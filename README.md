@@ -1,73 +1,43 @@
-# React + TypeScript + Vite
+# 🤝 협업 가이드라인
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 1. 이슈 및 브랜치 관리
 
-Currently, two official plugins are available:
+- **이슈 선 생성**: 작업 전 이슈 생성 필수 (이슈 단위와 브랜치 단위 일치)
+- **담당자 할당**: 본인(Assignee) 설정 및 체크리스트 작성
+- **이슈 템플릿 사용**: 정해진 양식에 따른 이슈 작성
+- **브랜치 명명**: `type/#이슈번호` 형식 준수 (ex: `feat/#10`)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 2. 커밋 컨벤션 (Commit Convention)
 
-## React Compiler
+- **메시지 형식**: `[#이슈번호]Type: 메시지` (ex: `[#2]Feat: 로그인 기능 구현`)
+- **작성 규칙**:
+  - 제목은 명령형 사용 및 끝 마침표(.) 금지
+  - 제목과 본문 사이 한 줄 개행 필수
+  - 본문은 "어떻게"보다 **"무엇을", "왜"** 위주로 설명
+  - 여러 줄 메시지 작성 시 `-`로 구분
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Type         | 설명                                           |
+| :----------- | :--------------------------------------------- |
+| **Feat**     | 새로운 기능 추가                               |
+| **Fix**      | 버그 수정                                      |
+| **!HOTFIX**  | 치명적 버그 긴급 수정                          |
+| **Design**   | CSS 등 UI 디자인 변경                          |
+| **Style**    | 코드 포맷팅, 세미콜론 누락 등 (로직 수정 없음) |
+| **Refactor** | 코드 리팩토링                                  |
+| **Comment**  | 주석 추가 및 변경                              |
+| **Docs**     | 문서 수정 (README.md 등)                       |
+| **Test**     | 테스트 코드 추가 및 리팩토링                   |
+| **Rename**   | 파일/폴더명 변경                               |
+| **Remove**   | 파일/폴더 삭제                                 |
+| **Chore**    | 패키지 매니저 설정, 빌드 업무 등 기타          |
 
-## Expanding the ESLint configuration
+## 3. PR 및 코드 리뷰
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **할당**: 본인(Assignee), 팀원 전체(Reviewer) 할당
+- **Merge 조건**: 리뷰 승인(Approve) 후 Merge 진행 및 이슈 종료
+- **피드백 대응**: 수정 요청 시 해당 PR에서 수정 후 재검토 요청
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 4. 브랜치 전략
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+- `main` : 최종 배포용 브랜치
+- `develop` : 기능 통합 및 개발용 브랜치

@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+pnpm lint
+pnpm format:check
+pnpm build

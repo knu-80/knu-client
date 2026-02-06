@@ -1,5 +1,15 @@
 @import 'tailwindcss';
 
+@theme {
+  --color-knu-red: #e60000;
+  --color-knu-gray: #797979;
+  --color-knu-gold: #bf7c26;
+  --color-knu-silver: #cccccc;
+  --color-knu-mint: #8dd9c3;
+  --color-knu-lavender: #acace6;
+  --color-knu-sage: #b8c395;
+}
+
 :root {
   color-scheme: light;
 }

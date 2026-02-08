@@ -1,9 +1,95 @@
 @import 'tailwindcss';
 
+@theme {
+  --color-knu-red: #e60000;
+  --color-knu-gray: #797979;
+  --color-knu-gold: #bf7c26;
+  --color-knu-silver: #cccccc;
+  --color-knu-mint: #8dd9c3;
+  --color-knu-lavender: #acace6;
+  --color-knu-sage: #b8c395;
+
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e5e5e5;
+  --color-gray-300: #d4d4d4;
+  --color-gray-400: #a3a3a3;
+  --color-gray-500: #737373;
+
+  --color-text-muted: var(--color-gray-400);
+
+  --font-sans:
+    'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Segoe UI', system-ui, sans-serif;
+  --font-display: var(--font-sans);
+
+  --text-display-1: 2.5rem;
+  --text-display-1--line-height: 3rem;
+  --text-display-1--letter-spacing: -0.02em;
+
+  --text-display-2: 2rem;
+  --text-display-2--line-height: 2.5rem;
+  --text-display-2--letter-spacing: -0.02em;
+
+  --text-heading-1: 1.75rem;
+  --text-heading-1--line-height: 2.25rem;
+  --text-heading-1--letter-spacing: -0.015em;
+
+  --text-heading-2: 1.5rem;
+  --text-heading-2--line-height: 2rem;
+  --text-heading-2--letter-spacing: -0.01em;
+
+  --text-heading-3: 1.25rem;
+  --text-heading-3--line-height: 1.75rem;
+
+  --text-body-1: 1rem;
+  --text-body-1--line-height: 1.5rem;
+
+  --text-body-2: 0.875rem;
+  --text-body-2--line-height: 1.375rem;
+
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.125rem;
+}
+
 :root {
   color-scheme: light;
 }
 
 body {
   margin: 0;
+}
+
+@layer base {
+  body {
+    @apply font-sans;
+  }
+}
+
+@layer components {
+  .typo-display-1 {
+    @apply font-display text-display-1 font-bold;
+  }
+  .typo-display-2 {
+    @apply font-display text-display-2 font-semibold;
+  }
+  .typo-heading-1 {
+    @apply font-display text-heading-1 font-semibold;
+  }
+  .typo-heading-2 {
+    @apply font-display text-heading-2 font-semibold;
+  }
+  .typo-heading-3 {
+    @apply font-display text-heading-3 font-semibold;
+  }
+  .typo-body-1 {
+    @apply font-sans text-body-1;
+  }
+  .typo-body-2 {
+    @apply font-sans text-body-2;
+  }
+  .typo-caption {
+    @apply font-sans text-caption;
+  }
+  .typo-muted {
+    @apply text-text-muted;
+  }
 }

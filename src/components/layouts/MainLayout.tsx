@@ -7,6 +7,7 @@ export default function MainLayout() {
   const { pathname } = useLocation();
   const isHomePage = pathname === '/';
   const contentPaddingTop = isHomePage ? 'pt-0' : 'pt-[66px]';
+  const contentPaddingBottom = isHomePage ? 'pb-0' : 'pb-6';
 
   return (
     <div className="min-h-dvh bg-gray-100 text-knu-gray">
@@ -20,7 +21,7 @@ export default function MainLayout() {
           </div>
         </header>
 
-        <main className={`flex-1 px-5 pb-6 ${contentPaddingTop}`}>
+        <main className={`flex-1 px-5 ${contentPaddingTop} ${contentPaddingBottom}`}>
           <Outlet />
         </main>
       </div>

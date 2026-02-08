@@ -1,54 +1,36 @@
+import backgroundImage from '../assets/background.png';
+
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200 bg-white/80 backdrop-blur">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <div className="text-lg font-semibold">경북대학교 가두모집 안내</div>
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-            KNU
-          </span>
-        </div>
-      </header>
-
-      <main className="mx-auto flex max-w-5xl flex-col gap-6 px-6 py-12">
-        <section className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200">
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-            Street Recruitment
-          </p>
-          <h1 className="mt-4 text-3xl font-semibold leading-tight">
-            2026학년도 가두모집 일정과 안내를 한곳에서 확인하세요.
-          </h1>
-          <p className="mt-4 max-w-2xl text-base text-slate-600">
-            모집 일정, 지원 자격, 상담 위치, 준비 서류 등 가두모집에 필요한 정보를 정리해두는
-            공간입니다. 실제 내용은 추후 업데이트 예정입니다.
-          </p>
-        </section>
-
-        <section className="grid gap-4 md:grid-cols-3">
-          {[
-            {
-              title: '모집 일정',
-              desc: '상담 운영 기간과 세부 일정 정보를 정리합니다.',
-            },
-            {
-              title: '지원 방법',
-              desc: '현장 상담 진행 방식과 제출 서류를 안내합니다.',
-            },
-            {
-              title: '문의',
-              desc: '연락처, 위치, 운영 시간 등 문의 정보를 제공합니다.',
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
+    <div className="flex">
+      <section className="relative -mx-5 flex-1 overflow-hidden">
+        <div
+          className="h-[100dvh] w-full bg-cover bg-center"
+          style={{ backgroundImage: `url(${backgroundImage})` }}
+          aria-label="경북대학교 가두모집 대표 이미지"
+          role="img"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/50" />
+        <div className="absolute bottom-6 left-5 right-5 text-white">
+          <p className="typo-caption uppercase tracking-[0.3em] text-white/80">2025 KNU Festival</p>
+          <h2 className="typo-display-2 mt-2">가두모집 &amp; 동아리 축제</h2>
+          <p className="typo-body-2 mt-2 text-white/80">3월 16일 ~ 3월 18일</p>
+          <div className="mt-4 flex gap-3">
+            <button
+              type="button"
+              className="rounded-full bg-knu-red px-5 py-2 text-sm font-semibold text-white shadow"
             >
-              <h2 className="text-lg font-semibold">{item.title}</h2>
-              <p className="mt-2 text-sm text-slate-600">{item.desc}</p>
-            </div>
-          ))}
-        </section>
-      </main>
+              부스 찾기
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-white/60 bg-white/10 px-5 py-2 text-sm font-semibold text-white backdrop-blur"
+            >
+              공지사항
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

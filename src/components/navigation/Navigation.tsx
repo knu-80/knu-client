@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import knuLogo from '../../assets/knuLogo.png';
+import knuLogo from '@/assets/knuLogo.png';
 
 const MENU_ITEMS = [
   { label: '부스 배치도', target: 'booth' },

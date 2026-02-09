@@ -3,6 +3,7 @@ import { BiMessageSquareDetail } from 'react-icons/bi';
 import { FaInstagram } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
 import RepresentativeImage from '../components/RepresentativeImage';
+import ApplyButton from '../components/ApplyButton';
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -36,7 +37,7 @@ export default function BoothDetailPage() {
 
       <RepresentativeImage imageUrl="https://picsum.photos/600/400" />
 
-      <div className="mt-10 mb-4">
+      <div className="mt-10 mb-10">
         <h3 className="typo-heading-3 mb-3 text-black">문의하기</h3>
         <div className="flex flex-col space-y-3">
           <div className="flex items-center space-x-2 text-black">
@@ -51,6 +52,8 @@ export default function BoothDetailPage() {
           </div>
         </div>
       </div>
+
+      <ApplyButton url="https://example.com/apply" />
 
       {id ? (
         <p className="muted">부스 ID: {id}</p>

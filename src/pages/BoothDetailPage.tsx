@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { BiMessageSquareDetail } from 'react-icons/bi';
-import RepresentativeImage from '../components/RepresentativeImage'; // RepresentativeImage 컴포넌트 임포트
+import { FaInstagram } from 'react-icons/fa';
+import { FaPhoneAlt } from 'react-icons/fa';
+import RepresentativeImage from '../components/RepresentativeImage';
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -33,6 +35,22 @@ export default function BoothDetailPage() {
       </div>
 
       <RepresentativeImage imageUrl="https://picsum.photos/600/400" />
+
+      <div className="mt-10 mb-4">
+        <h3 className="typo-heading-3 mb-3 text-black">문의하기</h3>
+        <div className="flex flex-col space-y-3">
+          <div className="flex items-center space-x-2 text-black">
+            <FaInstagram className="h-5 w-5" />
+            <p className="typo-body-1">인스타그램:</p>
+            <p className="typo-body-1 font-semibold">@knu_club</p>
+          </div>
+          <div className="flex items-center space-x-2 text-black">
+            <FaPhoneAlt className="h-5 w-5" />
+            <p className="typo-body-1">전화번호:</p>
+            <p className="typo-body-1 font-semibold">010-1234-5678</p>
+          </div>
+        </div>
+      </div>
 
       {id ? (
         <p className="muted">부스 ID: {id}</p>

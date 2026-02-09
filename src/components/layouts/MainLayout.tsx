@@ -10,7 +10,7 @@ export default function MainLayout() {
   return (
     <div className="min-h-dvh bg-gray-100 text-knu-gray">
       <div className="mx-auto flex min-h-dvh w-full max-w-[700px] flex-col bg-white">
-        <Navigation />
+        <Navigation key={pathname} />
 
         <main className={`flex-1 px-5 pb-6 ${contentPaddingTop}`}>
           <Outlet />

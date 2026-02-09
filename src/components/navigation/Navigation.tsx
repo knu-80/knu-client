@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
 
 import knuLogo from '@/assets/knuLogo.png';
 
@@ -11,14 +10,6 @@ const MENU_ITEMS = [
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    if (!open) return;
-    const id = window.setTimeout(() => setOpen(false), 0);
-    return () => clearTimeout(id);
-  }, [pathname, open]);
-
   const handleScrollTo = (target: string) => {
     const element = document.getElementById(target);
     if (!element) return;

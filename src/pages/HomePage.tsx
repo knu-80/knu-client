@@ -1,12 +1,12 @@
-import backgroundImage from '../assets/background.png';
+import backgroundImage from '../assets/background.webp';
 import knuLogo from '../assets/knuLogo.png';
 
 export default function HomePage() {
   return (
-    <div className="flex">
-      <section className="relative -mx-5 flex-1 overflow-hidden">
+    <div className="flex flex-col gap-6">
+      <section className="relative -mx-5 overflow-hidden">
         <div
-          className="h-[100dvh] w-full bg-cover bg-center"
+          className="h-[100dvh] w-full bg-cover bg-center md:bg-contain md:bg-top md:bg-no-repeat"
           style={{ backgroundImage: `url(${backgroundImage})` }}
           aria-label="경북대학교 가두모집 대표 이미지"
           role="img"
@@ -37,6 +37,61 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <section className="rounded-2xl border border-gray-200 bg-white p-5">
+        <h3 className="typo-heading-3">부스 찾기</h3>
+        <p className="typo-body-2 typo-muted mt-2">
+          행사 기간 동안 운영되는 동아리와 가두모집 부스를 빠르게 찾아보세요.
+        </p>
+        <button
+          type="button"
+          className="mt-4 w-full rounded-xl bg-knu-red py-3 text-sm font-semibold text-white"
+        >
+          부스 목록 보러가기
+        </button>
+      </section>
+
+      <section className="rounded-2xl border border-gray-200 bg-white p-5">
+        <div className="flex items-center justify-between">
+          <h3 className="typo-heading-3">공지사항</h3>
+          <span className="typo-caption text-text-muted">최근 3건</span>
+        </div>
+        <ul className="mt-4 space-y-3">
+          {[
+            { title: '우천 시 행사 운영 안내', date: '2025.03.14' },
+            { title: '부스 운영 시간 변경 공지', date: '2025.03.12' },
+            { title: '분실물 안내 데스크 위치', date: '2025.03.10' },
+          ].map((item) => (
+            <li
+              key={item.title}
+              className="flex items-center justify-between rounded-xl bg-gray-100 px-4 py-3"
+            >
+              <span className="typo-body-2">{item.title}</span>
+              <span className="typo-caption text-text-muted">{item.date}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <button
+        type="button"
+        aria-label="빠른 이동"
+        className="fixed bottom-6 right-6 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-knu-red text-white shadow-lg shadow-black/20"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-5 w-5"
+        >
+          <path d="M12 5v14" />
+          <path d="m19 12-7 7-7-7" />
+        </svg>
+      </button>
     </div>
   );
 }

@@ -29,7 +29,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-gray-200 bg-white p-5">
+      <section
+        id="booth"
+        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
+      >
         <h3 className="typo-heading-3">부스 찾기</h3>
         <p className="typo-body-2 typo-muted mt-2">
           행사 기간 동안 운영되는 동아리와 가두모집 부스를 빠르게 찾아보세요.
@@ -42,7 +45,10 @@ export default function HomePage() {
         </button>
       </section>
 
-      <section className="rounded-2xl border border-gray-200 bg-white p-5">
+      <section
+        id="notices"
+        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
+      >
         <div className="flex items-center justify-between">
           <h3 className="typo-heading-3">공지사항</h3>
           <span className="typo-caption text-text-muted">최근 3건</span>
@@ -62,6 +68,22 @@ export default function HomePage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section
+        id="events"
+        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
+      >
+        <h3 className="typo-heading-3">이벤트 소개</h3>
+        <p className="typo-body-2 typo-muted mt-2">
+          스탬프 투어 등 축제 이벤트 안내가 곧 제공됩니다.
+        </p>
+        <button
+          type="button"
+          className="mt-4 w-full rounded-xl border border-gray-200 py-3 text-sm font-semibold text-knu-gray"
+        >
+          이벤트 안내 보기
+        </button>
       </section>
 
       <button

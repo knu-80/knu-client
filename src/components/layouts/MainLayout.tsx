@@ -1,7 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom';
 
-const TITLE = '경북대학교 가두모집 안내';
-const BADGE = 'KNU';
+import Navigation from '../navigation/Navigation';
 
 export default function MainLayout() {
   const { pathname } = useLocation();
@@ -11,14 +10,7 @@ export default function MainLayout() {
   return (
     <div className="min-h-dvh bg-gray-100 text-knu-gray">
       <div className="mx-auto flex min-h-dvh w-full max-w-[700px] flex-col bg-white">
-        <header className="fixed left-1/2 top-0 z-20 h-[66px] w-full max-w-[700px] -translate-x-1/2 border-b border-gray-200 bg-white/95 backdrop-blur">
-          <div className="flex h-full items-center justify-between px-5">
-            <h1 className="typo-heading-3">{TITLE}</h1>
-            <span className="text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-knu-gray">
-              {BADGE}
-            </span>
-          </div>
-        </header>
+        <Navigation />
 
         <main className={`flex-1 px-5 pb-6 ${contentPaddingTop}`}>
           <Outlet />

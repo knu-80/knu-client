@@ -38,30 +38,24 @@ export default function Navigation() {
               aria-expanded={open}
               onClick={() => setOpen((prev) => !prev)}
             >
-              <span
-                className={`absolute left-2 right-2 top-2 h-1 rounded bg-[#fceefc] shadow-[0_1px_2px_rgba(0,0,0,0.6)] transition-all ${
-                  open ? 'translate-y-2.5 rotate-45' : ''
-                }`}
-              />
-              <span
-                className={`absolute left-2 right-2 top-4 h-1 rounded bg-[#fceefc] shadow-[0_1px_2px_rgba(0,0,0,0.6)] transition-all ${
-                  open ? 'opacity-0' : 'opacity-100'
-                }`}
-              />
-              <span
-                className={`absolute left-2 right-2 top-6 h-1 rounded bg-[#fceefc] shadow-[0_1px_2px_rgba(0,0,0,0.6)] transition-all ${
-                  open ? '-translate-y-2.5 -rotate-45' : ''
-                }`}
-              />
-            </button>
-          </div>
+            <span
+              className="absolute left-2 right-2 top-2 h-1 rounded bg-[#fceefc] shadow-[0_1px_2px_rgba(0,0,0,0.6)] transition-all"
+            />
+            <span
+              className="absolute left-2 right-2 top-4 h-1 rounded bg-[#fceefc] shadow-[0_1px_2px_rgba(0,0,0,0.6)] transition-all"
+            />
+            <span
+              className="absolute left-2 right-2 top-6 h-1 rounded bg-[#fceefc] shadow-[0_1px_2px_rgba(0,0,0,0.6)] transition-all"
+            />
+          </button>
         </div>
+      </div>
 
-        <div
-          className={`overflow-hidden border-b border-white/30 bg-white/80 text-black transition-all duration-300 ${
-            open ? 'max-h-56 opacity-100' : 'max-h-0 opacity-0'
-          }`}
-        >
+      <div
+        className={`overflow-hidden border-b border-white/30 bg-white/40 text-white backdrop-blur transition-all duration-300 ${
+          open ? 'max-h-56 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
           <ul className="space-y-1 px-5 py-4 text-center text-sm font-bold">
             {MENU_ITEMS.map((item) => (
               <li key={item.target} className="py-2">

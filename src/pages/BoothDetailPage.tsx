@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { BiMessageSquareDetail } from 'react-icons/bi';
+import RepresentativeImage from '../components/RepresentativeImage'; // RepresentativeImage 컴포넌트 임포트
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -19,7 +20,7 @@ export default function BoothDetailPage() {
         </div>
       </div>
 
-      <div className="flex items-center space-x-2 mb-3 muted">
+      <div className="flex items-center space-x-2 mb-3 typo-muted text-knu-gray">
         <p>[전 학년 모집]</p>
         <p>회비 40,000원</p>
       </div>
@@ -30,6 +31,8 @@ export default function BoothDetailPage() {
           매주 월요일마다 모여서 밥먹기를 주로 하구요 어쩌구 저쩌구..
         </p>
       </div>
+
+      <RepresentativeImage imageUrl="https://picsum.photos/600/400" />
 
       {id ? (
         <p className="muted">부스 ID: {id}</p>

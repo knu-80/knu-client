@@ -19,9 +19,16 @@ export default function BoothDetailPage() {
         </div>
       </div>
 
-      <div className='flex items-center space-x-2 mb-4 muted'>
+      <div className="flex items-center space-x-2 mb-3 muted">
         <p>[전 학년 모집]</p>
         <p>회비 40,000원</p>
+      </div>
+
+      <div className="mb-10 text-black">
+        <p className="typo-body-1">
+          경북대학교 문예부 동아리 XXX입니다. <br />
+          매주 월요일마다 모여서 밥먹기를 주로 하구요 어쩌구 저쩌구..
+        </p>
       </div>
 
       {id ? (

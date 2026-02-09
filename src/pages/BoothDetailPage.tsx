@@ -15,7 +15,7 @@ export default function BoothDetailPage() {
         <h2 className="typo-heading-2 text-black">상세보기</h2>
       </div>
 
-      <div className="flex items-center space-x-4 mb-3 text-black">
+      <div className="flex items-center space-x-4 mb-2 text-black">
         <h2 className="typo-heading-3">동아리이름</h2>
         <div className="flex items-center space-x-1">
           <div className="w-3 h-3 rounded-full bg-blue-500"></div>
@@ -23,7 +23,7 @@ export default function BoothDetailPage() {
         </div>
       </div>
 
-      <div className="flex items-center space-x-2 mb-3 typo-muted text-knu-gray">
+      <div className="flex items-center space-x-2 mb-2 typo-muted text-knu-gray">
         <p>[전 학년 모집]</p>
         <p>회비 40,000원</p>
       </div>

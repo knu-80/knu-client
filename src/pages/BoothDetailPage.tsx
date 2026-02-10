@@ -4,15 +4,19 @@ import { FaInstagram } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
 import RepresentativeImage from '../components/RepresentativeImage';
 import ApplyButton from '../components/ApplyButton';
+import EditButton from '../components/EditButton';
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
 
   return (
     <div className="p-5">
-      <div className="flex items-center space-x-2 mb-4">
-        <BiMessageSquareDetail className="h-6 w-6 text-black" />
-        <h2 className="typo-heading-2 text-black">상세보기</h2>
+      <div className="flex items-center justify-between space-x-2 mb-4">
+        <div className="flex items-center space-x-2">
+          <BiMessageSquareDetail className="h-6 w-6 text-black" />
+          <h2 className="typo-heading-2 text-black">상세보기</h2>
+        </div>
+        <EditButton editUrl={`/booths/${id}/edit`} />
       </div>
 
       <div className="flex items-center space-x-4 mb-2 text-black">

@@ -5,6 +5,7 @@ import { FaPhoneAlt } from 'react-icons/fa';
 import RepresentativeImage from '../components/RepresentativeImage';
 import ApplyButton from '../components/ApplyButton';
 import EditButton from '../components/EditButton';
+import ClubCategory from '../components/ClubCategory';
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -21,10 +22,7 @@ export default function BoothDetailPage() {
 
       <div className="flex items-center space-x-4 mb-2 text-black">
         <h2 className="typo-heading-3">동아리이름</h2>
-        <div className="flex items-center space-x-1">
-          <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-          <p className="typo-body-1">문예부</p>
-        </div>
+        <ClubCategory divisionName="문예부" />
       </div>
 
       <div className="flex items-center space-x-2 mb-2 typo-muted text-knu-gray">

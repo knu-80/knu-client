@@ -1,7 +1,18 @@
+import { Route, Routes } from 'react-router-dom';
+
+import MainLayout from './components/layouts/MainLayout';
 import HomePage from './pages/HomePage';
+import BoothDetailPage from './pages/BoothDetailPage';
 
 function App() {
-  return <HomePage />;
+  return (
+    <Routes>
+      <Route path="/" element={<MainLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="booths/:id" element={<BoothDetailPage />} />
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;

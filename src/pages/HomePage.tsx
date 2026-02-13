@@ -1,26 +1,17 @@
-import backgroundImage from '../assets/background.png';
-import knuLogo from '../assets/knuLogo.png';
+import backgroundImage from '@/assets/background.webp';
 
 export default function HomePage() {
   return (
-    <div className="flex">
-      <section className="relative -mx-5 flex-1 overflow-hidden">
+    <div className="flex flex-col gap-6">
+      <section className="relative -mx-5 overflow-hidden">
         <div
-          className="h-[100dvh] w-full bg-cover bg-center"
+          className="h-[100dvh] w-full bg-cover bg-center md:bg-contain md:bg-top md:bg-no-repeat"
           style={{ backgroundImage: `url(${backgroundImage})` }}
           aria-label="경북대학교 가두모집 대표 이미지"
           role="img"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/50" />
-        <div className="absolute inset-x-5 top-[18%] flex flex-col items-center text-center text-white">
-          <img src={knuLogo} alt="경북대학교 로고" className="h-20 w-20" />
-          <h2 className="typo-display-2 mt-6 leading-tight">
-            2025 경북대학교
-            <br />
-            가두모집 &amp; 동아리 축제
-          </h2>
-          <p className="typo-body-2 mt-4 text-white/90">80주년 기념 특별 행사</p>
-          <p className="typo-body-2 mt-1 text-white/90">3월 16일 · 3월 18일</p>
+        <div className="absolute inset-x-5 top-[75%] flex flex-col items-center text-center text-white">
           <div className="mt-6 flex gap-3">
             <button
               type="button"
@@ -37,6 +28,83 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <section
+        id="booth"
+        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
+      >
+        <h3 className="typo-heading-3">부스 찾기</h3>
+        <p className="typo-body-2 typo-muted mt-2">
+          행사 기간 동안 운영되는 동아리와 가두모집 부스를 빠르게 찾아보세요.
+        </p>
+        <button
+          type="button"
+          className="mt-4 w-full rounded-xl bg-knu-red py-3 text-sm font-semibold text-white"
+        >
+          부스 목록 보러가기
+        </button>
+      </section>
+
+      <section
+        id="notices"
+        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
+      >
+        <div className="flex items-center justify-between">
+          <h3 className="typo-heading-3">공지사항</h3>
+          <span className="typo-caption text-text-muted">최근 3건</span>
+        </div>
+        <ul className="mt-4 space-y-3">
+          {[
+            { title: '우천 시 행사 운영 안내', date: '2025.03.14' },
+            { title: '부스 운영 시간 변경 공지', date: '2025.03.12' },
+            { title: '분실물 안내 데스크 위치', date: '2025.03.10' },
+          ].map((item) => (
+            <li
+              key={item.title}
+              className="flex items-center justify-between rounded-xl bg-gray-100 px-4 py-3"
+            >
+              <span className="typo-body-2">{item.title}</span>
+              <span className="typo-caption text-text-muted">{item.date}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section
+        id="events"
+        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
+      >
+        <h3 className="typo-heading-3">이벤트 소개</h3>
+        <p className="typo-body-2 typo-muted mt-2">
+          스탬프 투어 등 축제 이벤트 안내가 곧 제공됩니다.
+        </p>
+        <button
+          type="button"
+          className="mt-4 w-full rounded-xl border border-gray-200 py-3 text-sm font-semibold text-knu-gray"
+        >
+          이벤트 안내 보기
+        </button>
+      </section>
+
+      <button
+        type="button"
+        aria-label="빠른 이동"
+        className="fixed bottom-6 right-6 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-knu-red text-white shadow-lg shadow-black/20"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-5 w-5"
+        >
+          <path d="M12 5v14" />
+          <path d="m19 12-7 7-7-7" />
+        </svg>
+      </button>
     </div>
   );
 }

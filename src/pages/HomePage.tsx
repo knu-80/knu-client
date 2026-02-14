@@ -1,4 +1,5 @@
 import backgroundImage from '@/assets/background.webp';
+import EventInfo from '@/components/home/EventInfo';
 import QuickMenu from '@/components/home/QuickMenu';
 
 export default function HomePage() {
@@ -31,6 +32,8 @@ export default function HomePage() {
       </section>
 
       <QuickMenu />
+
+      <EventInfo />
     </div>
   );
 }

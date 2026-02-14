@@ -17,7 +17,7 @@ const QUICK_MENU_ITEMS = [
 
 export default function QuickMenu() {
   return (
-    <section className="grid grid-cols-2 gap-4 pt-4">
+    <section className="grid grid-cols-2 gap-4 py-6">
       {QUICK_MENU_ITEMS.map((item) => {
         const Icon = item.icon;
         return (

@@ -34,7 +34,17 @@ export default function HomePage() {
 
       <QuickMenu />
 
-      <EventInfo />
+      <EventInfo
+        items={[
+          {
+            title: '가두모집 1일차',
+            date: '3월 16일 (일)',
+            location: '백양로 · 일정담',
+            time: '11:00 - 17:00',
+            description: '동아리 부스 운영 및 공연',
+          },
+        ]}
+      />
 
       <PerformanceTimeline />
     </div>

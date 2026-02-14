@@ -1,5 +1,5 @@
 import backgroundImage from '@/assets/background.webp';
-import { FiBell, FiMapPin } from 'react-icons/fi';
+import QuickMenu from '@/components/home/QuickMenu';
 
 export default function HomePage() {
   return (
@@ -30,49 +30,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="grid grid-cols-2 gap-4">
-        <button
-          id="booth"
-          type="button"
-          className="scroll-mt-[80px] rounded-3xl bg-knu-red/10 px-4 py-6 text-center"
-        >
-          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white">
-            <FiMapPin className="h-6 w-6 text-knu-red" />
-          </span>
-          <span className="typo-body-2 mt-3 block font-semibold text-knu-gray">부스 배치도</span>
-        </button>
-
-        <button
-          id="notices"
-          type="button"
-          className="scroll-mt-[80px] rounded-3xl bg-white px-4 py-6 text-center"
-        >
-          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white">
-            <FiBell className="h-6 w-6 text-knu-red" />
-          </span>
-          <span className="typo-body-2 mt-3 block font-semibold text-knu-gray">공지사항</span>
-        </button>
-      </section>
-
-      <button
-        type="button"
-        aria-label="빠른 이동"
-        className="fixed bottom-6 right-6 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-knu-red text-white shadow-lg shadow-black/20"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-5 w-5"
-        >
-          <path d="M12 5v14" />
-          <path d="m19 12-7 7-7-7" />
-        </svg>
-      </button>
+      <QuickMenu />
     </div>
   );
 }

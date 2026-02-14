@@ -1,5 +1,6 @@
 import backgroundImage from '@/assets/background.webp';
 import EventInfo from '@/components/home/EventInfo';
+import PerformanceTimeline from '@/components/home/PerformanceTimeline';
 import QuickMenu from '@/components/home/QuickMenu';
 
 export default function HomePage() {
@@ -34,6 +35,8 @@ export default function HomePage() {
       <QuickMenu />
 
       <EventInfo />
+
+      <PerformanceTimeline />
     </div>
   );
 }

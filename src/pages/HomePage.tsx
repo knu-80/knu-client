@@ -29,60 +29,94 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section
-        id="booth"
-        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
-      >
-        <h3 className="typo-heading-3">부스 찾기</h3>
-        <p className="typo-body-2 typo-muted mt-2">
-          행사 기간 동안 운영되는 동아리와 가두모집 부스를 빠르게 찾아보세요.
-        </p>
+      <section className="grid grid-cols-2 gap-4">
         <button
+          id="booth"
           type="button"
-          className="mt-4 w-full rounded-xl bg-knu-red py-3 text-sm font-semibold text-white"
+          className="scroll-mt-[80px] rounded-3xl bg-knu-red/10 px-4 py-6 text-center"
         >
-          부스 목록 보러가기
-        </button>
-      </section>
-
-      <section
-        id="notices"
-        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
-      >
-        <div className="flex items-center justify-between">
-          <h3 className="typo-heading-3">공지사항</h3>
-          <span className="typo-caption text-text-muted">최근 3건</span>
-        </div>
-        <ul className="mt-4 space-y-3">
-          {[
-            { title: '우천 시 행사 운영 안내', date: '2025.03.14' },
-            { title: '부스 운영 시간 변경 공지', date: '2025.03.12' },
-            { title: '분실물 안내 데스크 위치', date: '2025.03.10' },
-          ].map((item) => (
-            <li
-              key={item.title}
-              className="flex items-center justify-between rounded-xl bg-gray-100 px-4 py-3"
+          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-6 w-6 text-knu-red"
             >
-              <span className="typo-body-2">{item.title}</span>
-              <span className="typo-caption text-text-muted">{item.date}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+              <path d="M12 22s7-7.5 7-12a7 7 0 1 0-14 0c0 4.5 7 12 7 12Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          </span>
+          <span className="typo-body-2 mt-3 block font-semibold text-knu-gray">부스 배치도</span>
+        </button>
 
-      <section
-        id="events"
-        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
-      >
-        <h3 className="typo-heading-3">이벤트 소개</h3>
-        <p className="typo-body-2 typo-muted mt-2">
-          스탬프 투어 등 축제 이벤트 안내가 곧 제공됩니다.
-        </p>
         <button
+          id="notices"
           type="button"
-          className="mt-4 w-full rounded-xl border border-gray-200 py-3 text-sm font-semibold text-knu-gray"
+          className="scroll-mt-[80px] rounded-3xl bg-white px-4 py-6 text-center"
         >
-          이벤트 안내 보기
+          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-6 w-6 text-knu-red"
+            >
+              <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 7h18s-3 0-3-7" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+          </span>
+          <span className="typo-body-2 mt-3 block font-semibold text-knu-gray">공지사항</span>
+        </button>
+
+        <button
+          id="events"
+          type="button"
+          className="scroll-mt-[80px] rounded-3xl bg-knu-red/10 px-4 py-6 text-center"
+        >
+          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-6 w-6 text-knu-red"
+            >
+              <path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" />
+              <path d="M2 7h20v5H2z" />
+              <path d="M12 22V7" />
+              <path d="M12 7c-1.7 0-3-1.3-3-3a2 2 0 0 1 3-1.7A2 2 0 0 1 15 4c0 1.7-1.3 3-3 3Z" />
+            </svg>
+          </span>
+          <span className="typo-body-2 mt-3 block font-semibold text-knu-gray">이벤트</span>
+        </button>
+
+        <button type="button" className="rounded-3xl bg-white px-4 py-6 text-center">
+          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-6 w-6 text-knu-red"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17" cy="7" r="1.2" />
+            </svg>
+          </span>
+          <span className="typo-body-2 mt-3 block font-semibold text-knu-gray">
+            인스타그램
+          </span>
         </button>
       </section>
 

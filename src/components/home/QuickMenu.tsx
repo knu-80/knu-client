@@ -1,4 +1,4 @@
-import { FiBell, FiMapPin } from 'react-icons/fi';
+import { FiBell, FiGift, FiInstagram, FiMapPin } from 'react-icons/fi';
 
 const QUICK_MENU_ITEMS = [
   {
@@ -12,6 +12,18 @@ const QUICK_MENU_ITEMS = [
     description: '공지 · 이벤트 · 분실물',
     target: 'notices',
     icon: FiBell,
+  },
+  {
+    label: '이벤트',
+    description: '스탬프 · 이벤트 안내',
+    target: 'events',
+    icon: FiGift,
+  },
+  {
+    label: '인스타그램',
+    description: '총동연 소식 바로가기',
+    target: 'instagram',
+    icon: FiInstagram,
   },
 ] as const;
 

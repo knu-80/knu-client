@@ -2,10 +2,10 @@ import { useParams } from 'react-router-dom';
 import { BiMessageSquareDetail } from 'react-icons/bi';
 import { FaInstagram } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
-import RepresentativeImage from '../components/RepresentativeImage';
-import ApplyButton from '../components/ApplyButton';
-import EditButton from '../components/EditButton';
-import ClubCategory from '../components/ClubCategory';
+import RepresentativeImage from '@/components/RepresentativeImage';
+import ApplyButton from '@/components/ApplyButton';
+import EditButton from '@/components/EditButton';
+import ClubCategory from '@/components/ClubCategory';
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();

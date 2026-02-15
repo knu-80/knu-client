@@ -2,8 +2,15 @@ import backgroundImage from '@/assets/background.webp';
 import EventInfo from '@/components/home/EventInfo';
 import PerformanceTimeline from '@/components/home/PerformanceTimeline';
 import QuickMenu from '@/components/home/QuickMenu';
+import { FiChevronDown } from 'react-icons/fi';
 
 export default function HomePage() {
+  const handleScrollHint = () => {
+    const element = document.getElementById('quick-menu');
+    if (!element) return;
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <section className="relative -mx-5 overflow-hidden">
@@ -30,6 +37,19 @@ export default function HomePage() {
             </button>
           </div>
         </div>
+        <button
+          type="button"
+          onClick={handleScrollHint}
+          className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-white/80"
+          aria-label="아래로 스크롤"
+        >
+          <span className="typo-body-2 text-white/80">
+            아래로 스크롤하여 더 많은 정보를 확인하세요
+          </span>
+          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 backdrop-blur animate-bounce">
+            <FiChevronDown className="h-6 w-6 text-white" />
+          </span>
+        </button>
       </section>
 
       <QuickMenu />

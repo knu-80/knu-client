@@ -1,5 +1,6 @@
 import backgroundImage from '@/assets/background.webp';
 import EventInfo from '@/components/home/EventInfo';
+import Footer from '@/components/home/Footer';
 import PerformanceTimeline from '@/components/home/PerformanceTimeline';
 import QuickMenu from '@/components/home/QuickMenu';
 import { FiChevronDown } from 'react-icons/fi';
@@ -67,6 +68,8 @@ export default function HomePage() {
       />
 
       <PerformanceTimeline />
+
+      <Footer />
     </div>
   );
 }

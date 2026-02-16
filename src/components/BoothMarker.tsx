@@ -38,7 +38,7 @@ export function BoothMarker({
     >
       <div className={`relative w-full h-full rounded-[4px] flex items-center justify-center ${bgColorClass ?? 'bg-gray-300'}`} >
         {isOpen && (
-          <span className="absolute top-1 left-1 h-2 w-2 rounded-full bg-knu-red shadow-[0_0_4px_rgba(255,0,0,0.5)]" />
+          <span className="absolute top-1 left-1 h-2 w-2 rounded-full bg-knu-red" />
         )}
       </div>
     </button>

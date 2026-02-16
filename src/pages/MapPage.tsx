@@ -3,11 +3,19 @@ import { SearchBar } from '@/components/SearchBar';
 import { MapPageClubCategory } from '@/components/ClubCategory';
 import { BoothMarker } from '@/components/BoothMarker';
 import { BOOTH_COORDINATES } from '@/constants/map';
-import { DIVISION_INFO, MOCK_BOOTHS } from '@/constants/booth';
+import { DIVISION_INFO, MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
 import MapSvg from '@/assets/map.svg';
+
+const DEFAULT_BOOTH: BoothDetail = {
+  booth_number: 0,
+  name: '',
+  division: 'ACADEMIC_DIVISION',
+  is_active: false,
+};
 
 export default function MapPage() {
   const [value, setValue] = useState('');
+  const [selectedBoothId, setSelectedBoothId] = useState<number | null>(null);
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
@@ -35,22 +43,19 @@ export default function MapPage() {
           <div className="absolute top-0 left-0 w-full h-full">
             {Object.entries(BOOTH_COORDINATES).map(([number, coord]) => {
               const boothNum = Number(number);
-              const boothInfo = MOCK_BOOTHS.find(b => b.booth_number === boothNum);
-              const bgColorClass = coord.isManagement
+              const boothInfo = MOCK_BOOTHS[boothNum] || DEFAULT_BOOTH;
+              const isSelected = selectedBoothId === boothNum;
+              const divisionColor = coord.isManagement
                 ? DIVISION_INFO.MANAGEMENT.color
-                : boothInfo
-                  ? DIVISION_INFO[boothInfo.division].color
-                  : 'bg-gray-300'
-
+                : DIVISION_INFO[boothInfo.division].color;
+              const bgColorClass = isSelected ? 'bg-knu-red' : divisionColor;
               return (
                 <BoothMarker
                   key={boothNum}
-                  x={coord.x}
-                  y={coord.y}
-                  rotate={coord.rotate}
-                  isManagement={coord.isManagement}
+                  {...coord}
                   bgColorClass={bgColorClass}
-                  isOpen={boothInfo?.is_active}
+                  isOpen={boothInfo.is_active}
+                  onClick={() => setSelectedBoothId(boothNum)}
                 />
               );
             })}

@@ -14,29 +14,15 @@ export interface BoothDetail {
   is_active: boolean;
 }
 
-export const MOCK_BOOTHS: BoothDetail[] = [
-  {
-    booth_number: 1,
-    name: '테스트',
-    division: 'ACADEMIC_DIVISION',
-    is_active: true,
-  },
-  {
-    booth_number: 2,
-    name: '테스트 문예',
-    division: 'CULTURE_ART_DIVISION',
-    is_active: false,
-  },
-  {
-    booth_number: 3,
-    name: '테스트 체육',
-    division: 'SPORTS_DIVISION',
-    is_active: true,
-  },
-  {
-    booth_number: 4,
-    name: '테스트 사회',
-    division: 'SOCIAL_DIVISION',
-    is_active: true,
-  },
-];
+export const MOCK_BOOTHS: Record<number, BoothDetail> = {
+  1: { booth_number: 1, name: '테스트 학술', division: 'ACADEMIC_DIVISION', is_active: false },
+  2: { booth_number: 2, name: '테스트 문예', division: 'CULTURE_ART_DIVISION', is_active: false },
+  3: { booth_number: 3, name: '테스트 체육', division: 'SPORTS_DIVISION', is_active: false },
+  4: { booth_number: 4, name: '테스트 사회', division: 'SOCIAL_DIVISION', is_active: false },
+  5: { booth_number: 5, name: '테스트 종교', division: 'RELIGIOUS_DIVISION', is_active: false },
+  6: { booth_number: 6, name: '테스트 학술2', division: 'ACADEMIC_DIVISION', is_active: true },
+  7: { booth_number: 7, name: '테스트 문예2', division: 'CULTURE_ART_DIVISION', is_active: true },
+  8: { booth_number: 8, name: '테스트 체육2', division: 'SPORTS_DIVISION', is_active: false },
+  9: { booth_number: 9, name: '테스트 사회2', division: 'SOCIAL_DIVISION', is_active: false },
+  10: { booth_number: 10, name: '테스트 종교2', division: 'RELIGIOUS_DIVISION', is_active: true },
+};

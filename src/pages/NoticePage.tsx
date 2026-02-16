@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import { GrAnnounce } from 'react-icons/gr';
+import NoticeCard from '@/components/NoticeCard';
 
 export default function NoticePage() {
   const [activeTab, setActiveTab] = useState('전체');
   const tabs = ['전체', '공지', '분실물'];
+
+  const notices = [
+    { number: 4, title: '축제 부스 운영 시간 변경 안내', date: '2026.10.26', category: '공지' },
+    { number: 3, title: '학생회관에서 지갑 분실했어요!', date: '2026.10.25', category: '분실물' },
+    { number: 2, title: '중앙도서관 시험 기간 연장 운영', date: '2026.10.24', category: '공지' },
+    { number: 1, title: '본관 앞에서 에어팟 주우신 분!', date: '2026.10.23', category: '분실물' },
+  ];
 
   return (
     <div className="p-5">
@@ -24,6 +32,25 @@ export default function NoticePage() {
             {tab}
           </button>
         ))}
+      </div>
+      <div className="mt-4">
+        <div className="flex items-center gap-x-4 px-2 sm:px-4 py-2 text-sm font-semibold text-gray-500 border-y border-gray-200 bg-gray-50">
+          <div className="w-8 text-center">번호</div>
+          <div className="flex-1 text-center">제목</div>
+          <div className="hidden sm:block w-24 text-right pr-6">날짜</div>
+        </div>
+
+        <div>
+          {notices.map((notice) => (
+            <NoticeCard
+              key={notice.number}
+              number={notice.number}
+              title={notice.title}
+              date={notice.date}
+              category={notice.category as '공지' | '분실물'}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

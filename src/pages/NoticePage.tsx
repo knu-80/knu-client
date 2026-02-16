@@ -48,15 +48,19 @@ export default function NoticePage() {
         </div>
 
         <div>
-          {filteredNotices.map((notice) => (
-            <NoticeCard
-              key={notice.number}
-              number={notice.number}
-              title={notice.title}
-              date={notice.date}
-              category={notice.category as '공지' | '분실물'}
-            />
-          ))}
+          {filteredNotices.length === 0 ? (
+            <div className="py-10 text-center text-gray-500">등록된 공지사항이 없습니다.</div>
+          ) : (
+            filteredNotices.map((notice) => (
+              <NoticeCard
+                key={notice.number}
+                number={notice.number}
+                title={notice.title}
+                date={notice.date}
+                category={notice.category as '공지' | '분실물'}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>

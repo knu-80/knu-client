@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
 import MainLayout from './components/layouts/MainLayout';
+import MapLayout from '@/components/layouts/MapLayout';
 import HomePage from './pages/HomePage';
 import BoothDetailPage from './pages/BoothDetailPage';
 import MapPage from '@/pages/MapPage';
@@ -11,7 +12,9 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
         <Route path="booths/:id" element={<BoothDetailPage />} />
-        <Route path="map" element={<MapPage />} />
+      </Route>
+      <Route element={<MapLayout />}>
+        <Route path="/map" element={<MapPage />} />
       </Route>
     </Routes>
   );

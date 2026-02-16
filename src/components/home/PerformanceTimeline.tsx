@@ -10,10 +10,12 @@ const PERFORMANCES = [
 
 export default function PerformanceTimeline() {
   return (
-    <section className="flex flex-col gap-4 py-6">
+    <section aria-labelledby="performance-title" className="flex flex-col gap-4 py-6">
       <div className="flex items-center gap-3">
         <span className="h-6 w-1 rounded-full bg-knu-red" />
-        <h3 className="typo-heading-2 text-knu-gray">축하 공연</h3>
+        <h3 id="performance-title" className="typo-heading-2 text-knu-gray">
+          축하 공연
+        </h3>
       </div>
 
       <div className="flex flex-col gap-4">
@@ -23,7 +25,7 @@ export default function PerformanceTimeline() {
             className="flex items-center gap-4 rounded-3xl border border-gray-200 bg-white px-4 py-4 shadow-[0_2px_8px_rgba(15,23,42,0.06)]"
           >
             <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-knu-red/10">
-              <FiMusic className="h-6 w-6 text-knu-red" />
+              <FiMusic className="h-6 w-6 text-knu-red" aria-hidden="true" />
             </span>
             <div>
               <h4 className="typo-heading-3 text-knu-gray">{item.title}</h4>

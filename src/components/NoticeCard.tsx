@@ -19,7 +19,7 @@ export default function NoticeCard({ number, title, date, category }: NoticeCard
         >
           {category}
         </span>
-        <h3 className="text-base font-semibold text-black truncate">{title}</h3>
+        <h3 className="text-base font-semibold text-black truncate cursor-pointer">{title}</h3>
       </div>
 
       <div className="hidden sm:block w-24 text-sm text-gray-500 text-right">

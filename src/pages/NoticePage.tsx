@@ -13,6 +13,13 @@ export default function NoticePage() {
     { number: 1, title: '본관 앞에서 에어팟 주우신 분!', date: '2026.10.23', category: '분실물' },
   ];
 
+  const filteredNotices =
+    activeTab === '전체'
+      ? notices
+      : notices.filter((notice) => {
+          return notice.category === activeTab;
+        });
+
   return (
     <div className="p-5">
       <div className="flex items-center space-x-2 mb-4">
@@ -41,7 +48,7 @@ export default function NoticePage() {
         </div>
 
         <div>
-          {notices.map((notice) => (
+          {filteredNotices.map((notice) => (
             <NoticeCard
               key={notice.number}
               number={notice.number}

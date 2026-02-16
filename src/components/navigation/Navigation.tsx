@@ -36,6 +36,7 @@ export default function Navigation() {
               className="relative h-9 w-10"
               aria-label="메뉴"
               aria-expanded={open}
+              aria-controls="main-menu"
               onClick={() => setOpen((prev) => !prev)}
             >
               <span className="absolute left-2 right-2 top-2 h-1 rounded bg-[#fceefc] shadow-[0_1px_2px_rgba(0,0,0,0.6)] transition-all" />
@@ -46,6 +47,8 @@ export default function Navigation() {
         </div>
 
         <div
+          id="main-menu"
+          aria-hidden={!open}
           className={`overflow-hidden border-b border-white/30 bg-white/40 text-white backdrop-blur transition-all duration-300 ${
             open ? 'max-h-56 opacity-100' : 'max-h-0 opacity-0'
           }`}
@@ -56,6 +59,7 @@ export default function Navigation() {
                 <button
                   type="button"
                   className="w-full"
+                  tabIndex={open ? 0 : -1}
                   onClick={() => {
                     setOpen(false);
                     handleScrollTo(item.target);

@@ -24,6 +24,13 @@ export default function NoticeDetailPage() {
           </div>
         </div>
       </div>
+
+      <div className="mb-10 mt-5 text-black">
+        <p className="typo-body-1">
+          안녕하세요, 운영팀입니다. <br />
+          행사 진행 상황에 따라 운영시간이 오후 8시까지로 어쩌구 저쩌구..
+        </p>
+      </div>
     </div>
   );
 }

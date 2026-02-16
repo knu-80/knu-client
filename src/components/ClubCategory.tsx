@@ -72,7 +72,7 @@ export function MapPageClubCategory({ divisionName }: MapPageClubCategoryProps) 
             })()
           }`}
         ></div>
-        <p className="typo-body-2">{shortName}</p>
+        <p className="typo-body-2 text-black">{shortName}</p>
       </div>
     </div>
   );

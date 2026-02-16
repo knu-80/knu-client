@@ -15,6 +15,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col gap-6">
       <section className="relative -mx-5 overflow-hidden">
+        <h1 className="sr-only">2026 경북대학교 가두모집 & 동아리 축제 메인 페이지</h1>
         <div
           className="h-[100dvh] w-full bg-cover bg-center md:bg-contain md:bg-top md:bg-no-repeat"
           style={{ backgroundImage: `url(${backgroundImage})` }}

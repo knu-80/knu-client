@@ -29,24 +29,27 @@ const QUICK_MENU_ITEMS = [
 
 export default function QuickMenu() {
   return (
-    <section id="quick-menu" className="grid scroll-mt-[80px] grid-cols-2 gap-4 py-6">
+    <nav
+      id="quick-menu"
+      aria-label="빠른 메뉴"
+      className="grid scroll-mt-[80px] grid-cols-2 gap-4 py-6"
+    >
       {QUICK_MENU_ITEMS.map((item) => {
         const Icon = item.icon;
         return (
-          <button
+          <a
             key={item.target}
-            id={item.target}
-            type="button"
-            className="scroll-mt-[80px] rounded-3xl border border-gray-200 bg-white px-5 py-6 text-left shadow-[0_2px_8px_rgba(15,23,42,0.06)] cursor-pointer hover:bg-gray-50 transition-colors"
+            href={`#${item.target}`}
+            className="rounded-3xl border border-gray-200 bg-white px-5 py-6 text-left shadow-[0_2px_8px_rgba(15,23,42,0.06)] transition-colors hover:bg-gray-50"
           >
             <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-knu-red/10">
-              <Icon className="h-6 w-6 text-knu-red" />
+              <Icon className="h-6 w-6 text-knu-red" aria-hidden="true" />
             </span>
             <span className="typo-heading-3 mt-4 block text-knu-gray">{item.label}</span>
             <span className="typo-body-3 mt-2 block text-text-muted">{item.description}</span>
-          </button>
+          </a>
         );
       })}
-    </section>
+    </nav>
   );
 }

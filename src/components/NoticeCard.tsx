@@ -19,9 +19,9 @@ export default function NoticeCard({ number, title, date, category }: NoticeCard
         >
           {category}
         </span>
-        <h3 className="text-xs sm:text-base font-semibold text-black truncate cursor-pointer">
+        <a href="#" className="text-xs sm:text-base font-semibold text-black truncate">
           {title}
-        </h3>
+        </a>
       </div>
 
       <div className="w-16 text-xs sm:text-sm text-gray-500 text-center">

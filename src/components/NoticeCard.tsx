@@ -24,7 +24,7 @@ export default function NoticeCard({ number, title, date, category }: NoticeCard
         </h3>
       </div>
 
-      <div className="hidden sm:block w-16 text-xs sm:text-sm text-gray-500 text-center">
+      <div className="w-16 text-xs sm:text-sm text-gray-500 text-center">
         <span>{date}</span>
       </div>
     </div>

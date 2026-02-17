@@ -44,7 +44,7 @@ export default function NoticePage() {
         <div className="flex items-center gap-x-4 px-2 sm:px-4 py-2 text-sm font-semibold text-gray-500 border-y border-gray-200 bg-gray-50">
           <div className="w-8 text-center">번호</div>
           <div className="flex-1 text-center">제목</div>
-          <div className="hidden sm:block w-24 text-right pr-6">날짜</div>
+          <div className="hidden sm:block w-16 text-center">날짜</div>
         </div>
 
         <div>

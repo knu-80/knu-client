@@ -11,7 +11,7 @@ export default function NoticeCard({ number, title, date, category }: NoticeCard
 
   return (
     <div className="flex items-center gap-x-4 px-2 sm:px-4 py-4 border-b border-gray-200">
-      <div className="w-8 text-center text-gray-500">{number}</div>
+      <div className="w-8 text-center text-xs sm:text-sm text-gray-500">{number}</div>
 
       <div className="flex items-center space-x-2 flex-1 min-w-0">
         <span
@@ -19,10 +19,12 @@ export default function NoticeCard({ number, title, date, category }: NoticeCard
         >
           {category}
         </span>
-        <h3 className="text-base font-semibold text-black truncate cursor-pointer">{title}</h3>
+        <h3 className="text-xs sm:text-base font-semibold text-black truncate cursor-pointer">
+          {title}
+        </h3>
       </div>
 
-      <div className="hidden sm:block w-24 text-sm text-gray-500 text-right">
+      <div className="hidden sm:block w-16 text-xs sm:text-sm text-gray-500 text-center">
         <span>{date}</span>
       </div>
     </div>

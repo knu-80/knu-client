@@ -37,9 +37,12 @@ export default function BoothDetailPage() {
         </p>
       </div>
 
-      <RepresentativeImage imageUrl="https://picsum.photos/600/400" />
+      <div className="mb-10">
+        <h3 className="typo-heading-3 text-black mb-3">동아리 대표 사진</h3>
+        <RepresentativeImage imageUrl="https://picsum.photos/600/400" />
+      </div>
 
-      <div className="mt-10 mb-10">
+      <div className="mb-10">
         <h3 className="typo-heading-3 mb-3 text-black">문의하기</h3>
         <div className="flex flex-col space-y-3">
           <div className="flex items-center space-x-2 text-black">

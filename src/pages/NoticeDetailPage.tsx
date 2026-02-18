@@ -1,7 +1,8 @@
 import { BiMessageSquareDetail } from 'react-icons/bi';
-import { FaRegCalendar } from 'react-icons/fa';
+import { FaRegCalendar, FaInfoCircle } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa';
 import RepresentativeImage from '@/components/RepresentativeImage';
+import FoundItemCard from '@/components/FoundItemCard';
 
 export default function NoticeDetailPage() {
   return (
@@ -11,7 +12,7 @@ export default function NoticeDetailPage() {
         <h2 className="typo-heading-2 text-black">상세보기</h2>
       </div>
 
-      <div className="flex flex-col space-y-1 mb-2 text-black">
+      <div className="flex flex-col space-y-1 mb-8 text-black">
         <h2 className="typo-heading-3">부스 운영시간 안내</h2>
         <div className="flex items-center space-x-4 text-sm text-gray-500 mt-1 pt-1">
           <div className="flex items-center space-x-2">
@@ -26,6 +27,8 @@ export default function NoticeDetailPage() {
         </div>
       </div>
 
+      <FoundItemCard itemName="호반우 인형" foundLocation="일청담" />
+
       <div className="mb-10 mt-5 text-black">
         <p className="typo-body-1">
           안녕하세요, 운영팀입니다. <br />
@@ -33,9 +36,14 @@ export default function NoticeDetailPage() {
         </p>
       </div>
 
-      <div className="mb-10">
+      <div className="mb-5">
         <h3 className="typo-heading-3 text-black mb-3">관련 사진</h3>
         <RepresentativeImage imageUrl="https://picsum.photos/600/400" />
+      </div>
+
+      <div className="flex items-center space-x-2 p-3 bg-blue-50 border border-blue-200 text-blue-800 rounded-md mb-10">
+        <FaInfoCircle className="text-xl" />
+        <p className="typo-body-2">분실물은 총동연 부스에서 수령가능합니다</p>
       </div>
     </div>
   );

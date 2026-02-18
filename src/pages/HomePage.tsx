@@ -1,4 +1,4 @@
-import backgroundImage from '@/assets/background.png';
+import backgroundImage from '@/assets/background.webp';
 import EventInfo from '@/components/home/EventInfo';
 import Footer from '@/components/home/Footer';
 import PerformanceTimeline from '@/components/home/PerformanceTimeline';
@@ -17,23 +17,23 @@ export default function HomePage() {
       <section className="relative -mx-5 overflow-hidden border-b border-white/40">
         <h1 className="sr-only">2026 경북대학교 가두모집 & 동아리 축제 메인 페이지</h1>
         <div
-          className="h-[100svh] w-full bg-[#AC8ED8] bg-contain bg-center bg-no-repeat"
+          className="h-[100svh] w-full bg-[#AC8ED8] bg-contain bg-center bg-no-repeat md:bg-cover md:bg-center"
           style={{ backgroundImage: `url(${backgroundImage})` }}
           aria-label="경북대학교 가두모집 대표 이미지"
           role="img"
         />
 
-        <div className="absolute inset-x-5 top-[68%] flex flex-col items-center text-center text-white">
-          <div className="mt-6 flex gap-3">
+        <div className="absolute inset-x-0 bottom-[clamp(110px,20vh,180px)] flex justify-center px-5 text-white">
+          <div className="flex w-[min(90%,320px)] gap-3">
             <button
               type="button"
-              className="rounded-full bg-knu-red px-6 py-2.5 text-sm font-semibold text-white shadow"
+              className="flex-1 rounded-full bg-knu-lavender px-6 py-2.5 text-sm font-semibold text-white shadow"
             >
               부스 찾기
             </button>
             <button
               type="button"
-              className="rounded-full border border-white/60 bg-white/10 px-6 py-2.5 text-sm font-semibold text-white backdrop-blur"
+              className="flex-1 rounded-full border border-white/60 bg-white/10 px-6 py-2.5 text-sm font-semibold text-white backdrop-blur"
             >
               이벤트 보기
             </button>
@@ -42,11 +42,12 @@ export default function HomePage() {
         <button
           type="button"
           onClick={handleScrollHint}
-          className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-white/80"
+          className="absolute bottom-7 left-1/2 flex -translate-x-1/2 flex-col items-center gap-4 text-white/80"
           aria-label="아래로 스크롤"
         >
           <span className="typo-body-2 text-white/80">
-            아래로 스크롤하여 더 많은 정보를 확인하세요
+            아래로 스크롤하여 더 많은 정보를 <br />
+            확인하세요
           </span>
           <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 backdrop-blur animate-bounce">
             <FiChevronDown className="h-6 w-6 text-white" />

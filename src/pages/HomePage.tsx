@@ -1,4 +1,4 @@
-import backgroundImage from '@/assets/background.webp';
+import backgroundImage from '@/assets/background.png';
 import EventInfo from '@/components/home/EventInfo';
 import Footer from '@/components/home/Footer';
 import PerformanceTimeline from '@/components/home/PerformanceTimeline';
@@ -14,16 +14,16 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <section className="relative -mx-5 overflow-hidden">
+      <section className="relative -mx-5 overflow-hidden border-b border-white/40">
         <h1 className="sr-only">2026 경북대학교 가두모집 & 동아리 축제 메인 페이지</h1>
         <div
-          className="h-[100dvh] w-full bg-cover bg-center md:bg-contain md:bg-top md:bg-no-repeat"
+          className="h-[100svh] w-full bg-[#AC8ED8] bg-contain bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${backgroundImage})` }}
           aria-label="경북대학교 가두모집 대표 이미지"
           role="img"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/50" />
-        <div className="absolute inset-x-5 top-[75%] flex flex-col items-center text-center text-white">
+
+        <div className="absolute inset-x-5 top-[68%] flex flex-col items-center text-center text-white">
           <div className="mt-6 flex gap-3">
             <button
               type="button"

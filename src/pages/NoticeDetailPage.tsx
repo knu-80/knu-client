@@ -1,6 +1,7 @@
 import { BiMessageSquareDetail } from 'react-icons/bi';
 import { FaRegCalendar } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa';
+import RepresentativeImage from '@/components/RepresentativeImage';
 
 export default function NoticeDetailPage() {
   return (
@@ -30,6 +31,11 @@ export default function NoticeDetailPage() {
           안녕하세요, 운영팀입니다. <br />
           행사 진행 상황에 따라 운영시간이 오후 8시까지로 어쩌구 저쩌구..
         </p>
+      </div>
+
+      <div className="mb-10">
+        <h3 className="typo-heading-3 text-black mb-3">관련 사진</h3>
+        <RepresentativeImage imageUrl="https://picsum.photos/600/400" />
       </div>
     </div>
   );

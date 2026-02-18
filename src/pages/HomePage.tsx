@@ -4,6 +4,7 @@ import Footer from '@/components/home/Footer';
 import PerformanceTimeline from '@/components/home/PerformanceTimeline';
 import QuickMenu from '@/components/home/QuickMenu';
 import { FiChevronDown } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 export default function HomePage() {
   const handleScrollHint = () => {
@@ -25,12 +26,12 @@ export default function HomePage() {
 
         <div className="absolute inset-x-0 bottom-[clamp(110px,20vh,180px)] flex justify-center px-5 text-white">
           <div className="flex w-[min(90%,320px)] gap-3">
-            <button
-              type="button"
-              className="flex-1 rounded-full bg-knu-lavender px-6 py-2.5 text-sm font-semibold text-white shadow"
+            <Link
+              to="/map"
+              className="flex-1 rounded-full bg-knu-lavender px-6 py-2.5 text-center text-sm font-semibold text-white shadow"
             >
               부스 찾기
-            </button>
+            </Link>
             <button
               type="button"
               className="flex-1 rounded-full border border-white/60 bg-white/10 px-6 py-2.5 text-sm font-semibold text-white backdrop-blur"

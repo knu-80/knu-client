@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { GrAnnounce } from 'react-icons/gr';
 import NoticeCard from '@/components/NoticeCard';
+import FloatingActionButton from '@/components/FloatingActionButton';
+import floatingMap from '@/assets/floating-map.svg';
 
 export default function NoticePage() {
   const [activeTab, setActiveTab] = useState('전체');
@@ -21,7 +23,7 @@ export default function NoticePage() {
         });
 
   return (
-    <div className="p-3 sm:p-5">
+    <div className="pt-3 sm:p-5">
       <div className="flex items-center space-x-2 mb-4">
         <GrAnnounce className="h-6 w-6 text-black" />
         <h2 className="typo-heading-2 text-black">공지사항</h2>
@@ -61,6 +63,17 @@ export default function NoticePage() {
               />
             ))
           )}
+        </div>
+      </div>
+
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] z-30">
+        <div className="mx-auto flex w-full max-w-[700px] justify-end px-5">
+          <FloatingActionButton
+            label="부스 배치도로 이동"
+            href="/map"
+            icon={floatingMap}
+            className="pointer-events-auto"
+          />
         </div>
       </div>
     </div>

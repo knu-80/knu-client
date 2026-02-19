@@ -1,4 +1,7 @@
 import backgroundImage from '@/assets/background.webp';
+import floatingMap from '@/assets/floating-map.svg';
+import floatingMegaphone from '@/assets/floating-megaphone.svg';
+import FloatingActionButton from '@/components/FloatingActionButton';
 import EventInfo from '@/components/home/EventInfo';
 import Footer from '@/components/home/Footer';
 import PerformanceTimeline from '@/components/home/PerformanceTimeline';
@@ -73,6 +76,25 @@ export default function HomePage() {
       <PerformanceTimeline />
 
       <Footer />
+
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] z-30">
+        <div className="mx-auto flex w-full max-w-[700px] justify-end px-5">
+          <div className="flex flex-col gap-3">
+            <FloatingActionButton
+              label="부스 배치도로 이동"
+              href="/map"
+              icon={floatingMap}
+              className="pointer-events-auto"
+            />
+            <FloatingActionButton
+              label="공지사항으로 이동"
+              href="/notice"
+              icon={floatingMegaphone}
+              className="pointer-events-auto"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

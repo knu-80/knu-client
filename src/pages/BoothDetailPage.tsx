@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import { BiMessageSquareDetail } from 'react-icons/bi';
 import { FaInstagram } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
@@ -7,8 +6,6 @@ import ApplyButton from '@/components/ApplyButton';
 import ClubCategory from '@/components/ClubCategory';
 
 export default function BoothDetailPage() {
-  const { id } = useParams<{ id: string }>();
-
   return (
     <div className="pt-3 sm:p-5">
       <div className="flex items-center space-x-2 mb-4">
@@ -55,12 +52,6 @@ export default function BoothDetailPage() {
       </div>
 
       <ApplyButton url="https://example.com/apply" />
-
-      {id ? (
-        <p className="muted">부스 ID: {id}</p>
-      ) : (
-        <p className="muted">부스 ID를 찾을 수 없습니다.</p>
-      )}
     </div>
   );
 }

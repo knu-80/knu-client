@@ -82,12 +82,13 @@ export default function MapPage() {
           const divisionColor = coord.isManagement
             ? DIVISION_INFO.MANAGEMENT.color
             : DIVISION_INFO[boothInfo.division].color;
-          const bgColorClass = isSelected ? 'bg-knu-red' : divisionColor;
+          const bgColorClass = isSelected ? divisionColor : 'bg-vanilla';
 
           return (
             <BoothMarker
               key={boothNum}
               {...coord}
+              name={boothInfo.name}
               bgColorClass={bgColorClass}
               isOpen={boothInfo.is_active}
               onClick={() => setSelectedBoothId(boothNum)}

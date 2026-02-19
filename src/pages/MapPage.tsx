@@ -21,8 +21,8 @@ export default function MapPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  const x = useMotionValue(-220);
-  const y = useMotionValue(-2100);
+  const x = useMotionValue(-250);
+  const y = useMotionValue(-2200);
   const [constraints, setConstraints] = useState<{ left: number; right: number; top: number; bottom: number } | false>(false);
 
   useEffect(() => {

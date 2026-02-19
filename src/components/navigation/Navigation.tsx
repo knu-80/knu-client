@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import knuLogo from '@/assets/knuLogo.png';
+import Logo from '@/assets/logo.png';
 
 const MENU_ITEMS = [
   { label: '부스 배치도', target: 'booth' },
@@ -27,8 +27,7 @@ export default function Navigation() {
               className="flex items-center gap-2"
               aria-label="홈으로 이동"
             >
-              <img src={knuLogo} alt="경북대학교 로고" className="h-7 w-7" />
-              <span className="text-sm font-semibold">KNU</span>
+              <img src={Logo} alt="경북대학교 로고" className="h-8 w-full" />
             </button>
 
             <button

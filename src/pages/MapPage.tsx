@@ -26,31 +26,31 @@ export default function MapPage() {
   const [constraints, setConstraints] = useState<{ left: number; right: number; top: number; bottom: number } | false>(false);
 
   useEffect(() => {
-  if (!containerRef.current || !canvasRef.current) return;
-
-  const calculateBounds = () => {
     if (!containerRef.current || !canvasRef.current) return;
 
-    const containerRect = containerRef.current.getBoundingClientRect();
-    const canvasRect = canvasRef.current.getBoundingClientRect();
+    const calculateBounds = () => {
+      if (!containerRef.current || !canvasRef.current) return;
 
-    const left = Math.min(0, containerRect.width - canvasRect.width);
-    const top = Math.min(0, containerRect.height - canvasRect.height);
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const canvasRect = canvasRef.current.getBoundingClientRect();
 
-    setConstraints({
-      left,
-      right: 0,
-      top,
-      bottom: 0,
-    });
-  };
+      const left = Math.min(0, containerRect.width - canvasRect.width);
+      const top = Math.min(0, containerRect.height - canvasRect.height);
 
-  calculateBounds();
-  const observer = new ResizeObserver(calculateBounds);
-  observer.observe(canvasRef.current);
-  observer.observe(containerRef.current);
-  return () => observer.disconnect();
-}, []);
+      setConstraints({
+        left,
+        right: 0,
+        top,
+        bottom: 0,
+      });
+    };
+
+    calculateBounds();
+    const observer = new ResizeObserver(calculateBounds);
+    observer.observe(canvasRef.current);
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
 
   return (
@@ -74,7 +74,7 @@ export default function MapPage() {
         style={{ x, y }}
         className="absolute top-0 left-0 w-[700px] h-[3100px] cursor-grab active:cursor-grabbing"
       >
-        <img src={MapSvg} alt="지도" className="w-full h-full" />
+        <img src={MapSvg} alt="지도" className="w-full h-full" draggable="false" />
         {Object.entries(BOOTH_COORDINATES).map(([number, coord]) => {
           const boothNum = Number(number);
           const boothInfo = MOCK_BOOTHS[boothNum] || DEFAULT_BOOTH;

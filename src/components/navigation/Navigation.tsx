@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Logo from '@/assets/logo.png';
 
@@ -21,14 +22,14 @@ export default function Navigation() {
       <div className="overflow-hidden rounded-b-lg shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
         <div className="border-b border-white/30 bg-white/40 text-white backdrop-blur">
           <div className="flex h-[66px] items-center justify-around gap-36 px-5">
-            <button
-              type="button"
+            <Link
+              to="/"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="flex items-center gap-2"
               aria-label="홈으로 이동"
             >
               <img src={Logo} alt="경북대학교 로고" className="h-8 w-full" />
-            </button>
+            </Link>
 
             <button
               type="button"

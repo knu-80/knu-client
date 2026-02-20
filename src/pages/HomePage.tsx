@@ -5,10 +5,14 @@ import EventInfo from '@/components/home/EventInfo';
 import Footer from '@/components/home/Footer';
 import PerformanceTimeline from '@/components/home/PerformanceTimeline';
 import QuickMenu from '@/components/home/QuickMenu';
+import { useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 export default function HomePage() {
+  const [isCompactDevice] = useState(() => window.screen.height <= 740);
+  const [heroHeight] = useState(() => Math.max(window.innerHeight - 66, 520));
+
   const handleScrollHint = () => {
     const element = document.getElementById('quick-menu');
     if (!element) return;
@@ -20,23 +24,37 @@ export default function HomePage() {
       <section className="relative -mx-5 overflow-hidden border-b border-white/40">
         <h1 className="sr-only">2026 경북대학교 가두모집 & 동아리 축제 메인 페이지</h1>
         <div
-          className="h-[100svh] w-full bg-[#AC8ED8] bg-contain bg-[center_12%] bg-no-repeat md:bg-cover md:bg-center [@media(max-height:820px)]:bg-[center_8%] [@media(max-height:740px)]:bg-[center_4%]"
-          style={{ backgroundImage: `url(${backgroundImage})` }}
+          className={`w-full bg-[#AC8ED8] bg-contain bg-no-repeat md:bg-cover md:bg-center ${
+            isCompactDevice ? 'bg-[center_4%]' : 'bg-[center_12%]'
+          }`}
+          style={{ backgroundImage: `url(${backgroundImage})`, height: `${heroHeight}px` }}
           aria-label="경북대학교 가두모집 대표 이미지"
           role="img"
         />
 
-        <div className="absolute inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] flex flex-col items-center gap-4 px-5 text-white [@media(max-height:740px)]:bottom-[calc(env(safe-area-inset-bottom)+1rem)] [@media(max-height:740px)]:gap-3">
-          <div className="flex w-[min(90%,320px)] gap-3 [@media(max-height:740px)]:w-[min(92%,300px)] [@media(max-height:740px)]:gap-2">
+        <div
+          className={`absolute inset-x-0 flex flex-col items-center px-5 text-white ${
+            isCompactDevice
+              ? 'bottom-[calc(env(safe-area-inset-bottom)+1rem)] gap-3'
+              : 'bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] gap-4'
+          }`}
+        >
+          <div
+            className={`flex ${isCompactDevice ? 'w-[min(92%,300px)] gap-2' : 'w-[min(90%,320px)] gap-3'}`}
+          >
             <Link
               to="/map"
-              className="flex-1 rounded-full bg-knu-lavender px-6 py-2.5 text-center text-sm font-semibold text-white shadow [@media(max-height:740px)]:px-4 [@media(max-height:740px)]:py-2 [@media(max-height:740px)]:text-xs"
+              className={`flex-1 rounded-full bg-knu-lavender text-center font-semibold text-white shadow ${
+                isCompactDevice ? 'px-4 py-2 text-xs' : 'px-6 py-2.5 text-sm'
+              }`}
             >
               부스 찾기
             </Link>
             <button
               type="button"
-              className="flex-1 rounded-full border border-white/60 bg-white/10 px-6 py-2.5 text-sm font-semibold text-white backdrop-blur [@media(max-height:740px)]:px-4 [@media(max-height:740px)]:py-2 [@media(max-height:740px)]:text-xs"
+              className={`flex-1 rounded-full border border-white/60 bg-white/10 font-semibold text-white backdrop-blur ${
+                isCompactDevice ? 'px-4 py-2 text-xs' : 'px-6 py-2.5 text-sm'
+              }`}
             >
               이벤트 보기
             </button>
@@ -47,11 +65,17 @@ export default function HomePage() {
             className="flex flex-col items-center gap-4 text-white/80"
             aria-label="아래로 스크롤"
           >
-            <span className="typo-body-2 whitespace-nowrap text-white/80 [@media(max-height:740px)]:hidden">
-              아래로 스크롤하여 더 많은 정보를 <br />
-              확인하세요
-            </span>
-            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 backdrop-blur animate-bounce [@media(max-height:740px)]:h-9 [@media(max-height:740px)]:w-9">
+            {!isCompactDevice && (
+              <span className="typo-body-2 whitespace-nowrap text-white/80">
+                아래로 스크롤하여 더 많은 정보를 <br />
+                확인하세요
+              </span>
+            )}
+            <span
+              className={`flex items-center justify-center rounded-full border border-white/40 bg-white/10 backdrop-blur animate-bounce ${
+                isCompactDevice ? 'h-9 w-9' : 'h-11 w-11'
+              }`}
+            >
               <FiChevronDown className="h-6 w-6 text-white" />
             </span>
           </button>

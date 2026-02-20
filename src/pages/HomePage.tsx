@@ -48,7 +48,7 @@ export default function HomePage() {
           className="absolute bottom-7 left-1/2 flex -translate-x-1/2 flex-col items-center gap-4 text-white/80"
           aria-label="아래로 스크롤"
         >
-          <span className="typo-body-2 text-white/80">
+          <span className="typo-body-2 whitespace-nowrap text-white/80">
             아래로 스크롤하여 더 많은 정보를 <br />
             확인하세요
           </span>

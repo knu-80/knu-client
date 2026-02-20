@@ -10,8 +10,11 @@ import { FiChevronDown } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 export default function HomePage() {
-  const [isCompactDevice] = useState(() => window.screen.height <= 740);
-  const [heroHeight] = useState(() => Math.max(window.innerHeight, 520));
+  // Lock viewport metrics at first render so mobile browser UI changes do not reshuffle the hero.
+  const [viewportHeight] = useState(() => window.innerHeight);
+  const isCompactDevice = viewportHeight <= 760;
+  const isSmallDevice = viewportHeight <= 700;
+  const [heroHeight] = useState(() => Math.max(viewportHeight, 520));
 
   const handleScrollHint = () => {
     const element = document.getElementById('quick-menu');
@@ -24,8 +27,8 @@ export default function HomePage() {
       <section className="relative -mx-5 overflow-hidden border-b border-white/40">
         <h1 className="sr-only">2026 경북대학교 가두모집 & 동아리 축제 메인 페이지</h1>
         <div
-          className={`w-full bg-[#AC8ED8] bg-contain bg-no-repeat md:bg-cover md:bg-center ${
-            isCompactDevice ? 'bg-[center_4%]' : 'bg-[center_12%]'
+          className={`w-full bg-[#AC8ED8] bg-cover bg-no-repeat ${
+            isSmallDevice ? 'bg-[center_8%]' : isCompactDevice ? 'bg-[center_6%]' : 'bg-center'
           }`}
           style={{ backgroundImage: `url(${backgroundImage})`, height: `${heroHeight}px` }}
           aria-label="경북대학교 가두모집 대표 이미지"
@@ -34,9 +37,7 @@ export default function HomePage() {
 
         <div
           className={`absolute inset-x-0 flex flex-col items-center px-5 text-white ${
-            isCompactDevice
-              ? 'bottom-[calc(env(safe-area-inset-bottom)+1rem)] gap-3'
-              : 'bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] gap-4'
+            isCompactDevice ? 'bottom-4 gap-2.5' : 'bottom-6 gap-4'
           }`}
         >
           <div
@@ -65,7 +66,7 @@ export default function HomePage() {
             className="flex flex-col items-center gap-4 text-white/80"
             aria-label="아래로 스크롤"
           >
-            {!isCompactDevice && (
+            {!isSmallDevice && (
               <span className="typo-body-2 whitespace-nowrap text-white/80">
                 아래로 스크롤하여 더 많은 정보를 <br />
                 확인하세요

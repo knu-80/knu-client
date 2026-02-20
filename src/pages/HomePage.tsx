@@ -26,7 +26,7 @@ export default function HomePage() {
           role="img"
         />
 
-        <div className="absolute inset-x-0 bottom-[clamp(110px,20vh,180px)] flex justify-center px-5 text-white">
+        <div className="absolute inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] flex flex-col items-center gap-4 px-5 text-white">
           <div className="flex w-[min(90%,320px)] gap-3">
             <Link
               to="/map"
@@ -41,21 +41,21 @@ export default function HomePage() {
               이벤트 보기
             </button>
           </div>
+          <button
+            type="button"
+            onClick={handleScrollHint}
+            className="flex flex-col items-center gap-4 text-white/80"
+            aria-label="아래로 스크롤"
+          >
+            <span className="typo-body-2 whitespace-nowrap text-white/80">
+              아래로 스크롤하여 더 많은 정보를 <br />
+              확인하세요
+            </span>
+            <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 backdrop-blur animate-bounce">
+              <FiChevronDown className="h-6 w-6 text-white" />
+            </span>
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={handleScrollHint}
-          className="absolute bottom-7 left-1/2 flex -translate-x-1/2 flex-col items-center gap-4 text-white/80"
-          aria-label="아래로 스크롤"
-        >
-          <span className="typo-body-2 whitespace-nowrap text-white/80">
-            아래로 스크롤하여 더 많은 정보를 <br />
-            확인하세요
-          </span>
-          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 backdrop-blur animate-bounce">
-            <FiChevronDown className="h-6 w-6 text-white" />
-          </span>
-        </button>
       </section>
 
       <QuickMenu />

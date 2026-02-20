@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 
 export default function HomePage() {
   const [isCompactDevice] = useState(() => window.screen.height <= 740);
-  const [heroHeight] = useState(() => Math.max(window.innerHeight - 66, 520));
+  const [heroHeight] = useState(() => Math.max(window.innerHeight, 520));
 
   const handleScrollHint = () => {
     const element = document.getElementById('quick-menu');

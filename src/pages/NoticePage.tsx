@@ -1,12 +1,27 @@
 import { useState } from 'react';
 import { GrAnnounce } from 'react-icons/gr';
 import NoticeCard from '@/components/NoticeCard';
+import floatingMap from '@/assets/floating-map.svg';
+import floatingMegaphone from '@/assets/floating-megaphone.svg';
+import FloatingActionGroup from '@/components/FloatingActionGroup';
 
 export default function NoticePage() {
   const [activeTab, setActiveTab] = useState('전체');
   const tabs = ['전체', '공지', '분실물'];
 
   const notices = [
+    { number: 4, title: '축제 부스 운영 시간 변경 안내', date: '2026.10.26', category: '공지' },
+    { number: 3, title: '학생회관에서 지갑 분실했어요!', date: '2026.10.25', category: '분실물' },
+    { number: 2, title: '중앙도서관 시험 기간 연장 운영', date: '2026.10.24', category: '공지' },
+    { number: 1, title: '본관 앞에서 에어팟 주우신 분!', date: '2026.10.23', category: '분실물' },
+    { number: 4, title: '축제 부스 운영 시간 변경 안내', date: '2026.10.26', category: '공지' },
+    { number: 3, title: '학생회관에서 지갑 분실했어요!', date: '2026.10.25', category: '분실물' },
+    { number: 2, title: '중앙도서관 시험 기간 연장 운영', date: '2026.10.24', category: '공지' },
+    { number: 1, title: '본관 앞에서 에어팟 주우신 분!', date: '2026.10.23', category: '분실물' },
+    { number: 4, title: '축제 부스 운영 시간 변경 안내', date: '2026.10.26', category: '공지' },
+    { number: 3, title: '학생회관에서 지갑 분실했어요!', date: '2026.10.25', category: '분실물' },
+    { number: 2, title: '중앙도서관 시험 기간 연장 운영', date: '2026.10.24', category: '공지' },
+    { number: 1, title: '본관 앞에서 에어팟 주우신 분!', date: '2026.10.23', category: '분실물' },
     { number: 4, title: '축제 부스 운영 시간 변경 안내', date: '2026.10.26', category: '공지' },
     { number: 3, title: '학생회관에서 지갑 분실했어요!', date: '2026.10.25', category: '분실물' },
     { number: 2, title: '중앙도서관 시험 기간 연장 운영', date: '2026.10.24', category: '공지' },
@@ -63,6 +78,21 @@ export default function NoticePage() {
           )}
         </div>
       </div>
+
+      <FloatingActionGroup
+        actions={[
+          {
+            label: '부스 배치도로 이동',
+            href: '/map',
+            icon: floatingMap,
+          },
+          {
+            label: '이벤트 안내로 이동',
+            href: '/event',
+            icon: floatingMegaphone,
+          },
+        ]}
+      />
     </div>
   );
 }

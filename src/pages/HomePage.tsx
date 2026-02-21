@@ -1,11 +1,21 @@
 import backgroundImage from '@/assets/background.webp';
+import floatingMap from '@/assets/floating-map.svg';
+import FloatingActionGroup from '@/components/FloatingActionGroup';
 import EventInfo from '@/components/home/EventInfo';
 import Footer from '@/components/home/Footer';
 import PerformanceTimeline from '@/components/home/PerformanceTimeline';
 import QuickMenu from '@/components/home/QuickMenu';
+import { useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 export default function HomePage() {
+  // Lock viewport metrics at first render so mobile browser UI changes do not reshuffle the hero.
+  const [viewportHeight] = useState(() => window.innerHeight);
+  const isCompactDevice = viewportHeight <= 760;
+  const isSmallDevice = viewportHeight <= 700;
+  const [heroHeight] = useState(() => Math.max(viewportHeight, 520));
+
   const handleScrollHint = () => {
     const element = document.getElementById('quick-menu');
     if (!element) return;
@@ -14,44 +24,63 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <section className="relative -mx-5 overflow-hidden">
+      <section className="relative -mx-5 overflow-hidden border-b border-white/40">
         <h1 className="sr-only">2026 경북대학교 가두모집 & 동아리 축제 메인 페이지</h1>
         <div
-          className="h-[100dvh] w-full bg-cover bg-center md:bg-contain md:bg-top md:bg-no-repeat"
-          style={{ backgroundImage: `url(${backgroundImage})` }}
+          className={`w-full bg-[#AC8ED8] bg-cover bg-no-repeat ${
+            isSmallDevice ? 'bg-[center_8%]' : isCompactDevice ? 'bg-[center_6%]' : 'bg-center'
+          }`}
+          style={{ backgroundImage: `url(${backgroundImage})`, height: `${heroHeight}px` }}
           aria-label="경북대학교 가두모집 대표 이미지"
           role="img"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/50" />
-        <div className="absolute inset-x-5 top-[75%] flex flex-col items-center text-center text-white">
-          <div className="mt-6 flex gap-3">
-            <button
-              type="button"
-              className="rounded-full bg-knu-red px-6 py-2.5 text-sm font-semibold text-white shadow"
+
+        <div
+          className={`absolute inset-x-0 flex flex-col items-center px-5 text-white ${
+            isCompactDevice ? 'bottom-4 gap-2.5' : 'bottom-6 gap-4'
+          }`}
+        >
+          <div
+            className={`flex ${isCompactDevice ? 'w-[min(92%,300px)] gap-2' : 'w-[min(90%,320px)] gap-3'}`}
+          >
+            <Link
+              to="/map"
+              className={`flex-1 rounded-full bg-knu-lavender text-center font-semibold text-white shadow ${
+                isCompactDevice ? 'px-4 py-2 text-xs' : 'px-6 py-2.5 text-sm'
+              }`}
             >
               부스 찾기
-            </button>
+            </Link>
             <button
               type="button"
-              className="rounded-full border border-white/60 bg-white/10 px-6 py-2.5 text-sm font-semibold text-white backdrop-blur"
+              className={`flex-1 rounded-full border border-white/60 bg-white/10 font-semibold text-white backdrop-blur ${
+                isCompactDevice ? 'px-4 py-2 text-xs' : 'px-6 py-2.5 text-sm'
+              }`}
             >
               이벤트 보기
             </button>
           </div>
+          <button
+            type="button"
+            onClick={handleScrollHint}
+            className="flex flex-col items-center gap-4 text-white/80"
+            aria-label="아래로 스크롤"
+          >
+            {!isSmallDevice && (
+              <span className="typo-body-2 whitespace-nowrap text-white/80">
+                아래로 스크롤하여 더 많은 정보를 <br />
+                확인하세요
+              </span>
+            )}
+            <span
+              className={`flex items-center justify-center rounded-full border border-white/40 bg-white/10 backdrop-blur animate-bounce ${
+                isCompactDevice ? 'h-9 w-9' : 'h-11 w-11'
+              }`}
+            >
+              <FiChevronDown className="h-6 w-6 text-white" />
+            </span>
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={handleScrollHint}
-          className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-white/80"
-          aria-label="아래로 스크롤"
-        >
-          <span className="typo-body-2 text-white/80">
-            아래로 스크롤하여 더 많은 정보를 확인하세요
-          </span>
-          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 backdrop-blur animate-bounce">
-            <FiChevronDown className="h-6 w-6 text-white" />
-          </span>
-        </button>
       </section>
 
       <QuickMenu />
@@ -71,6 +100,16 @@ export default function HomePage() {
       <PerformanceTimeline />
 
       <Footer />
+
+      <FloatingActionGroup
+        actions={[
+          {
+            label: '부스 배치도로 이동',
+            href: '/map',
+            icon: floatingMap,
+          },
+        ]}
+      />
     </div>
   );
 }

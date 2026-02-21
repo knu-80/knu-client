@@ -4,7 +4,7 @@ import { SearchBar } from '@/components/SearchBar';
 import { MapPageClubCategory } from '@/components/ClubCategory';
 import { BoothMarker } from '@/components/BoothMarker';
 import { BOOTH_COORDINATES } from '@/constants/map';
-import { DIVISION_INFO, MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
+import { MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
 import MapSvg from '@/assets/map.svg';
 
 const DEFAULT_BOOTH: BoothDetail = {

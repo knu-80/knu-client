@@ -10,7 +10,13 @@ export const DIVISION_INFO = {
 export interface BoothDetail {
   booth_number: number;
   name: string;
-  division: 'ACADEMIC_DIVISION' | 'CULTURE_ART_DIVISION' | 'SPORTS_DIVISION' | 'SOCIAL_DIVISION' | 'RELIGIOUS_DIVISION';
+  division:
+    | 'ACADEMIC_DIVISION'
+    | 'CULTURE_ART_DIVISION'
+    | 'SPORTS_DIVISION'
+    | 'SOCIAL_DIVISION'
+    | 'RELIGIOUS_DIVISION'
+    | 'MANAGEMENT';
   is_active: boolean;
 }
 
@@ -25,4 +31,5 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
   8: { booth_number: 8, name: '테스트 체육2', division: 'SPORTS_DIVISION', is_active: false },
   9: { booth_number: 9, name: '테스트 사회2', division: 'SOCIAL_DIVISION', is_active: false },
   10: { booth_number: 10, name: '테스트 종교2', division: 'RELIGIOUS_DIVISION', is_active: true },
+  100: { booth_number: 99, name: '총동연', division: 'MANAGEMENT', is_active: false },
 };

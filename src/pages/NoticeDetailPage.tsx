@@ -6,7 +6,7 @@ import FoundItemCard from '@/components/FoundItemCard';
 
 export default function NoticeDetailPage() {
   return (
-    <div className="pt-3 sm:p-5">
+    <div className="pt-5 sm:p-5">
       <div className="flex items-center space-x-2 mb-4">
         <BiMessageSquareDetail className="h-6 w-6 text-black" />
         <h2 className="typo-heading-2 text-black">상세보기</h2>

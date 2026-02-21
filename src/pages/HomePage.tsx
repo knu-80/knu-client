@@ -1,9 +1,21 @@
 import backgroundImage from '@/assets/background.webp';
+import EventInfo from '@/components/home/EventInfo';
+import Footer from '@/components/home/Footer';
+import PerformanceTimeline from '@/components/home/PerformanceTimeline';
+import QuickMenu from '@/components/home/QuickMenu';
+import { FiChevronDown } from 'react-icons/fi';
 
 export default function HomePage() {
+  const handleScrollHint = () => {
+    const element = document.getElementById('quick-menu');
+    if (!element) return;
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <section className="relative -mx-5 overflow-hidden">
+        <h1 className="sr-only">2026 경북대학교 가두모집 & 동아리 축제 메인 페이지</h1>
         <div
           className="h-[100dvh] w-full bg-cover bg-center md:bg-contain md:bg-top md:bg-no-repeat"
           style={{ backgroundImage: `url(${backgroundImage})` }}
@@ -27,84 +39,38 @@ export default function HomePage() {
             </button>
           </div>
         </div>
-      </section>
-
-      <section
-        id="booth"
-        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
-      >
-        <h3 className="typo-heading-3">부스 찾기</h3>
-        <p className="typo-body-2 typo-muted mt-2">
-          행사 기간 동안 운영되는 동아리와 가두모집 부스를 빠르게 찾아보세요.
-        </p>
         <button
           type="button"
-          className="mt-4 w-full rounded-xl bg-knu-red py-3 text-sm font-semibold text-white"
+          onClick={handleScrollHint}
+          className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-white/80"
+          aria-label="아래로 스크롤"
         >
-          부스 목록 보러가기
+          <span className="typo-body-2 text-white/80">
+            아래로 스크롤하여 더 많은 정보를 확인하세요
+          </span>
+          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/40 bg-white/10 backdrop-blur animate-bounce">
+            <FiChevronDown className="h-6 w-6 text-white" />
+          </span>
         </button>
       </section>
 
-      <section
-        id="notices"
-        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
-      >
-        <div className="flex items-center justify-between">
-          <h3 className="typo-heading-3">공지사항</h3>
-          <span className="typo-caption text-text-muted">최근 3건</span>
-        </div>
-        <ul className="mt-4 space-y-3">
-          {[
-            { title: '우천 시 행사 운영 안내', date: '2025.03.14' },
-            { title: '부스 운영 시간 변경 공지', date: '2025.03.12' },
-            { title: '분실물 안내 데스크 위치', date: '2025.03.10' },
-          ].map((item) => (
-            <li
-              key={item.title}
-              className="flex items-center justify-between rounded-xl bg-gray-100 px-4 py-3"
-            >
-              <span className="typo-body-2">{item.title}</span>
-              <span className="typo-caption text-text-muted">{item.date}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <QuickMenu />
 
-      <section
-        id="events"
-        className="scroll-mt-[80px] rounded-2xl border border-gray-200 bg-white p-5"
-      >
-        <h3 className="typo-heading-3">이벤트 소개</h3>
-        <p className="typo-body-2 typo-muted mt-2">
-          스탬프 투어 등 축제 이벤트 안내가 곧 제공됩니다.
-        </p>
-        <button
-          type="button"
-          className="mt-4 w-full rounded-xl border border-gray-200 py-3 text-sm font-semibold text-knu-gray"
-        >
-          이벤트 안내 보기
-        </button>
-      </section>
+      <EventInfo
+        items={[
+          {
+            title: '가두모집 1일차',
+            date: '3월 16일 (일)',
+            location: '백양로 · 일정담',
+            time: '11:00 - 17:00',
+            description: '동아리 부스 운영 및 공연',
+          },
+        ]}
+      />
 
-      <button
-        type="button"
-        aria-label="빠른 이동"
-        className="fixed bottom-6 right-6 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-knu-red text-white shadow-lg shadow-black/20"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-5 w-5"
-        >
-          <path d="M12 5v14" />
-          <path d="m19 12-7 7-7-7" />
-        </svg>
-      </button>
+      <PerformanceTimeline />
+
+      <Footer />
     </div>
   );
 }

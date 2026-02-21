@@ -48,6 +48,9 @@
   --text-body-2: 0.875rem;
   --text-body-2--line-height: 1.375rem;
 
+  --text-body-3: 0.75rem;
+  --text-body-3--line-height: 1.125rem;
+
   --text-caption: 0.75rem;
   --text-caption--line-height: 1.125rem;
 }
@@ -87,6 +90,9 @@ body {
   }
   .typo-body-2 {
     @apply font-sans text-body-2;
+  }
+  .typo-body-3 {
+    @apply font-sans text-body-3;
   }
   .typo-caption {
     @apply font-sans text-caption;

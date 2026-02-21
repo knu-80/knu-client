@@ -1,23 +1,16 @@
-import { useParams } from 'react-router-dom';
 import { BiMessageSquareDetail } from 'react-icons/bi';
 import { FaInstagram } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
 import RepresentativeImage from '@/components/RepresentativeImage';
 import ApplyButton from '@/components/ApplyButton';
-import EditButton from '@/components/EditButton';
 import ClubCategory from '@/components/ClubCategory';
 
 export default function BoothDetailPage() {
-  const { id } = useParams<{ id: string }>();
-
   return (
-    <div className="p-5">
-      <div className="flex items-center justify-between space-x-2 mb-4">
-        <div className="flex items-center space-x-2">
-          <BiMessageSquareDetail className="h-6 w-6 text-black" />
-          <h2 className="typo-heading-2 text-black">상세보기</h2>
-        </div>
-        <EditButton editUrl={`/booths/${id}/edit`} />
+    <div className="pt-5 sm:p-5">
+      <div className="flex items-center space-x-2 mb-4">
+        <BiMessageSquareDetail className="h-6 w-6 text-black" />
+        <h2 className="typo-heading-2 text-black">상세보기</h2>
       </div>
 
       <div className="flex items-center space-x-4 mb-2 text-black">
@@ -59,12 +52,6 @@ export default function BoothDetailPage() {
       </div>
 
       <ApplyButton url="https://example.com/apply" />
-
-      {id ? (
-        <p className="muted">부스 ID: {id}</p>
-      ) : (
-        <p className="muted">부스 ID를 찾을 수 없습니다.</p>
-      )}
     </div>
   );
 }

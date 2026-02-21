@@ -17,6 +17,8 @@
 
   --color-text-muted: var(--color-gray-400);
 
+  --color-vanilla: #F7F3E8;
+
   --font-sans:
     'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Segoe UI', system-ui, sans-serif;
   --font-display: var(--font-sans);

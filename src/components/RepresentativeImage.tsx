@@ -2,9 +2,13 @@ import { useState, useEffect } from 'react';
 
 interface RepresentativeImageProps {
   imageUrl: string | null;
+  height?: string;
 }
 
-export default function RepresentativeImage({ imageUrl }: RepresentativeImageProps) {
+export default function RepresentativeImage({
+  imageUrl,
+  height = 'h-64',
+}: RepresentativeImageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleImageClick = () => {
@@ -49,13 +53,15 @@ export default function RepresentativeImage({ imageUrl }: RepresentativeImagePro
     <div>
       {imageUrl ? (
         <div
-          className="relative w-full h-64 bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
+          className={`relative w-full ${height} bg-gray-200 rounded-lg overflow-hidden cursor-pointer`}
           onClick={handleImageClick}
         >
           <img src={imageUrl} alt="대표 사진" className="w-full h-full object-cover" />
         </div>
       ) : (
-        <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center typo-muted">
+        <div
+          className={`w-full ${height} bg-gray-200 rounded-lg flex items-center justify-center typo-muted`}
+        >
           표시할 이미지가 없습니다.
         </div>
       )}

@@ -3,16 +3,18 @@ import { useState, useEffect } from 'react';
 interface RepresentativeImageProps {
   imageUrl: string | null;
   height?: string;
+  isZoomable?: boolean;
 }
 
 export default function RepresentativeImage({
   imageUrl,
   height = 'h-64',
+  isZoomable = true,
 }: RepresentativeImageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleImageClick = () => {
-    if (imageUrl) {
+    if (imageUrl && isZoomable) {
       setIsModalOpen(true);
     }
   };
@@ -53,7 +55,9 @@ export default function RepresentativeImage({
     <div>
       {imageUrl ? (
         <div
-          className={`relative w-full ${height} bg-gray-200 rounded-lg overflow-hidden cursor-pointer`}
+          className={`relative w-full ${height} bg-gray-200 rounded-lg overflow-hidden ${
+            isZoomable ? 'cursor-pointer' : ''
+          }`}
           onClick={handleImageClick}
         >
           <img src={imageUrl} alt="대표 사진" className="w-full h-full object-cover" />

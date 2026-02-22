@@ -46,7 +46,7 @@ export default function RepresentativeImage({ imageUrl }: RepresentativeImagePro
   }, [isModalOpen]);
 
   return (
-    <div className="mt-4">
+    <div>
       {imageUrl ? (
         <div
           className="relative w-full h-64 bg-gray-200 rounded-lg overflow-hidden cursor-pointer"

@@ -7,6 +7,7 @@ import BoothDetailPage from '@/pages/BoothDetailPage';
 import MapPage from '@/pages/MapPage';
 import NoticePage from '@/pages/NoticePage';
 import NoticeDetailPage from '@/pages/NoticeDetailPage';
+import EventPage from '@/pages/EventPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="booths/:id" element={<BoothDetailPage />} />
         <Route path="notice" element={<NoticePage />} />
         <Route path="notice/:id" element={<NoticeDetailPage />} />
+        <Route path="event" element={<EventPage />} />
       </Route>
       <Route element={<MapLayout />}>
         <Route path="/map" element={<MapPage />} />

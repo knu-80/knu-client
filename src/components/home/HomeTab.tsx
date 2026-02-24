@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiChevronRight, FiInfo } from 'react-icons/fi';
+import MapSvg from '@/assets/map.svg';
 
 type DayKey = 'day1' | 'day2';
 
@@ -202,6 +203,39 @@ function NoticePreviewCard({
   );
 }
 
+function MapPreviewCard() {
+  return (
+    <Link
+      to="/map"
+      className="group block overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)] transition hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
+      aria-label="부스 배치도 지도 페이지로 이동"
+    >
+      <div className="relative h-36 overflow-hidden bg-gray-100">
+        <img
+          src={MapSvg}
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-cover object-top opacity-85 transition duration-200 group-hover:scale-[1.02]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
+        <div className="absolute bottom-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-knu-lavender">
+          탭하여 지도 보기
+        </div>
+      </div>
+
+      <div className="flex items-start justify-between gap-3 px-4 py-4">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-knu-gray">부스 배치도</p>
+          <p className="mt-1 text-xs leading-4 text-text-muted">
+            전체 배치도에서 부스 위치를 확인하고 탐색할 수 있어요.
+          </p>
+        </div>
+        <span className="mt-0.5 shrink-0 text-sm font-semibold text-knu-lavender">OPEN</span>
+      </div>
+    </Link>
+  );
+}
+
 export default function HomeTab() {
   const [activeDay, setActiveDay] = useState<DayKey>('day1');
 
@@ -252,6 +286,14 @@ export default function HomeTab() {
         aria-labelledby={`home-day-tab-${activeDay}`}
         className="space-y-8 pt-6"
       >
+        <section aria-labelledby="home-map-preview-title">
+          <SectionHeader title="부스 배치도" to="/map" label="더보기" />
+          <div id="home-map-preview-title" className="sr-only">
+            부스 배치도 미리보기
+          </div>
+          <MapPreviewCard />
+        </section>
+
         <section aria-labelledby="home-timetable-title">
           <SectionHeader title="타임테이블" to="/timetable" label="더보기" />
           <TimeTablePreviewCard

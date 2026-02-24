@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiChevronRight, FiInfo } from 'react-icons/fi';
+import { FiChevronRight } from 'react-icons/fi';
 import MapSvg from '@/assets/map.svg';
 
 type DayKey = 'day1' | 'day2';
@@ -309,22 +309,6 @@ export default function HomeTab() {
             items={activeContent.noticePreview}
           />
         </section>
-
-        <div className="rounded-3xl border border-gray-200 bg-white p-4">
-          <div className="flex items-start gap-3">
-            <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-gray-500">
-              <FiInfo className="h-4 w-4" aria-hidden="true" />
-            </span>
-            <div>
-              <p className="text-sm font-semibold text-knu-gray">
-                홈에서는 핵심 안내만 먼저 보여드려요.
-              </p>
-              <p className="mt-1 text-xs leading-4 text-text-muted">
-                자세한 운영 시간표, 공지 원문, 분실물 상세 내용은 각 탭의 더보기에서 확인해주세요.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );

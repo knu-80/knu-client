@@ -11,8 +11,11 @@ type DayOption = {
 };
 
 type DayContent = {
-  timetableMessage: string;
-  timetableSubMessage: string;
+  timetablePreview: {
+    time: string;
+    title: string;
+    location: string;
+  }[];
   noticeMessage: string;
   noticeSubMessage: string;
 };
@@ -24,15 +27,45 @@ const DAY_OPTIONS: DayOption[] = [
 
 const DAY_CONTENT: Record<DayKey, DayContent> = {
   day1: {
-    timetableMessage: '가두모집 1일차 운영 시간과 주요 공연 순서를 이벤트 탭에서 확인하세요.',
-    timetableSubMessage: '홈에서는 핵심 안내만 제공하고 상세 시간표는 더보기에서 확인할 수 있어요.',
+    timetablePreview: [
+      {
+        time: '11:00',
+        title: '운영 시작 안내',
+        location: '백양로 메인 구간',
+      },
+      {
+        time: '12:00',
+        title: '동아리 공연 1부',
+        location: '백양로 메인 무대',
+      },
+      {
+        time: '14:00',
+        title: '참여형 이벤트',
+        location: '일청담 광장',
+      },
+    ],
     noticeMessage:
       '1일차 공지, 우천 안내, 위치 변경 및 분실물 접수 공지를 공지사항 탭에서 확인하세요.',
     noticeSubMessage: '실시간 업데이트는 공지사항 기준으로 반영됩니다.',
   },
   day2: {
-    timetableMessage: '가두모집 2일차 운영 시간과 프로그램 변경 사항은 이벤트 탭에서 확인하세요.',
-    timetableSubMessage: '2일차 일정은 현장 상황에 따라 조정될 수 있어 상세 화면 확인이 필요해요.',
+    timetablePreview: [
+      {
+        time: '11:00',
+        title: '2일차 운영 시작',
+        location: '백양로 메인 구간',
+      },
+      {
+        time: '12:30',
+        title: '동아리 공연 2부',
+        location: '백양로 메인 무대',
+      },
+      {
+        time: '15:00',
+        title: '모집 상담 집중 시간',
+        location: '백양로 · 일정담',
+      },
+    ],
     noticeMessage:
       '2일차 부스 위치 업데이트와 운영 안내, 분실물 공지는 공지사항 탭에서 확인하세요.',
     noticeSubMessage: '공지사항 탭에서 최신 순으로 확인하는 것을 권장합니다.',
@@ -78,6 +111,44 @@ function InfoGuideCard({
         <p className="mt-1 text-sm leading-5 text-gray-700">{message}</p>
         <p className="mt-2 text-xs leading-4 text-text-muted">{subMessage}</p>
       </div>
+    </div>
+  );
+}
+
+function TimeTablePreviewCard({
+  dayLabel,
+  items,
+}: {
+  dayLabel: string;
+  items: DayContent['timetablePreview'];
+}) {
+  return (
+    <div className="rounded-3xl border border-knu-mint/45 bg-knu-mint/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <p className="text-sm font-semibold text-knu-gray">{dayLabel} 타임테이블 미리보기</p>
+        <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-knu-lavender">
+          일부 항목
+        </span>
+      </div>
+
+      <div className="space-y-2">
+        {items.map((item) => (
+          <div
+            key={`${item.time}-${item.title}`}
+            className="grid grid-cols-[56px_1fr] gap-3 rounded-2xl border border-white/70 bg-white/80 px-3 py-3"
+          >
+            <p className="text-sm font-semibold text-knu-lavender">{item.time}</p>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold text-knu-gray">{item.title}</p>
+              <p className="mt-1 truncate text-xs text-text-muted">{item.location}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-3 text-xs text-text-muted">
+        상세 시간표 및 변경 사항은 타임테이블 더보기에서 확인해주세요.
+      </p>
     </div>
   );
 }
@@ -134,11 +205,9 @@ export default function HomeTab() {
       >
         <section aria-labelledby="home-timetable-title">
           <SectionHeader title="타임테이블" to="/timetable" label="더보기" />
-          <InfoGuideCard
-            title={`${activeDay === 'day1' ? 'DAY 1' : 'DAY 2'} 시간표 안내`}
-            message={activeContent.timetableMessage}
-            subMessage={activeContent.timetableSubMessage}
-            tone="blue"
+          <TimeTablePreviewCard
+            dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
+            items={activeContent.timetablePreview}
           />
         </section>
 

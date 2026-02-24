@@ -55,7 +55,7 @@ export default function MapPage() {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full h-screen relative overflow-hidden bg-gray-50">
+    <div ref={containerRef} className="relative h-full min-h-0 w-full overflow-hidden bg-gray-50">
       <div className="px-5 py-3 z-30 sticky top-0 bg-white">
         <SearchBar
           value={value}

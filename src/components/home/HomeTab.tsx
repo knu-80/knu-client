@@ -16,8 +16,11 @@ type DayContent = {
     title: string;
     location: string;
   }[];
-  noticeMessage: string;
-  noticeSubMessage: string;
+  noticePreview: {
+    category: '공지' | '분실물';
+    title: string;
+    date: string;
+  }[];
 };
 
 const DAY_OPTIONS: DayOption[] = [
@@ -44,9 +47,23 @@ const DAY_CONTENT: Record<DayKey, DayContent> = {
         location: '일청담 광장',
       },
     ],
-    noticeMessage:
-      '1일차 공지, 우천 안내, 위치 변경 및 분실물 접수 공지를 공지사항 탭에서 확인하세요.',
-    noticeSubMessage: '실시간 업데이트는 공지사항 기준으로 반영됩니다.',
+    noticePreview: [
+      {
+        category: '공지',
+        title: '1일차 운영 시간 및 우천 시 안내',
+        date: '03.16',
+      },
+      {
+        category: '공지',
+        title: '백양로 일부 구간 동선 안내',
+        date: '03.16',
+      },
+      {
+        category: '분실물',
+        title: '현장 분실물 접수 위치 안내',
+        date: '03.16',
+      },
+    ],
   },
   day2: {
     timetablePreview: [
@@ -66,9 +83,23 @@ const DAY_CONTENT: Record<DayKey, DayContent> = {
         location: '백양로 · 일정담',
       },
     ],
-    noticeMessage:
-      '2일차 부스 위치 업데이트와 운영 안내, 분실물 공지는 공지사항 탭에서 확인하세요.',
-    noticeSubMessage: '공지사항 탭에서 최신 순으로 확인하는 것을 권장합니다.',
+    noticePreview: [
+      {
+        category: '공지',
+        title: '2일차 부스 위치 업데이트 안내',
+        date: '03.17',
+      },
+      {
+        category: '공지',
+        title: '프로그램 시간 변경 공지',
+        date: '03.17',
+      },
+      {
+        category: '분실물',
+        title: '분실물 보관 현황 업데이트',
+        date: '03.17',
+      },
+    ],
   },
 };
 
@@ -83,34 +114,6 @@ function SectionHeader({ title, to, label }: { title: string; to: string; label:
         {label}
         <FiChevronRight className="h-4 w-4" aria-hidden="true" />
       </Link>
-    </div>
-  );
-}
-
-function InfoGuideCard({
-  title,
-  message,
-  subMessage,
-  tone = 'blue',
-}: {
-  title: string;
-  message: string;
-  subMessage: string;
-  tone?: 'blue' | 'purple';
-}) {
-  return (
-    <div
-      className={`rounded-3xl border p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)] ${
-        tone === 'blue'
-          ? 'border-knu-mint/45 bg-knu-mint/10'
-          : 'border-knu-lavender/35 bg-knu-lavender/10'
-      }`}
-    >
-      <div className="min-w-0">
-        <p className="text-sm font-semibold text-knu-gray">{title}</p>
-        <p className="mt-1 text-sm leading-5 text-gray-700">{message}</p>
-        <p className="mt-2 text-xs leading-4 text-text-muted">{subMessage}</p>
-      </div>
     </div>
   );
 }
@@ -148,6 +151,52 @@ function TimeTablePreviewCard({
 
       <p className="mt-3 text-xs text-text-muted">
         상세 시간표 및 변경 사항은 타임테이블 더보기에서 확인해주세요.
+      </p>
+    </div>
+  );
+}
+
+function NoticePreviewCard({
+  dayLabel,
+  items,
+}: {
+  dayLabel: string;
+  items: DayContent['noticePreview'];
+}) {
+  return (
+    <div className="rounded-3xl border border-knu-lavender/35 bg-knu-lavender/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <p className="text-sm font-semibold text-knu-gray">{dayLabel} 공지 미리보기</p>
+        <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-knu-lavender">
+          최신 순
+        </span>
+      </div>
+
+      <div className="space-y-2">
+        {items.map((item) => (
+          <div
+            key={`${item.date}-${item.category}-${item.title}`}
+            className="flex items-start justify-between gap-3 rounded-2xl border border-white/70 bg-white/80 px-3 py-3"
+          >
+            <div className="min-w-0">
+              <span
+                className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
+                  item.category === '공지'
+                    ? 'bg-knu-red/10 text-knu-red'
+                    : 'bg-knu-lavender/15 text-knu-lavender'
+                }`}
+              >
+                {item.category}
+              </span>
+              <p className="mt-2 truncate text-sm font-semibold text-knu-gray">{item.title}</p>
+            </div>
+            <span className="shrink-0 text-xs font-medium text-gray-500">{item.date}</span>
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-3 text-xs text-text-muted">
+        공지 원문, 분실물 상세 내용, 변경 사항은 공지사항 더보기에서 확인해주세요.
       </p>
     </div>
   );
@@ -213,11 +262,9 @@ export default function HomeTab() {
 
         <section aria-labelledby="home-notice-title">
           <SectionHeader title="공지사항" to="/notice" label="더보기" />
-          <InfoGuideCard
-            title={`${activeDay === 'day1' ? 'DAY 1' : 'DAY 2'} 공지 안내`}
-            message={activeContent.noticeMessage}
-            subMessage={activeContent.noticeSubMessage}
-            tone="purple"
+          <NoticePreviewCard
+            dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
+            items={activeContent.noticePreview}
           />
         </section>
 

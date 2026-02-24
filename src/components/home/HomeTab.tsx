@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiBell, FiCalendar, FiChevronRight, FiInfo } from 'react-icons/fi';
+import { FiChevronRight, FiInfo } from 'react-icons/fi';
 
 type DayKey = 'day1' | 'day2';
 
@@ -45,7 +45,7 @@ function SectionHeader({ title, to, label }: { title: string; to: string; label:
       <h3 className="typo-heading-2 text-knu-gray">{title}</h3>
       <Link
         to={to}
-        className="inline-flex items-center gap-1 text-sm font-semibold text-[#9f9f9f] transition hover:text-[#7d6ea8]"
+        className="inline-flex items-center gap-1 text-sm font-semibold text-gray-400 transition hover:text-knu-lavender"
       >
         {label}
         <FiChevronRight className="h-4 w-4" aria-hidden="true" />
@@ -55,40 +55,28 @@ function SectionHeader({ title, to, label }: { title: string; to: string; label:
 }
 
 function InfoGuideCard({
-  icon,
   title,
   message,
   subMessage,
   tone = 'blue',
 }: {
-  icon: 'calendar' | 'bell';
   title: string;
   message: string;
   subMessage: string;
   tone?: 'blue' | 'purple';
 }) {
-  const Icon = icon === 'calendar' ? FiCalendar : FiBell;
-
   return (
     <div
       className={`rounded-3xl border p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)] ${
-        tone === 'blue' ? 'border-[#c5effc] bg-[#f5fcff]' : 'border-[#eadfff] bg-[#faf7ff]'
+        tone === 'blue'
+          ? 'border-knu-mint/45 bg-knu-mint/10'
+          : 'border-knu-lavender/35 bg-knu-lavender/10'
       }`}
     >
-      <div className="flex items-start gap-3">
-        <span
-          className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${
-            tone === 'blue' ? 'bg-[#22c7f2]/15 text-[#22c7f2]' : 'bg-[#7d6ea8]/12 text-[#7d6ea8]'
-          }`}
-        >
-          <Icon className="h-5 w-5" aria-hidden="true" />
-        </span>
-
-        <div className="min-w-0">
-          <p className="text-sm font-semibold text-knu-gray">{title}</p>
-          <p className="mt-1 text-sm leading-5 text-gray-700">{message}</p>
-          <p className="mt-2 text-xs leading-4 text-text-muted">{subMessage}</p>
-        </div>
+      <div className="min-w-0">
+        <p className="text-sm font-semibold text-knu-gray">{title}</p>
+        <p className="mt-1 text-sm leading-5 text-gray-700">{message}</p>
+        <p className="mt-2 text-xs leading-4 text-text-muted">{subMessage}</p>
       </div>
     </div>
   );
@@ -105,7 +93,7 @@ export default function HomeTab() {
         가두모집 날짜별 홈 안내
       </h2>
 
-      <div className="rounded-[24px] bg-[#f5f3f7] p-4">
+      <div className="">
         <div
           role="tablist"
           aria-label="가두모집 날짜 선택"
@@ -125,8 +113,8 @@ export default function HomeTab() {
                 onClick={() => setActiveDay(day.key)}
                 className={`rounded-full border px-3 py-2.5 text-sm font-semibold transition-all ${
                   isActive
-                    ? 'border-[#22c7f2] bg-[#22c7f2] text-white shadow-[0_6px_16px_rgba(34,199,242,0.24)]'
-                    : 'border-[#aee9fb] bg-white text-[#22c7f2]'
+                    ? 'border-knu-lavender bg-knu-lavender text-white shadow-md'
+                    : 'border-knu-lavender/40 bg-white text-knu-lavender'
                 }`}
               >
                 <span className="whitespace-nowrap">
@@ -145,9 +133,8 @@ export default function HomeTab() {
         className="space-y-8 pt-6"
       >
         <section aria-labelledby="home-timetable-title">
-          <SectionHeader title="타임테이블" to="/event" label="더보기" />
+          <SectionHeader title="타임테이블" to="/timetable" label="더보기" />
           <InfoGuideCard
-            icon="calendar"
             title={`${activeDay === 'day1' ? 'DAY 1' : 'DAY 2'} 시간표 안내`}
             message={activeContent.timetableMessage}
             subMessage={activeContent.timetableSubMessage}
@@ -158,7 +145,6 @@ export default function HomeTab() {
         <section aria-labelledby="home-notice-title">
           <SectionHeader title="공지사항" to="/notice" label="더보기" />
           <InfoGuideCard
-            icon="bell"
             title={`${activeDay === 'day1' ? 'DAY 1' : 'DAY 2'} 공지 안내`}
             message={activeContent.noticeMessage}
             subMessage={activeContent.noticeSubMessage}

@@ -12,7 +12,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-gray-300">
         <div className="text-center mb-8">
           <h1 className="typo-heading-2 text-gray-900 mb-2">관리자 로그인</h1>
           <p className="typo-body-2 text-gray-500">가두모집 관리 시스템에 접속합니다</p>

@@ -9,6 +9,7 @@ import BoothDetailPage from '@/pages/BoothDetailPage';
 import MapPage from '@/pages/MapPage';
 import NoticePage from '@/pages/NoticePage';
 import NoticeDetailPage from '@/pages/NoticeDetailPage';
+import TimeTablePage from '@/pages/TimeTablePage';
 import SplashScreen from '@/components/home/SplashScreen';
 
 const SPLASH_DURATION_MS = 2000;
@@ -44,6 +45,9 @@ function App() {
       </Route>
       <Route element={<DetailLayout title="공지사항" fallbackPath="/notice" />}>
         <Route path="/notice/:id" element={<NoticeDetailPage />} />
+      </Route>
+      <Route element={<DetailLayout title="타임테이블" fallbackPath="/" />}>
+        <Route path="/timetable" element={<TimeTablePage />} />
       </Route>
     </Routes>
   );

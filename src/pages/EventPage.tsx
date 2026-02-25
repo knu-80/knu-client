@@ -28,16 +28,23 @@ export default function EventPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        {filteredEvents.map((event) => (
-          <EventCard
-            key={event.id}
-            title={event.title}
-            description={event.description}
-            date={event.date}
-            location={event.location}
-            imageUrl={event.imageUrl}
-          />
-        ))}
+        {filteredEvents.length > 0 ? (
+          filteredEvents.map((event) => (
+            <EventCard
+              key={event.id}
+              title={event.title}
+              description={event.description}
+              date={event.date}
+              location={event.location}
+              imageUrl={event.imageUrl}
+            />
+          ))
+        ) : (
+          <div className="col-span-full flex flex-col items-center justify-center py-20 text-gray-500">
+            <MdEventNote className="h-12 w-12 mb-4 opacity-20" />
+            <p className="typo-body-1">진행 중인 이벤트가 없습니다.</p>
+          </div>
+        )}
       </div>
     </div>
   );

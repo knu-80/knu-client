@@ -12,7 +12,7 @@ import NoticeDetailPage from '@/pages/NoticeDetailPage';
 import TimeTablePage from '@/pages/TimeTablePage';
 import SplashScreen from '@/components/home/SplashScreen';
 
-const SPLASH_DURATION_MS = 2000;
+const SPLASH_DURATION_MS = 1500;
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);

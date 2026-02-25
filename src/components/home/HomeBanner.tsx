@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type TouchEvent } from 'react';
 
 import backgroundImagePng from '@/assets/background.png';
 import backgroundImageWebp from '@/assets/background.webp';
@@ -7,54 +7,93 @@ type BannerSlide = {
   src: string;
   alt: string;
   badge: string;
-  title: string;
-  description: string;
   backgroundPosition: string;
 };
 
 const AUTO_SLIDE_MS = 3000;
+const SWIPE_THRESHOLD_PX = 40;
 
 const BANNER_SLIDES: BannerSlide[] = [
   {
     src: backgroundImageWebp,
     alt: '가두모집 메인 포스터 배너',
     badge: '메인 배너',
-    title: '가두모집 메인 포스터',
-    description: '행사 분위기와 주요 비주얼을 확인할 수 있어요.',
     backgroundPosition: 'center top',
   },
   {
     src: backgroundImagePng,
     alt: '가두모집 안내 포스터 배너',
     badge: '안내 배너',
-    title: '행사 안내 포스터',
-    description: '일정/운영 관련 배너 이미지를 순차적으로 노출합니다.',
     backgroundPosition: 'center center',
   },
   {
     src: backgroundImageWebp,
-    alt: '가두모집 하이라이트 포스터 배너',
+    alt: '가두모집 하이라이트 배너',
     badge: '하이라이트',
-    title: '가두모집 하이라이트',
-    description: '추후 3~4장의 배너 이미지를 교체하여 사용할 수 있어요.',
     backgroundPosition: 'center 65%',
   },
 ];
 
+type BannerTrackStyle = CSSProperties & {
+  '--banner-card-width': string;
+  '--banner-gap': string;
+  '--banner-side-offset': string;
+};
+
 export default function HomeBanner() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchEndXRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (BANNER_SLIDES.length < 2) return;
 
-    const timer = window.setInterval(() => {
+    const timer = window.setTimeout(() => {
       setCurrentIndex((prev) => (prev + 1) % BANNER_SLIDES.length);
     }, AUTO_SLIDE_MS);
 
     return () => {
-      window.clearInterval(timer);
+      window.clearTimeout(timer);
     };
-  }, []);
+  }, [currentIndex]);
+
+  const moveToPrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + BANNER_SLIDES.length) % BANNER_SLIDES.length);
+  };
+
+  const moveToNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % BANNER_SLIDES.length);
+  };
+
+  const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    touchStartXRef.current = event.touches[0]?.clientX ?? null;
+    touchEndXRef.current = null;
+  };
+
+  const handleTouchMove = (event: TouchEvent<HTMLDivElement>) => {
+    touchEndXRef.current = event.touches[0]?.clientX ?? null;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartXRef.current === null || touchEndXRef.current === null) return;
+
+    const deltaX = touchStartXRef.current - touchEndXRef.current;
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX) return;
+
+    if (deltaX > 0) {
+      moveToNext();
+      return;
+    }
+
+    moveToPrev();
+  };
+
+  const trackStyle: BannerTrackStyle = {
+    '--banner-card-width': 'calc(100% - 56px)',
+    '--banner-gap': '12px',
+    '--banner-side-offset': 'calc((100% - var(--banner-card-width)) / 2)',
+    transform: `translateX(calc(var(--banner-side-offset) - ${currentIndex} * (var(--banner-card-width) + var(--banner-gap))))`,
+  };
 
   return (
     <section
@@ -65,14 +104,29 @@ export default function HomeBanner() {
         메인 배너 캐러셀
       </h2>
 
-      <div className="relative px-4 pb-2 pt-4 sm:px-5">
-        <div className="relative h-[230px] overflow-hidden rounded-3xl border border-white/35 bg-knu-lavender/20 sm:h-[290px]">
+      <div className="relative pb-2 pt-4 sm:px-5">
+        <div className="pointer-events-none absolute inset-y-4 left-0 z-10 w-4 bg-gradient-to-r to-transparent sm:w-6" />
+        <div className="pointer-events-none absolute inset-y-4 right-0 z-10 w-4 bg-gradient-to-l to-transparent sm:w-6" />
+
+        <div
+          className="overflow-hidden touch-pan-y"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+          aria-roledescription="carousel"
+          aria-label="메인 배너 슬라이드"
+        >
           <div
-            className="flex h-full transition-transform duration-700 ease-out"
-            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            className="flex gap-[var(--banner-gap)] transition-transform duration-700 ease-out"
+            style={trackStyle}
           >
             {BANNER_SLIDES.map((slide, index) => (
-              <div key={`${slide.badge}-${index}`} className="relative h-full min-w-full">
+              <div
+                key={`${slide.badge}-${index}`}
+                className="relative h-[230px] min-w-[var(--banner-card-width)] overflow-hidden rounded-3xl border border-white/35 bg-knu-lavender/20 shadow-[0_6px_18px_rgba(0,0,0,0.06)] sm:h-[290px]"
+                aria-hidden={index !== currentIndex}
+              >
                 <div
                   className="absolute inset-0 bg-cover bg-no-repeat"
                   style={{
@@ -81,39 +135,14 @@ export default function HomeBanner() {
                   }}
                   role="img"
                   aria-label={slide.alt}
-                  aria-hidden={index !== currentIndex}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-knu-lavender/55 via-knu-lavender/10 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-knu-lavender/55 via-knu-lavender/15 to-transparent" />
 
                 <div className="absolute left-4 top-4 rounded-full border border-white/50 bg-white/85 px-3 py-1 text-xs font-semibold text-knu-lavender backdrop-blur-sm">
                   {slide.badge}
                 </div>
-
-                <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/35 bg-white/15 p-4 text-white backdrop-blur-sm">
-                  <p className="text-sm font-semibold">{slide.title}</p>
-                  <p className="mt-1 text-xs text-white/90">{slide.description}</p>
-                </div>
               </div>
             ))}
-          </div>
-
-          <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5 rounded-full bg-black/20 px-2.5 py-1 backdrop-blur-sm">
-            {BANNER_SLIDES.map((_, index) => {
-              const isActive = index === currentIndex;
-
-              return (
-                <button
-                  key={`banner-dot-${index}`}
-                  type="button"
-                  onClick={() => setCurrentIndex(index)}
-                  aria-label={`${index + 1}번 배너 보기`}
-                  aria-pressed={isActive}
-                  className={`h-2 rounded-full transition-all ${
-                    isActive ? 'w-5 bg-white' : 'w-2 bg-white/55'
-                  }`}
-                />
-              );
-            })}
           </div>
         </div>
       </div>

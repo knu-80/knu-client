@@ -23,7 +23,7 @@ export default function EventPage() {
             { label: '주막이벤트', value: 'PUB' },
           ]}
           selectedValue={selectedType}
-          onChange={(val) => setSelectedType(val as EventType)}
+          onChange={setSelectedType}
         />
       </div>
 

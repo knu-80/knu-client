@@ -1,19 +1,19 @@
 import { useId } from 'react';
 import { motion } from 'framer-motion';
 
-interface SegmentedControlProps {
+interface SegmentedControlProps<T extends string> {
   id?: string;
-  options: { label: string; value: string }[];
-  selectedValue: string;
-  onChange: (value: string) => void;
+  options: { label: string; value: T }[];
+  selectedValue: T;
+  onChange: (value: T) => void;
 }
 
-export default function SegmentedControl({
+export default function SegmentedControl<T extends string>({
   id,
   options,
   selectedValue,
   onChange,
-}: SegmentedControlProps) {
+}: SegmentedControlProps<T>) {
   const generatedId = useId();
   const baseId = id || generatedId;
 

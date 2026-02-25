@@ -127,7 +127,7 @@ export default function HomeBanner() {
             {BANNER_SLIDES.map((slide, index) => (
               <div
                 key={`${slide.src}-${index}`}
-                className="relative h-[230px] min-w-[var(--banner-card-width)] overflow-hidden rounded-3xl bg-knu-lavender/20 shadow-[0_6px_18px_rgba(0,0,0,0.06)] sm:h-[290px]"
+                className="relative aspect-video w-[var(--banner-card-width)] shrink-0 overflow-hidden rounded-3xl bg-knu-lavender/20 shadow-[0_6px_18px_rgba(0,0,0,0.06)]"
                 aria-hidden={index !== currentIndex}
               >
                 <div
@@ -139,7 +139,7 @@ export default function HomeBanner() {
                   role="img"
                   aria-label={slide.alt}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-knu-lavender/55 via-knu-lavender/15 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-knu-lavender/35 via-knu-lavender/15 to-transparent" />
               </div>
             ))}
           </div>

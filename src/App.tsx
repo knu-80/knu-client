@@ -1,24 +1,53 @@
+import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import MainLayout from '@/components/layouts/MainLayout';
+import DetailLayout from '@/components/layouts/DetailLayout';
 import MapLayout from '@/components/layouts/MapLayout';
 import HomePage from '@/pages/HomePage';
 import BoothDetailPage from '@/pages/BoothDetailPage';
 import MapPage from '@/pages/MapPage';
 import NoticePage from '@/pages/NoticePage';
 import NoticeDetailPage from '@/pages/NoticeDetailPage';
+import TimeTablePage from '@/pages/TimeTablePage';
+import SplashScreen from '@/components/home/SplashScreen';
+
+const SPLASH_DURATION_MS = 1500;
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setIsLoading(false);
+    }, SPLASH_DURATION_MS);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, []);
+
+  if (isLoading) {
+    return <SplashScreen />;
+  }
+
   return (
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
-        <Route path="booths/:id" element={<BoothDetailPage />} />
         <Route path="notice" element={<NoticePage />} />
-        <Route path="notice/:id" element={<NoticeDetailPage />} />
       </Route>
       <Route element={<MapLayout />}>
         <Route path="/map" element={<MapPage />} />
+      </Route>
+      <Route element={<DetailLayout title="부스 상세" fallbackPath="/map" />}>
+        <Route path="/booths/:id" element={<BoothDetailPage />} />
+      </Route>
+      <Route element={<DetailLayout title="공지사항" fallbackPath="/notice" />}>
+        <Route path="/notice/:id" element={<NoticeDetailPage />} />
+      </Route>
+      <Route element={<DetailLayout title="타임테이블" fallbackPath="/" />}>
+        <Route path="/timetable" element={<TimeTablePage />} />
       </Route>
     </Routes>
   );

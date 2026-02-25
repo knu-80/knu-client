@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { GrAnnounce } from 'react-icons/gr';
 import NoticeCard from '@/components/NoticeCard';
-import floatingMap from '@/assets/floating-map.svg';
-import floatingMegaphone from '@/assets/floating-megaphone.svg';
-import FloatingActionGroup from '@/components/FloatingActionGroup';
 
 export default function NoticePage() {
   const [activeTab, setActiveTab] = useState('전체');
@@ -78,21 +75,6 @@ export default function NoticePage() {
           )}
         </div>
       </div>
-
-      <FloatingActionGroup
-        actions={[
-          {
-            label: '부스 배치도로 이동',
-            href: '/map',
-            icon: floatingMap,
-          },
-          {
-            label: '이벤트 안내로 이동',
-            href: '/event',
-            icon: floatingMegaphone,
-          },
-        ]}
-      />
     </div>
   );
 }

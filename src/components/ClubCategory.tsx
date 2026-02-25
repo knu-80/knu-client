@@ -1,4 +1,4 @@
-import { DIVISION_INFO } from "@/constants/booth";
+import { DIVISION_INFO } from '@/constants/booth';
 
 interface ClubCategoryProps {
   divisionName: string;
@@ -46,12 +46,8 @@ export function MapPageClubCategory({ divisionName }: MapPageClubCategoryProps) 
   return (
     <div className="h-8 px-[10px] border border-gray-200 rounded-full bg-white flex items-center shrink-0">
       <div className="flex items-center space-x-1">
-        <div
-          className={`w-2 h-2 rounded-full ${info?.color ?? 'bg-gray-500'}`}
-        ></div>
-        <p className="typo-body-2 text-black">
-          {info?.shortName ?? divisionName}
-        </p>
+        <div className={`w-2 h-2 rounded-full ${info?.color ?? 'bg-gray-500'}`}></div>
+        <p className="typo-body-2 text-black">{info?.shortName ?? divisionName}</p>
       </div>
     </div>
   );

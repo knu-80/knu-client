@@ -1,4 +1,3 @@
-import { BiMessageSquareDetail } from 'react-icons/bi';
 import { FaRegCalendar, FaInfoCircle } from 'react-icons/fa';
 import { FaUser } from 'react-icons/fa';
 import RepresentativeImage from '@/components/RepresentativeImage';
@@ -6,12 +5,7 @@ import FoundItemCard from '@/components/FoundItemCard';
 
 export default function NoticeDetailPage() {
   return (
-    <div className="pt-5 sm:p-5">
-      <div className="flex items-center space-x-2 mb-4">
-        <BiMessageSquareDetail className="h-6 w-6 text-black" />
-        <h2 className="typo-heading-2 text-black">상세보기</h2>
-      </div>
-
+    <div className="pt-5">
       <div className="flex flex-col space-y-1 mb-8 text-black">
         <h2 className="typo-heading-3">부스 운영시간 안내</h2>
         <div className="flex items-center space-x-4 text-sm text-gray-500 mt-1 pt-1">

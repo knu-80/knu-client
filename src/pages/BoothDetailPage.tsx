@@ -1,4 +1,3 @@
-import { BiMessageSquareDetail } from 'react-icons/bi';
 import { FaInstagram } from 'react-icons/fa';
 import { FaPhoneAlt } from 'react-icons/fa';
 import RepresentativeImage from '@/components/RepresentativeImage';
@@ -7,12 +6,7 @@ import ClubCategory from '@/components/ClubCategory';
 
 export default function BoothDetailPage() {
   return (
-    <div className="pt-5 sm:p-5">
-      <div className="flex items-center space-x-2 mb-4">
-        <BiMessageSquareDetail className="h-6 w-6 text-black" />
-        <h2 className="typo-heading-2 text-black">상세보기</h2>
-      </div>
-
+    <div className="pt-5">
       <div className="flex items-center space-x-4 mb-2 text-black">
         <h2 className="typo-heading-3">동아리이름</h2>
         <ClubCategory divisionName="문예부" />

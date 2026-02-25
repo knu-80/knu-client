@@ -9,6 +9,7 @@ import BoothDetailPage from '@/pages/BoothDetailPage';
 import MapPage from '@/pages/MapPage';
 import NoticePage from '@/pages/NoticePage';
 import NoticeDetailPage from '@/pages/NoticeDetailPage';
+import LoginPage from '@/pages/admin/LoginPage';
 import EventPage from '@/pages/EventPage';
 import TimeTablePage from '@/pages/TimeTablePage';
 import SplashScreen from '@/components/home/SplashScreen';
@@ -42,6 +43,7 @@ function App() {
       <Route element={<MapLayout />}>
         <Route path="/map" element={<MapPage />} />
       </Route>
+      <Route path="/admin/login" element={<LoginPage />} />
       <Route element={<DetailLayout title="부스 상세" fallbackPath="/map" />}>
         <Route path="/booths/:id" element={<BoothDetailPage />} />
       </Route>

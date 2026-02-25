@@ -18,7 +18,12 @@ export default function EventCard({
 }: EventCardProps) {
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
-      <RepresentativeImage imageUrl={imageUrl} height="h-45" isZoomable={false} />
+      <RepresentativeImage
+        imageUrl={imageUrl}
+        altText={`${title} 포스터`}
+        height="h-45"
+        isZoomable={false}
+      />
 
       <div className="flex flex-col gap-4 p-5">
         <div className="flex flex-col gap-1">

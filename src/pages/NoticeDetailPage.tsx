@@ -38,7 +38,10 @@ export default function NoticeDetailPage() {
 
       <div className="mb-5">
         <h3 className="typo-heading-3 text-black mb-3">관련 사진</h3>
-        <RepresentativeImage imageUrl="https://picsum.photos/600/400" />
+        <RepresentativeImage
+          imageUrl="https://picsum.photos/600/400"
+          altText="부스 운영시간 안내 관련 사진"
+        />
       </div>
 
       <div className="flex items-center space-x-2 p-3 bg-blue-50 border border-blue-200 text-blue-800 rounded-md mb-10">

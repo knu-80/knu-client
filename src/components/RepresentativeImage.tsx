@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 
 interface RepresentativeImageProps {
   imageUrl: string | null;
+  altText: string;
   height?: string;
   isZoomable?: boolean;
 }
 
 export default function RepresentativeImage({
   imageUrl,
+  altText,
   height = 'h-64',
   isZoomable = true,
 }: RepresentativeImageProps) {
@@ -60,7 +62,7 @@ export default function RepresentativeImage({
           }`}
           onClick={handleImageClick}
         >
-          <img src={imageUrl} alt="대표 사진" className="w-full h-full object-cover" />
+          <img src={imageUrl} alt={altText} className="w-full h-full object-cover" />
         </div>
       ) : (
         <div
@@ -79,7 +81,7 @@ export default function RepresentativeImage({
         >
           <img
             src={imageUrl}
-            alt="확대된 대표 사진"
+            alt={`확대된 ${altText}`}
             className="max-w-full max-h-full object-contain"
             onClick={(e) => e.stopPropagation()}
           />

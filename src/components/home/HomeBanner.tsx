@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type CSSProperties, type TouchEvent } from
 import banner1 from '@/assets/banner1.png';
 import banner2 from '@/assets/banner2.png';
 import banner3 from '@/assets/banner3.png';
+import banner4 from '@/assets/banner4.png';
 
 type BannerSlide = {
   src: string;
@@ -26,6 +27,11 @@ const BANNER_SLIDES: BannerSlide[] = [
   },
   {
     src: banner3,
+    alt: '가두모집 하이라이트 배너',
+    backgroundPosition: 'center 65%',
+  },
+  {
+    src: banner4,
     alt: '가두모집 하이라이트 배너',
     backgroundPosition: 'center 65%',
   },
@@ -120,6 +126,7 @@ export default function HomeBanner() {
           >
             {BANNER_SLIDES.map((slide, index) => (
               <div
+                key={`${slide.src}-${index}`}
                 className="relative h-[230px] min-w-[var(--banner-card-width)] overflow-hidden rounded-3xl bg-knu-lavender/20 shadow-[0_6px_18px_rgba(0,0,0,0.06)] sm:h-[290px]"
                 aria-hidden={index !== currentIndex}
               >

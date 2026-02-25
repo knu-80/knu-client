@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState, type CSSProperties, type TouchEvent } from 'react';
 
-import backgroundImagePng from '@/assets/background.png';
-import backgroundImageWebp from '@/assets/background.webp';
+import banner1 from '@/assets/banner1.png';
+import banner2 from '@/assets/banner2.png';
+import banner3 from '@/assets/banner3.png';
 
 type BannerSlide = {
   src: string;
   alt: string;
-  badge: string;
   backgroundPosition: string;
 };
 
@@ -15,21 +15,18 @@ const SWIPE_THRESHOLD_PX = 40;
 
 const BANNER_SLIDES: BannerSlide[] = [
   {
-    src: backgroundImageWebp,
+    src: banner1,
     alt: '가두모집 메인 포스터 배너',
-    badge: '메인 배너',
     backgroundPosition: 'center top',
   },
   {
-    src: backgroundImagePng,
+    src: banner2,
     alt: '가두모집 안내 포스터 배너',
-    badge: '안내 배너',
     backgroundPosition: 'center center',
   },
   {
-    src: backgroundImageWebp,
+    src: banner3,
     alt: '가두모집 하이라이트 배너',
-    badge: '하이라이트',
     backgroundPosition: 'center 65%',
   },
 ];
@@ -98,15 +95,15 @@ export default function HomeBanner() {
   return (
     <section
       aria-labelledby="home-banner-title"
-      className="-mx-5 relative overflow-hidden bg-knu-lavender select-none"
+      className="-mx-5 relative overflow-hidden bg-gray-200 select-none"
     >
       <h2 id="home-banner-title" className="sr-only">
         메인 배너 캐러셀
       </h2>
 
       <div className="relative pb-2 pt-4 sm:px-5">
-        <div className="pointer-events-none absolute inset-y-4 left-0 z-10 w-4 bg-gradient-to-r to-transparent sm:w-6" />
-        <div className="pointer-events-none absolute inset-y-4 right-0 z-10 w-4 bg-gradient-to-l to-transparent sm:w-6" />
+        <div className="pointer-events-none absolute inset-y-4 left-0 z-10 w-4 to-transparent sm:w-6" />
+        <div className="pointer-events-none absolute inset-y-4 right-0 z-10 w-4 to-transparent sm:w-6" />
 
         <div
           className="overflow-hidden touch-pan-y"
@@ -123,8 +120,7 @@ export default function HomeBanner() {
           >
             {BANNER_SLIDES.map((slide, index) => (
               <div
-                key={`${slide.badge}-${index}`}
-                className="relative h-[230px] min-w-[var(--banner-card-width)] overflow-hidden rounded-3xl border border-white/35 bg-knu-lavender/20 shadow-[0_6px_18px_rgba(0,0,0,0.06)] sm:h-[290px]"
+                className="relative h-[230px] min-w-[var(--banner-card-width)] overflow-hidden rounded-3xl bg-knu-lavender/20 shadow-[0_6px_18px_rgba(0,0,0,0.06)] sm:h-[290px]"
                 aria-hidden={index !== currentIndex}
               >
                 <div
@@ -137,10 +133,6 @@ export default function HomeBanner() {
                   aria-label={slide.alt}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-knu-lavender/55 via-knu-lavender/15 to-transparent" />
-
-                <div className="absolute left-4 top-4 rounded-full border border-white/50 bg-white/85 px-3 py-1 text-xs font-semibold text-knu-lavender backdrop-blur-sm">
-                  {slide.badge}
-                </div>
               </div>
             ))}
           </div>

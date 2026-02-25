@@ -127,7 +127,7 @@ function TimeTablePreviewCard({
   items: DayContent['timetablePreview'];
 }) {
   return (
-    <div className="rounded-3xl border border-knu-mint/45 bg-knu-mint/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
+    <div className="rounded-3xl bg-knu-mint/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-knu-gray">{dayLabel} 타임테이블 미리보기</p>
         <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-knu-lavender">
@@ -139,7 +139,7 @@ function TimeTablePreviewCard({
         {items.map((item) => (
           <div
             key={`${item.time}-${item.title}`}
-            className="grid grid-cols-[56px_1fr] gap-3 rounded-2xl border border-white/70 bg-white/80 px-3 py-3"
+            className="grid grid-cols-[56px_1fr] gap-3 rounded-2xl bg-white/85 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
           >
             <p className="text-sm font-semibold text-knu-lavender">{item.time}</p>
             <div className="min-w-0">
@@ -165,7 +165,7 @@ function NoticePreviewCard({
   items: DayContent['noticePreview'];
 }) {
   return (
-    <div className="rounded-3xl border border-knu-lavender/35 bg-knu-lavender/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
+    <div className="rounded-3xl bg-knu-lavender/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-knu-gray">{dayLabel} 공지 미리보기</p>
         <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-knu-lavender">
@@ -177,7 +177,7 @@ function NoticePreviewCard({
         {items.map((item) => (
           <div
             key={`${item.date}-${item.category}-${item.title}`}
-            className="flex items-start justify-between gap-3 rounded-2xl border border-white/70 bg-white/80 px-3 py-3"
+            className="flex items-start justify-between gap-3 rounded-2xl bg-white/85 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
           >
             <div className="min-w-0">
               <span
@@ -207,7 +207,7 @@ function MapPreviewCard() {
   return (
     <Link
       to="/map"
-      className="group block overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)] transition hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
+      className="group block overflow-hidden rounded-3xl bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)] transition hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
       aria-label="부스 배치도 지도 페이지로 이동"
     >
       <div className="relative h-36 overflow-hidden bg-gray-100">
@@ -265,10 +265,10 @@ export default function HomeTab() {
                 aria-selected={isActive}
                 aria-controls={`home-day-panel-${day.key}`}
                 onClick={() => setActiveDay(day.key)}
-                className={`rounded-full border px-3 py-2.5 text-sm font-semibold transition-all ${
+                className={`rounded-full px-3 py-2.5 text-sm font-semibold transition-all ${
                   isActive
-                    ? 'border-knu-lavender bg-knu-lavender text-white shadow-md'
-                    : 'border-knu-lavender/40 bg-white text-knu-lavender'
+                    ? 'bg-knu-lavender text-white shadow-md'
+                    : 'bg-knu-lavender/10 text-knu-lavender shadow-[inset_0_0_0_1px_rgba(172,172,230,0.22)]'
                 }`}
               >
                 <span className="whitespace-nowrap">

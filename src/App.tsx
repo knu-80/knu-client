@@ -9,6 +9,7 @@ import BoothDetailPage from '@/pages/BoothDetailPage';
 import MapPage from '@/pages/MapPage';
 import NoticePage from '@/pages/NoticePage';
 import NoticeDetailPage from '@/pages/NoticeDetailPage';
+import EventPage from '@/pages/EventPage';
 import TimeTablePage from '@/pages/TimeTablePage';
 import SplashScreen from '@/components/home/SplashScreen';
 
@@ -36,6 +37,7 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
         <Route path="notice" element={<NoticePage />} />
+        <Route path="event" element={<EventPage />} />
       </Route>
       <Route element={<MapLayout />}>
         <Route path="/map" element={<MapPage />} />

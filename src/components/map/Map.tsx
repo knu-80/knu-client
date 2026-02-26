@@ -1,29 +1,32 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, useMotionValue } from 'framer-motion';
-import MapSvg from '@/assets/map.svg';
-import { BoothMarker } from '@/components/BoothMarker';
-import { BOOTH_COORDINATES } from '@/constants/map';
-import { MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
+// import { BoothMarker } from '@/components/BoothMarker';
+// import { BOOTH_COORDINATES } from '@/constants/map';
+// import { MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
 
-const DEFAULT_BOOTH: BoothDetail = {
-  booth_number: 0,
-  name: '',
-  division: 'ACADEMIC_DIVISION',
-  is_active: false,
-};
+import { MapBackground } from './MapBackground';
+import { WORLD_WIDTH, WORLD_HEIGHT } from './world';
 
-export function Map({
-  selectedBoothId,
-  setSelectedBoothId,
-}: {
-  selectedBoothId: number | null;
-  setSelectedBoothId: (id: number) => void;
-}) {
+// const DEFAULT_BOOTH: BoothDetail = {
+//   booth_number: 0,
+//   name: '',
+//   division: 'ACADEMIC_DIVISION',
+//   is_active: false,
+// };
+
+export function Map() {
+  //   {
+  //   selectedBoothId,
+  //   setSelectedBoothId,
+  // }: {
+  //   selectedBoothId: number | null;
+  //   setSelectedBoothId: (id: number) => void;
+  // }
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  const x = useMotionValue(-250);
-  const y = useMotionValue(-2200);
+  const x = useMotionValue(-300);
+  const y = useMotionValue(-2000);
 
   const [constraints, setConstraints] = useState<
     { left: number; right: number; top: number; bottom: number } | false
@@ -64,11 +67,11 @@ export function Map({
         dragConstraints={constraints || undefined}
         dragElastic={0.05}
         dragMomentum={false}
-        style={{ x, y }}
-        className="absolute top-0 left-0 w-[700px] h-[3100px] cursor-grab active:cursor-grabbing"
+        style={{ x, y, width: WORLD_WIDTH, height: WORLD_HEIGHT }}
+        className="absolute top-0 left-0 cursor-grab active:cursor-grabbing"
       >
-        <img src={MapSvg} alt="지도" className="w-full h-full" draggable="false" />
-
+        <MapBackground />
+        {/* 
         {Object.entries(BOOTH_COORDINATES).map(([number, coord]) => {
           const boothNum = Number(number);
           const boothInfo = MOCK_BOOTHS[boothNum] || DEFAULT_BOOTH;
@@ -85,7 +88,7 @@ export function Map({
               onClick={() => setSelectedBoothId(boothNum)}
             />
           );
-        })}
+        })} */}
       </motion.div>
     </div>
   );

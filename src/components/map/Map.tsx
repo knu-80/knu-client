@@ -1,28 +1,19 @@
 import { useRef, useEffect } from 'react';
 import { motion, useMotionValue } from 'framer-motion';
-// import { BoothMarker } from '@/components/BoothMarker';
-// import { BOOTH_COORDINATES } from '@/constants/map';
-// import { MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
-
+import { MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
+import { WORLD_WIDTH, WORLD_HEIGHT, BUILDING_LABELS, BOOTH_COORDINATES } from './world';
 import { MapBackground } from './MapBackground';
 import { useMapCamera, ZOOM_LEVELS } from './useMapCamera';
-import { WORLD_WIDTH, WORLD_HEIGHT } from './world';
+import { BoothMarker } from './BoothMarker';
 
-// const DEFAULT_BOOTH: BoothDetail = {
-//   booth_number: 0,
-//   name: '',
-//   division: 'ACADEMIC_DIVISION',
-//   is_active: false,
-// };
+const DEFAULT_BOOTH: BoothDetail = {
+  booth_number: 0,
+  name: '',
+  division: 'ACADEMIC_DIVISION',
+  is_active: false,
+};
 
 export function Map() {
-  //   {
-  //   selectedBoothId,
-  //   setSelectedBoothId,
-  // }: {
-  //   selectedBoothId: number | null;
-  //   setSelectedBoothId: (id: number) => void;
-  // }
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
@@ -60,7 +51,6 @@ export function Map() {
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
 
-      // Cooldown to prevent rapid level skipping
       const now = Date.now();
       if (now - lastZoomTime.current < 50) return;
 
@@ -78,7 +68,6 @@ export function Map() {
       const nextScale = ZOOM_LEVELS[nextLevel];
       const ratio = nextScale / prevScale;
 
-      // Update scale, x, and y together in the same tick to prevent flickering
       scale.set(nextScale);
       x.set((x.get() - centerX) * ratio + centerX);
       y.set((y.get() - centerY) * ratio + centerY);
@@ -104,12 +93,26 @@ export function Map() {
         className="absolute top-0 left-0 cursor-grab active:cursor-grabbing"
       >
         <MapBackground />
-        {/* 
+
+        {BUILDING_LABELS.map((b) => (
+          <div
+            key={b.name}
+            className="absolute text-body1 font-medium text-gray-500 pointer-events-none"
+            style={{
+              left: b.x,
+              top: b.y,
+              transform: 'translate(-50%, -50%)',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {b.name}
+          </div>
+        ))}
+
         {Object.entries(BOOTH_COORDINATES).map(([number, coord]) => {
           const boothNum = Number(number);
           const boothInfo = MOCK_BOOTHS[boothNum] || DEFAULT_BOOTH;
-          const isSelected = selectedBoothId === boothNum;
-          const bgColorClass = isSelected ? 'bg-knu-red' : 'bg-vanilla';
+          const bgColorClass = 'bg-vanilla';
 
           return (
             <BoothMarker
@@ -118,10 +121,10 @@ export function Map() {
               name={boothInfo.name}
               bgColorClass={bgColorClass}
               isOpen={boothInfo.is_active}
-              onClick={() => setSelectedBoothId(boothNum)}
+              onClick={() => {}}
             />
           );
-        })} */}
+        })}
       </motion.div>
     </div>
   );

@@ -17,8 +17,8 @@ export function BoothMarker({
   // isOpen,
   onClick,
 }: BoothMarkerProps) {
-  const width = isManagement ? 'w-[120px]' : 'w-[72px]';
-  const height = 'h-[64px]';
+  const width = isManagement ? 'w-[72px]' : 'w-[60px]';
+  const height = 'h-[48px]';
 
   return (
     <button

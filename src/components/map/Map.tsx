@@ -1,10 +1,11 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { motion, useMotionValue } from 'framer-motion';
 // import { BoothMarker } from '@/components/BoothMarker';
 // import { BOOTH_COORDINATES } from '@/constants/map';
 // import { MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
 
 import { MapBackground } from './MapBackground';
+import { useMapCamera, ZOOM_LEVELS } from './useMapCamera';
 import { WORLD_WIDTH, WORLD_HEIGHT } from './world';
 
 // const DEFAULT_BOOTH: BoothDetail = {
@@ -25,39 +26,71 @@ export function Map() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  const x = useMotionValue(-300);
-  const y = useMotionValue(-2000);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
 
-  const [constraints, setConstraints] = useState<
-    { left: number; right: number; top: number; bottom: number } | false
-  >(false);
+  const { scale: scaleState, constraints, level, setLevel } = useMapCamera(containerRef);
+  const scale = useMotionValue(scaleState);
+
+  const levelRef = useRef(level);
+  const lastZoomTime = useRef(0);
+  const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (!containerRef.current || !canvasRef.current) return;
+    levelRef.current = level;
+    scale.set(ZOOM_LEVELS[level]);
+  }, [level, scale]);
 
-    const calculateBounds = () => {
-      if (!containerRef.current || !canvasRef.current) return;
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || isInitialized.current) return;
 
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const canvasRect = canvasRef.current.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const initialX = (containerRect.width - WORLD_WIDTH * scaleState) / 2;
+    const initialY = containerRect.height - WORLD_HEIGHT * scaleState;
+    x.set(initialX);
+    y.set(initialY);
+    isInitialized.current = true;
+  }, [x, y, scaleState]);
 
-      const left = Math.min(0, containerRect.width - canvasRect.width);
-      const top = Math.min(0, containerRect.height - canvasRect.height);
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-      setConstraints({
-        left,
-        right: 0,
-        top,
-        bottom: 0,
-      });
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+
+      // Cooldown to prevent rapid level skipping
+      const now = Date.now();
+      if (now - lastZoomTime.current < 50) return;
+
+      const rect = container.getBoundingClientRect();
+      const centerX = e.clientX - rect.left;
+      const centerY = e.clientY - rect.top;
+
+      let nextLevel = levelRef.current;
+      if (e.deltaY < 0) nextLevel = Math.min(levelRef.current + 1, ZOOM_LEVELS.length - 1);
+      else if (e.deltaY > 0) nextLevel = Math.max(levelRef.current - 1, 0);
+
+      if (nextLevel === levelRef.current) return;
+
+      const prevScale = ZOOM_LEVELS[levelRef.current];
+      const nextScale = ZOOM_LEVELS[nextLevel];
+      const ratio = nextScale / prevScale;
+
+      // Update scale, x, and y together in the same tick to prevent flickering
+      scale.set(nextScale);
+      x.set((x.get() - centerX) * ratio + centerX);
+      y.set((y.get() - centerY) * ratio + centerY);
+
+      levelRef.current = nextLevel;
+      lastZoomTime.current = now;
+      setLevel(nextLevel);
     };
 
-    calculateBounds();
-    const observer = new ResizeObserver(calculateBounds);
-    observer.observe(canvasRef.current);
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    return () => container.removeEventListener('wheel', handleWheel);
+  }, [x, y, scale, setLevel]);
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">
@@ -67,7 +100,7 @@ export function Map() {
         dragConstraints={constraints || undefined}
         dragElastic={0.05}
         dragMomentum={false}
-        style={{ x, y, width: WORLD_WIDTH, height: WORLD_HEIGHT }}
+        style={{ x, y, scale, originX: 0, originY: 0 }}
         className="absolute top-0 left-0 cursor-grab active:cursor-grabbing"
       >
         <MapBackground />

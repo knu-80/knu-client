@@ -5,7 +5,7 @@ import { Map } from '@/components/map';
 
 export default function MapPage() {
   const [value, setValue] = useState('');
-  const [selectedBoothId, setSelectedBoothId] = useState<number | null>(null);
+  // const [selectedBoothId, setSelectedBoothId] = useState<number | null>(null);
 
   return (
     <div className="w-full h-screen relative bg-gray-50">
@@ -24,7 +24,8 @@ export default function MapPage() {
         ))}
       </div>
 
-      <Map selectedBoothId={selectedBoothId} setSelectedBoothId={setSelectedBoothId} />
+      {/* <Map selectedBoothId={selectedBoothId} setSelectedBoothId={setSelectedBoothId} /> */}
+      <Map />
     </div>
   );
 }

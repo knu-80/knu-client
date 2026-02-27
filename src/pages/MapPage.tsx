@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useCallback } from 'react';
 import { SearchBar } from '@/components/SearchBar';
 import { MapPageClubCategory } from '@/components/ClubCategory';
@@ -8,9 +8,14 @@ import { BoothPopup } from '@/components/BoothPopup';
 import { SearchWidget } from '@/components/SearchWidget';
 
 export default function MapPage() {
+  const location = useLocation();
   const navigate = useNavigate();
+
   const [value, setValue] = useState('');
-  const [selectedBoothId, setSelectedBoothId] = useState<number | null>(null);
+  const [selectedBoothId, setSelectedBoothId] = useState<number | null>(() => {
+    const externalId = location.state?.selectedBoothId;
+    return externalId ? Number(externalId) : null;
+  });
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleBoothClick = useCallback((id: number) => {

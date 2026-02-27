@@ -45,6 +45,12 @@ export default function SearchPage() {
               key={booth.id}
               booth={booth}
               onClick={() => navigate(`/booths/${booth.id}`)}
+              onLocationClick={() => {
+                // URL은 /map으로 깔끔하게 유지하되, 내부적으로 boothId를 전달
+                navigate('/map', {
+                  state: { selectedBoothId: booth.id },
+                });
+              }}
             />
           ))}
         </div>

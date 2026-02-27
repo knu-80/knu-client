@@ -6,6 +6,7 @@ import { BoothItem } from './BoothItem';
 
 interface SearchWidgetProps {
   value: string;
+  onLocationClick: (id: number) => void;
   onChange: (v: string) => void;
   onClear: () => void;
   onClose: () => void;
@@ -14,7 +15,14 @@ interface SearchWidgetProps {
 
 const RECOMMENDATIONS = ['힐링', '취미활동', '공모전', '밴드', '창업'];
 
-export function SearchWidget({ value, onChange, onClear, onClose, onSearch }: SearchWidgetProps) {
+export function SearchWidget({
+  value,
+  onLocationClick,
+  onChange,
+  onClear,
+  onClose,
+  onSearch,
+}: SearchWidgetProps) {
   const navigate = useNavigate();
   const recommendedBooths = Object.values(MOCK_BOOTHS).slice(0, 5);
 
@@ -66,6 +74,7 @@ export function SearchWidget({ value, onChange, onClear, onClose, onSearch }: Se
                 key={booth.id}
                 booth={booth}
                 onClick={() => navigate(`/booths/${booth.id}`)}
+                onLocationClick={() => onLocationClick(booth.id)}
               />
             ))}
           </div>

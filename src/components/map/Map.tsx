@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { MapBackground } from './MapBackground';
 import { BuildingLabels } from './BuildingLabels';
@@ -13,7 +13,13 @@ interface MapProps {
 export function Map({ onBoothClick, selectedBoothId }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { x, y, scale, constraints, clampPosition } = useMapCamera(containerRef);
+  const { x, y, scale, constraints, clampPosition, moveToBooth } = useMapCamera(containerRef);
+
+  useEffect(() => {
+    if (selectedBoothId !== null) {
+      moveToBooth(selectedBoothId);
+    }
+  }, [selectedBoothId, moveToBooth]);
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">
@@ -30,6 +36,7 @@ export function Map({ onBoothClick, selectedBoothId }: MapProps) {
         <BoothMarkers
           onBoothClick={(id) => {
             onBoothClick(id);
+            moveToBooth(id);
             clampPosition();
           }}
           selectedBoothId={selectedBoothId}

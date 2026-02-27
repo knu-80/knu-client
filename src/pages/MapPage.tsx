@@ -23,6 +23,11 @@ export default function MapPage() {
     navigate(`/search?q=${encodeURIComponent(keyword)}`);
   };
 
+  const handleLocationClick = (id: number) => {
+    setIsSearchOpen(false);
+    setSelectedBoothId(id);
+  };
+
   return (
     <div className="w-full h-screen relative bg-gray-50">
       <div className="px-5 py-3 z-30 sticky top-0 bg-white" onClick={() => setIsSearchOpen(true)}>
@@ -51,6 +56,7 @@ export default function MapPage() {
       {isSearchOpen && (
         <SearchWidget
           value={value}
+          onLocationClick={handleLocationClick}
           onChange={setValue}
           onClear={() => setValue('')}
           onClose={() => setIsSearchOpen(false)}

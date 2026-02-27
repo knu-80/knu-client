@@ -9,7 +9,7 @@ export function ClubCategory({ division }: ClubCategoryProps) {
   if (!info) return null;
 
   return (
-    <div className="h-8 px-[10px] flex items-center shrink-0">
+    <div className="flex shrink-0">
       <div className="flex items-center space-x-1">
         <div className={`w-2 h-2 rounded-full ${info.color}`}></div>
         <p className="typo-body-2 text-black">{info.name}</p>

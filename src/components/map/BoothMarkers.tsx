@@ -1,14 +1,7 @@
 import { memo } from 'react';
 import { BOOTH_COORDINATES } from './world';
-import { MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
+import { DEFAULT_BOOTH, MOCK_BOOTHS } from '@/constants/booth';
 import { BoothMarker } from './BoothMarker';
-
-const DEFAULT_BOOTH: BoothDetail = {
-  booth_number: 0,
-  name: '',
-  division: 'ACADEMIC_DIVISION',
-  is_active: false,
-};
 
 export const BoothMarkers = memo(function BoothMarkers({
   onBoothClick,
@@ -30,7 +23,7 @@ export const BoothMarkers = memo(function BoothMarkers({
             {...coord}
             name={boothInfo.name}
             bgColorClass={isSelected ? 'bg-knu-red text-white' : 'bg-vanilla'}
-            isOpen={boothInfo.is_active}
+            isOpen={boothInfo.isActive}
             onClick={() => onBoothClick(boothNum)}
           />
         );

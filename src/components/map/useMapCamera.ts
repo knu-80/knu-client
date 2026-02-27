@@ -1,6 +1,7 @@
 import { type RefObject, useEffect, useRef, useState, useCallback } from 'react';
-import { useMotionValue } from 'framer-motion';
+import { animate, useMotionValue } from 'framer-motion';
 import { WORLD_WIDTH, WORLD_HEIGHT } from './world';
+import { BOOTH_COORDINATES } from './world';
 
 const ZOOM_LEVELS = [0.5, 0.75, 1, 1.5, 2];
 
@@ -56,6 +57,41 @@ export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
     x.set(clampedX);
     y.set(clampedY);
   }, [x, y]);
+
+  const moveToBooth = useCallback(
+    (id: number) => {
+      const container = containerRef.current;
+      const coords = BOOTH_COORDINATES[id];
+
+      if (!container || !coords) {
+        return;
+      }
+
+      const rect = container.getBoundingClientRect();
+      const currentScale = scale.get();
+
+      const targetX = rect.width / 2 - coords.x * currentScale;
+      const targetY = rect.height / 2 - coords.y * currentScale;
+
+      animate(x, targetX, {
+        type: 'spring',
+        stiffness: 250,
+        damping: 25,
+        restDelta: 0.5,
+      });
+
+      animate(y, targetY, {
+        type: 'spring',
+        stiffness: 250,
+        damping: 25,
+        restDelta: 0.5,
+        onComplete: () => {
+          clampPosition();
+        },
+      });
+    },
+    [containerRef, scale, x, y, clampPosition],
+  );
 
   useEffect(() => {
     const container = containerRef.current;
@@ -134,5 +170,6 @@ export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
     scale,
     constraints,
     clampPosition,
+    moveToBooth,
   };
 }

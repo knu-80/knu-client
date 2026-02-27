@@ -12,6 +12,8 @@ export const MapBackground = memo(function MapBackground() {
         width: WORLD_WIDTH,
         height: WORLD_HEIGHT,
         backgroundColor: '#F1F6FD',
+        touchAction: 'none', // 브라우저의 기본 핀치줌/드래그 방지
+        userSelect: 'none',
       }}
     >
       <img

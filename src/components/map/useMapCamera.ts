@@ -5,10 +5,18 @@ import { BOOTH_COORDINATES } from './world';
 
 const ZOOM_LEVELS = [0.5, 0.75, 1, 1.5, 2];
 
+const getDistance = (touches: React.TouchList | TouchList) => {
+  return Math.hypot(
+    touches[0].clientX - touches[1].clientX,
+    touches[0].clientY - touches[1].clientY,
+  );
+};
+
 export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const scale = useMotionValue(ZOOM_LEVELS[0]);
+  const lastTouchDistance = useRef<number | null>(null);
 
   const [constraints, setConstraints] = useState({
     left: 0,
@@ -48,15 +56,31 @@ export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
     [containerRef],
   );
 
-  const clampPosition = useCallback(() => {
-    const { left, right, top, bottom } = constraintsRef.current;
+  const clampPosition = useCallback(
+    (nextScale?: number) => {
+      const container = containerRef.current;
+      if (!container) return;
 
-    const clampedX = Math.min(right, Math.max(left, x.get()));
-    const clampedY = Math.min(bottom, Math.max(top, y.get()));
+      const rect = container.getBoundingClientRect();
+      const currentScale = nextScale ?? scale.get();
 
-    x.set(clampedX);
-    y.set(clampedY);
-  }, [x, y]);
+      const scaledWidth = WORLD_WIDTH * currentScale;
+      const scaledHeight = WORLD_HEIGHT * currentScale;
+
+      const left = Math.min(0, rect.width - scaledWidth);
+      const top = Math.min(0, rect.height - scaledHeight);
+
+      const right = 0;
+      const bottom = 0;
+
+      const clampedX = Math.min(right, Math.max(left, x.get()));
+      const clampedY = Math.min(bottom, Math.max(top, y.get()));
+
+      x.set(clampedX);
+      y.set(clampedY);
+    },
+    [containerRef, scale, x, y],
+  );
 
   const moveToBooth = useCallback(
     (id: number) => {
@@ -92,6 +116,68 @@ export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
     },
     [containerRef, scale, x, y, clampPosition],
   );
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        lastTouchDistance.current = getDistance(e.touches);
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 2 && lastTouchDistance.current !== null) {
+        e.preventDefault();
+        const rect = container.getBoundingClientRect();
+
+        const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+        const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+
+        const currentX = x.get();
+        const currentY = y.get();
+        const currentScale = scale.get();
+
+        const currentDistance = getDistance(e.touches);
+        const zoomFactor = currentDistance / lastTouchDistance.current;
+        let nextScale = currentScale * zoomFactor;
+
+        nextScale = Math.max(
+          ZOOM_LEVELS[0],
+          Math.min(ZOOM_LEVELS[ZOOM_LEVELS.length - 1], nextScale),
+        );
+
+        if (nextScale !== currentScale) {
+          const scaleRatio = nextScale / currentScale;
+
+          const newX = centerX - (centerX - currentX) * scaleRatio;
+          const newY = centerY - (centerY - currentY) * scaleRatio;
+
+          x.set(newX);
+          y.set(newY);
+          scale.set(nextScale);
+
+          calculateConstraints(nextScale);
+        }
+
+        lastTouchDistance.current = currentDistance;
+      }
+    };
+    const handleTouchEnd = () => {
+      lastTouchDistance.current = null;
+    };
+
+    container.addEventListener('touchstart', handleTouchStart, { passive: false });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [containerRef, scale, x, y, calculateConstraints, clampPosition]);
 
   useEffect(() => {
     const container = containerRef.current;

@@ -22,7 +22,7 @@ export function Map({ onBoothClick, selectedBoothId }: MapProps) {
   }, [selectedBoothId, moveToBooth]);
 
   return (
-    <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+    <div ref={containerRef} className="absolute inset-0 overflow-hidden touch-none">
       <motion.div
         drag
         dragConstraints={constraints}

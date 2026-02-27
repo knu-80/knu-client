@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { memo } from 'react';
 import { DEFAULT_BOOTH, MOCK_BOOTHS } from '@/constants/booth';
 import { ClubCategory } from './ClubCategory';
@@ -8,16 +9,25 @@ interface BoothPopupProps {
 }
 
 export const BoothPopup = memo(function BoothPopup({ boothId, onClose }: BoothPopupProps) {
+  const navigate = useNavigate();
   if (!boothId) return null;
 
   const booth = MOCK_BOOTHS[boothId] || DEFAULT_BOOTH;
   const hasImage = booth.imageUrl && booth.imageUrl.trim() !== '';
 
+  const handlePopupClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate(`/booths/${boothId}`);
+  };
+
   return (
     <>
       <div className="fixed inset-0 z-30 bg-black/5" onClick={onClose} />
 
-      <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-40px)] h-[120px] bg-white rounded-[8px] p-4 shadow-xl flex gap-4 items-center cursor-pointer">
+      <div
+        onClick={handlePopupClick}
+        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-40px)] h-[120px] bg-white rounded-[8px] p-4 shadow-xl flex gap-4 items-center cursor-pointer"
+      >
         {hasImage ? (
           <img
             src={booth.imageUrl}

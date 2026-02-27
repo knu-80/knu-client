@@ -3,6 +3,7 @@ import { SearchBar } from '@/components/SearchBar';
 import { MapPageClubCategory } from '@/components/ClubCategory';
 import { Map } from '@/components/map';
 import { DIVISION_LIST } from '@/constants/booth';
+import { BoothPopup } from '@/components/BoothPopup';
 
 export default function MapPage() {
   const [value, setValue] = useState('');
@@ -30,6 +31,11 @@ export default function MapPage() {
       </div>
 
       <Map selectedBoothId={selectedBoothId} onBoothClick={handleBoothClick} />
+      {selectedBoothId && (
+        <div className="absolute bottom-0 left-0 w-full px-6">
+          <BoothPopup boothId={selectedBoothId} onClose={() => setSelectedBoothId(null)} />
+        </div>
+      )}
     </div>
   );
 }

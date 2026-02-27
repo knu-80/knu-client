@@ -17,7 +17,7 @@
 
   --color-text-muted: var(--color-gray-400);
 
-  --color-vanilla: #F7F3E8;
+  --color-vanilla: #f7f3e8;
 
   --font-sans:
     'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Segoe UI', system-ui, sans-serif;
@@ -100,4 +100,17 @@ body {
   .typo-muted {
     @apply text-text-muted;
   }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s infinite;
 }

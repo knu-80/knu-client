@@ -1,4 +1,4 @@
-import { FiSearch, FiX } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
 
 interface SearchBarProps {
   value: string;
@@ -22,9 +22,7 @@ export function SearchBar({
   };
 
   return (
-    <div className="flex items-center h-[40px] px-3 py-2 bg-gray-100 rounded-[4px]">
-      <FiSearch size={24} className="text-gray-300 mr-2" />
-
+    <div className="flex items-center h-[40px] px-4 py-2 bg-gray-100 rounded-full">
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -37,9 +35,12 @@ export function SearchBar({
         autoComplete="off"
       />
 
-      {value && (
-        <button onClick={onClear}>
-          <FiX size={24} className="text-gray-300" />
+      {value && onClear && (
+        <button
+          onClick={onClear}
+          className="absolute right-4 z-10 p-4 flex items-center justify-center active:opacity-60 transition-opacity"
+        >
+          <FiX size={20} className="text-gray-400" />
         </button>
       )}
     </div>

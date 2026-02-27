@@ -7,6 +7,7 @@ import BoothDetailPage from '@/pages/BoothDetailPage';
 import MapPage from '@/pages/MapPage';
 import NoticePage from '@/pages/NoticePage';
 import NoticeDetailPage from '@/pages/NoticeDetailPage';
+import SearchPage from '@/pages/SearchPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       </Route>
       <Route element={<MapLayout />}>
         <Route path="/map" element={<MapPage />} />
+        <Route path="search" element={<SearchPage />} />
       </Route>
     </Routes>
   );

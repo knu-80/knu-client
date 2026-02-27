@@ -33,6 +33,7 @@ export function SearchWidget({ value, onChange, onClear, onClose, onSearch }: Se
             value={value}
             onChange={onChange}
             onClear={onClear}
+            onSearch={onSearch}
             placeholder="동아리, 부스명을 검색해보세요"
           />
         </div>

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useState, useCallback } from 'react';
 import { SearchBar } from '@/components/SearchBar';
 import { MapPageClubCategory } from '@/components/ClubCategory';
@@ -7,6 +8,7 @@ import { BoothPopup } from '@/components/BoothPopup';
 import { SearchWidget } from '@/components/SearchWidget';
 
 export default function MapPage() {
+  const navigate = useNavigate();
   const [value, setValue] = useState('');
   const [selectedBoothId, setSelectedBoothId] = useState<number | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -18,6 +20,7 @@ export default function MapPage() {
   const handleSearch = (keyword: string) => {
     setValue(keyword);
     setIsSearchOpen(false);
+    navigate(`/search?q=${encodeURIComponent(keyword)}`);
   };
 
   return (

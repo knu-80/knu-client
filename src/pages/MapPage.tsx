@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { SearchBar } from '@/components/SearchBar';
 import { MapPageClubCategory } from '@/components/ClubCategory';
 import { Map } from '@/components/map';
 
 export default function MapPage() {
   const [value, setValue] = useState('');
-  // const [selectedBoothId, setSelectedBoothId] = useState<number | null>(null);
+  const [selectedBoothId, setSelectedBoothId] = useState<number | null>(null);
+
+  const handleBoothClick = useCallback((id: number) => {
+    setSelectedBoothId(id);
+  }, []);
 
   return (
     <div className="w-full h-screen relative bg-gray-50">
@@ -24,8 +28,7 @@ export default function MapPage() {
         ))}
       </div>
 
-      {/* <Map selectedBoothId={selectedBoothId} setSelectedBoothId={setSelectedBoothId} /> */}
-      <Map />
+      <Map selectedBoothId={selectedBoothId} onBoothClick={handleBoothClick} />
     </div>
   );
 }

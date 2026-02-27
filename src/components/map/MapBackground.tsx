@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import MapSvg from '@/assets/map.svg';
 import { WORLD_WIDTH, WORLD_HEIGHT } from './world';
 
-export function MapBackground() {
+export const MapBackground = memo(function MapBackground() {
   return (
     <div
       style={{
@@ -26,4 +27,4 @@ export function MapBackground() {
       />
     </div>
   );
-}
+});

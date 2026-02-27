@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 interface BoothMarkerProps {
   x: number;
   y: number;
@@ -8,7 +10,7 @@ interface BoothMarkerProps {
   onClick: () => void;
 }
 
-export function BoothMarker({
+export const BoothMarker = memo(function BoothMarker({
   x,
   y,
   name,
@@ -45,4 +47,4 @@ export function BoothMarker({
       )}
     </button>
   );
-}
+});

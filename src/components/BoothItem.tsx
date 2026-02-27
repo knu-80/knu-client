@@ -1,10 +1,49 @@
-import { type BoothDetail } from '@/constants/booth';
+import type { BoothDetail, DivisionType } from '@/constants/booth';
 import { ClubCategory } from './ClubCategory';
 
 interface BoothItemProps {
   booth: BoothDetail;
   onClick: () => void;
   onLocationClick?: (e: React.MouseEvent) => void;
+}
+
+function ApplyButton({
+  division,
+  isActive,
+  onClick,
+}: {
+  division: DivisionType;
+  isActive: boolean;
+  onClick: () => void;
+}) {
+  const isExcluded = division === 'MANAGEMENT' || division === 'EXTERNAL_SUPPORT';
+  if (isExcluded) return null;
+
+  if (!isActive) {
+    return (
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick();
+        }}
+        className="h-8 px-4 bg-gray-600 text-white rounded-full typo-body-3 font-semibold cursor-not-allowed"
+      >
+        모집마감
+      </button>
+    );
+  }
+
+  return (
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      className="h-8 px-4 bg-knu-red text-white rounded-full typo-body-3 font-semibold active:brightness-95 transition-colors"
+    >
+      지원하기
+    </button>
+  );
 }
 
 export function BoothItem({ booth, onClick, onLocationClick }: BoothItemProps) {
@@ -42,15 +81,7 @@ export function BoothItem({ booth, onClick, onLocationClick }: BoothItemProps) {
           >
             위치보기
           </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onClick();
-            }}
-            className="h-8 px-4 bg-knu-red text-white rounded-full typo-caption font-semibold active:brightness-95 transition-colors"
-          >
-            지원하기
-          </button>
+          <ApplyButton division={booth.division} isActive={booth.isActive} onClick={onClick} />
         </div>
       </div>
     </div>

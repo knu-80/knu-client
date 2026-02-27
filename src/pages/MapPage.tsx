@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { SearchBar } from '@/components/SearchBar';
 import { MapPageClubCategory } from '@/components/ClubCategory';
 import { Map } from '@/components/map';
+import { DIVISION_LIST } from '@/constants/booth';
 
 export default function MapPage() {
   const [value, setValue] = useState('');
@@ -22,9 +23,9 @@ export default function MapPage() {
         />
       </div>
 
-      <div className="sticky top-[52px] z-20 flex gap-2 overflow-x-auto px-5 py-2">
-        {['문예부', '사회부', '학술부', '체육부', '종교부'].map((d) => (
-          <MapPageClubCategory key={d} divisionName={d} />
+      <div className="sticky top-[52px] z-20 flex gap-2 overflow-x-auto px-5 py-2 no-scrollbar">
+        {DIVISION_LIST.map((d) => (
+          <MapPageClubCategory key={d} division={d} />
         ))}
       </div>
 

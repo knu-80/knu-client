@@ -8,17 +8,20 @@ export const DIVISION_INFO = {
   EXTERNAL_SUPPORT: { name: '외부부스', shortName: '외부', color: 'bg-gray-400' },
 } as const;
 
+export type DivisionType = keyof typeof DIVISION_INFO;
+
+export const DIVISION_LIST: DivisionType[] = [
+  'CULTURE_ART_DIVISION',
+  'SOCIAL_DIVISION',
+  'ACADEMIC_DIVISION',
+  'SPORTS_DIVISION',
+  'RELIGIOUS_DIVISION',
+];
+
 export interface BoothDetail {
   booth_number: number;
   name: string;
-  division:
-    | 'ACADEMIC_DIVISION'
-    | 'CULTURE_ART_DIVISION'
-    | 'SPORTS_DIVISION'
-    | 'SOCIAL_DIVISION'
-    | 'RELIGIOUS_DIVISION'
-    | 'MANAGEMENT'
-    | 'EXTERNAL_SUPPORT';
+  division: DivisionType;
   is_active: boolean;
 }
 

@@ -13,8 +13,7 @@ interface MapProps {
 export function Map({ onBoothClick, selectedBoothId }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { x, y, scale, constraints, clampPosition, moveToBooth, isPinching } =
-    useMapCamera(containerRef);
+  const { x, y, scale, constraints, moveToBooth, isPinching } = useMapCamera(containerRef);
 
   useEffect(() => {
     if (selectedBoothId !== null) {
@@ -37,8 +36,6 @@ export function Map({ onBoothClick, selectedBoothId }: MapProps) {
         <BoothMarkers
           onBoothClick={(id) => {
             onBoothClick(id);
-            moveToBooth(id);
-            clampPosition();
           }}
           selectedBoothId={selectedBoothId}
         />

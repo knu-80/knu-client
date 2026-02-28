@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaRegCalendar, FaInfoCircle, FaUser, FaEdit, FaTrash } from 'react-icons/fa';
 import RepresentativeImage from '@/components/RepresentativeImage';
 import FoundItemCard from '@/components/FoundItemCard';
+import ConfirmModal from '@/components/ConfirmModal';
 import { NOTICES } from '@/mocks/notices';
 
 export default function AdminNoticeDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const notice = NOTICES.find((n) => n.id === Number(id));
 
@@ -20,11 +23,9 @@ export default function AdminNoticeDetailPage() {
     navigate(`/admin/notice/edit/${id}`);
   };
 
-  const handleDelete = () => {
-    if (window.confirm('정말 이 공지사항을 삭제하시겠습니까?')) {
-      alert('삭제되었습니다.');
-      navigate('/admin/notice');
-    }
+  const handleDeleteConfirm = () => {
+    setIsDeleteModalOpen(false);
+    navigate('/admin/notice');
   };
 
   return (
@@ -79,13 +80,23 @@ export default function AdminNoticeDetailPage() {
           <span className="text-base font-bold whitespace-nowrap">수정하기</span>
         </button>
         <button
-          onClick={handleDelete}
+          onClick={() => setIsDeleteModalOpen(true)}
           className="flex h-12 items-center justify-center gap-2 rounded-full bg-red-600 px-6 text-white shadow-2xl transition-all hover:scale-105 active:scale-95"
         >
           <FaTrash className="h-4 w-4" />
           <span className="text-base font-bold whitespace-nowrap">삭제하기</span>
         </button>
       </div>
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="공지사항 삭제"
+        message="정말 이 공지사항을 삭제하시겠습니까? 삭제된 데이터는 복구할 수 없습니다."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        confirmText="삭제"
+        cancelText="취소"
+      />
     </div>
   );
 }

@@ -16,7 +16,7 @@ export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const [isPinching, setIsPinching] = useState(false);
-  const scale = useMotionValue(ZOOM_LEVELS[0]);
+  const scale = useMotionValue(ZOOM_LEVELS[1]);
   const lastTouchDistance = useRef<number | null>(null);
 
   const [constraints, setConstraints] = useState({
@@ -191,8 +191,8 @@ export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
     const rect = container.getBoundingClientRect();
     const initialScale = scale.get();
 
-    const initialX = (rect.width - WORLD_WIDTH * initialScale) / 2;
-    const initialY = rect.height - WORLD_HEIGHT * initialScale;
+    const initialX = (rect.width - WORLD_WIDTH * initialScale) / 2 + 80;
+    const initialY = rect.height - WORLD_HEIGHT * initialScale + 400;
 
     x.set(initialX);
     y.set(initialY);

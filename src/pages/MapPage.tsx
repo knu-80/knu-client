@@ -34,7 +34,7 @@ export default function MapPage() {
   };
 
   return (
-    <div className="w-full h-screen relative bg-gray-50">
+    <div className="w-full h-full relative bg-gray-50">
       <div className="px-5 py-3 z-30 sticky top-0 bg-white" onClick={() => setIsSearchOpen(true)}>
         <div className="pointer-events-none">
           <SearchBar

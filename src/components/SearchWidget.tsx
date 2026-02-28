@@ -27,7 +27,7 @@ export function SearchWidget({
   const recommendedBooths = Object.values(MOCK_BOOTHS).slice(0, 5);
 
   return (
-    <div className="fixed top-[66px] inset-y-0 left-1/2 z-30 w-full max-w-[700px] -translate-x-1/2 bg-white flex flex-col">
+    <div className="fixed top-[66px] bottom-0 left-1/2 z-30 w-full max-w-[700px] -translate-x-1/2 bg-white flex flex-col">
       <div className="px-5 py-3 flex items-center gap-2 border-b border-gray-100">
         <button
           onClick={onClose}
@@ -47,7 +47,7 @@ export function SearchWidget({
         </div>
       </div>
 
-      <div className="p-5">
+      <div className="px-6 py-5">
         <h4 className="typo-heading-3 font-semibold mb-2">추천 검색어</h4>
         <div className="flex flex-wrap gap-[10px]">
           {RECOMMENDATIONS.map((tag) => (
@@ -64,11 +64,11 @@ export function SearchWidget({
 
       {/* [seah] 무한스크롤 넣기 */}
       <div className="flex-1 flex flex-col min-h-0 mt-5">
-        <div className="mb-4 px-5">
+        <div className="mb-4 px-6">
           <h4 className="typo-heading-3 font-semibold">놓치면 아쉬운 동아리</h4>
         </div>
         <div className="flex-1 overflow-y-auto no-scrollbar">
-          <div className="flex flex-col gap-5 px-5 pb-10">
+          <div className="flex flex-col gap-5 px-6 pb-10">
             {recommendedBooths.map((booth) => (
               <BoothItem
                 key={booth.id}

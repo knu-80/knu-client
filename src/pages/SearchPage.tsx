@@ -23,7 +23,7 @@ export default function SearchPage() {
   const isSearching = query !== '';
 
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col h-full bg-white">
       <div className="px-5 py-3 flex items-center gap-2 border-b border-gray-100 shrink-0">
         <button onClick={() => navigate(-1)} className="p-1 -ml-2 text-gray-600">
           <FiArrowLeft size={24} />
@@ -41,7 +41,7 @@ export default function SearchPage() {
 
       <div className="flex-1 overflow-y-auto">
         {hasResults ? (
-          <div className="px-5 py-4">
+          <div className="px-6 py-4">
             <p className="typo-body-2 text-gray-500 mb-4">
               총 <span className="text-black font-medium">{filteredResults.length}개</span>의 결과
             </p>

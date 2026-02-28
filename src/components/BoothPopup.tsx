@@ -26,7 +26,7 @@ export const BoothPopup = memo(function BoothPopup({ boothId, onClose }: BoothPo
 
       <div
         onClick={handlePopupClick}
-        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-40px)] h-[120px] bg-white rounded-[8px] p-4 shadow-xl flex gap-4 items-center cursor-pointer"
+        className="absolute bottom-22 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-40px)] h-[120px] bg-white rounded-[8px] p-4 shadow-xl flex gap-4 items-center cursor-pointer"
       >
         {hasImage ? (
           <img

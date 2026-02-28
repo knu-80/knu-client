@@ -5,7 +5,6 @@ import { MapPageClubCategory } from '@/components/ClubCategory';
 import { Map } from '@/components/map';
 import { DIVISION_LIST } from '@/constants/booth';
 import { BoothPopup } from '@/components/BoothPopup';
-import { SearchWidget } from '@/components/SearchWidget';
 
 export default function MapPage() {
   const location = useLocation();
@@ -16,26 +15,14 @@ export default function MapPage() {
     const externalId = location.state?.selectedBoothId;
     return externalId ? Number(externalId) : null;
   });
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleBoothClick = useCallback((id: number) => {
     setSelectedBoothId(id);
   }, []);
 
-  const handleSearch = (keyword: string) => {
-    setValue(keyword);
-    setIsSearchOpen(false);
-    navigate(`/search?q=${encodeURIComponent(keyword)}`);
-  };
-
-  const handleLocationClick = (id: number) => {
-    setIsSearchOpen(false);
-    setSelectedBoothId(id);
-  };
-
   return (
     <div className="w-full h-full relative bg-gray-50">
-      <div className="px-5 py-3 z-30 sticky top-0 bg-white" onClick={() => setIsSearchOpen(true)}>
+      <div className="px-5 py-3 z-30 sticky top-0 bg-white" onClick={() => navigate('/search')}>
         <div className="pointer-events-none">
           <SearchBar
             value={value}
@@ -57,16 +44,6 @@ export default function MapPage() {
         <div className="absolute bottom-0 left-0 w-full px-6">
           <BoothPopup boothId={selectedBoothId} onClose={() => setSelectedBoothId(null)} />
         </div>
-      )}
-      {isSearchOpen && (
-        <SearchWidget
-          value={value}
-          onLocationClick={handleLocationClick}
-          onChange={setValue}
-          onClear={() => setValue('')}
-          onClose={() => setIsSearchOpen(false)}
-          onSearch={handleSearch}
-        />
       )}
     </div>
   );

@@ -7,6 +7,7 @@ interface NoticeCardProps {
   date: string;
   category: '공지' | '분실물';
   totalCount: number;
+  basePath?: string;
 }
 
 export default function NoticeCard({
@@ -16,6 +17,7 @@ export default function NoticeCard({
   date,
   category,
   totalCount,
+  basePath = '/notice',
 }: NoticeCardProps) {
   const categoryBgClass = category === '공지' ? 'bg-knu-red' : 'bg-white border border-knu-red';
   const categoryTextClass = category === '공지' ? 'text-white' : 'text-knu-red';
@@ -35,7 +37,7 @@ export default function NoticeCard({
           {category}
         </span>
         <Link
-          to={`/notice/${id}`}
+          to={`${basePath}/${id}`}
           className="text-xs sm:text-base font-semibold text-black truncate hover:text-knu-red transition-colors"
         >
           {title}

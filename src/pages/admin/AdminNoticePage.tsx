@@ -63,6 +63,7 @@ export default function AdminNoticePage() {
                 title={notice.title}
                 date={notice.date}
                 category={notice.category}
+                basePath="/admin/notice"
               />
             ))
           )}

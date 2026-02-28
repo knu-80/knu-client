@@ -9,10 +9,12 @@ import BoothDetailPage from '@/pages/BoothDetailPage';
 import MapPage from '@/pages/MapPage';
 import NoticePage from '@/pages/NoticePage';
 import NoticeDetailPage from '@/pages/NoticeDetailPage';
+import AdminNoticeDetailPage from '@/pages/admin/AdminNoticeDetailPage';
 import LoginPage from '@/pages/admin/LoginPage';
 import AdminHomePage from '@/pages/admin/AdminHomePage';
 import AdminNoticePage from '@/pages/admin/AdminNoticePage';
 import AdminMainLayout from '@/components/layouts/AdminMainLayout';
+import AdminDetailLayout from '@/components/layouts/AdminDetailLayout';
 import EventPage from '@/pages/EventPage';
 import TimeTablePage from '@/pages/TimeTablePage';
 import SplashScreen from '@/components/home/SplashScreen';
@@ -51,6 +53,9 @@ function App() {
         <Route path="notice" element={<AdminNoticePage />} />
       </Route>
       <Route path="/admin/login" element={<LoginPage />} />
+      <Route element={<AdminDetailLayout title="공지사항 상세" fallbackPath="/admin/notice" />}>
+        <Route path="/admin/notice/:id" element={<AdminNoticeDetailPage />} />
+      </Route>
       <Route element={<DetailLayout title="부스 상세" fallbackPath="/map" />}>
         <Route path="/booths/:id" element={<BoothDetailPage />} />
       </Route>

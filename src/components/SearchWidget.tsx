@@ -27,7 +27,7 @@ export function SearchWidget({
   const recommendedBooths = Object.values(MOCK_BOOTHS).slice(0, 5);
 
   return (
-    <div className="fixed inset-0 z-[100] bg-white flex flex-col">
+    <div className="fixed top-[66px] inset-y-0 left-1/2 z-30 w-full max-w-[700px] -translate-x-1/2 bg-white flex flex-col">
       <div className="px-5 py-3 flex items-center gap-2 border-b border-gray-100">
         <button
           onClick={onClose}

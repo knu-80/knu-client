@@ -13,7 +13,8 @@ interface MapProps {
 export function Map({ onBoothClick, selectedBoothId }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { x, y, scale, constraints, clampPosition, moveToBooth } = useMapCamera(containerRef);
+  const { x, y, scale, constraints, clampPosition, moveToBooth, isPinching } =
+    useMapCamera(containerRef);
 
   useEffect(() => {
     if (selectedBoothId !== null) {
@@ -24,7 +25,7 @@ export function Map({ onBoothClick, selectedBoothId }: MapProps) {
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden touch-none">
       <motion.div
-        drag
+        drag={!isPinching}
         dragConstraints={constraints}
         dragElastic={0.05}
         dragMomentum={false}

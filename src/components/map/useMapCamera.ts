@@ -15,6 +15,7 @@ const getDistance = (touches: React.TouchList | TouchList) => {
 export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const [isPinching, setIsPinching] = useState(false);
   const scale = useMotionValue(ZOOM_LEVELS[0]);
   const lastTouchDistance = useRef<number | null>(null);
 
@@ -123,6 +124,7 @@ export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
 
     const handleTouchStart = (e: TouchEvent) => {
       if (e.touches.length === 2) {
+        setIsPinching(true);
         lastTouchDistance.current = getDistance(e.touches);
       }
     };
@@ -164,7 +166,10 @@ export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
         lastTouchDistance.current = currentDistance;
       }
     };
-    const handleTouchEnd = () => {
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (e.touches.length < 2) {
+        setIsPinching(false);
+      }
       lastTouchDistance.current = null;
     };
 
@@ -257,5 +262,6 @@ export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
     constraints,
     clampPosition,
     moveToBooth,
+    isPinching,
   };
 }

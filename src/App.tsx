@@ -11,6 +11,7 @@ import NoticePage from '@/pages/NoticePage';
 import NoticeDetailPage from '@/pages/NoticeDetailPage';
 import LoginPage from '@/pages/admin/LoginPage';
 import AdminHomePage from '@/pages/admin/AdminHomePage';
+import AdminNoticePage from '@/pages/admin/AdminNoticePage';
 import AdminMainLayout from '@/components/layouts/AdminMainLayout';
 import EventPage from '@/pages/EventPage';
 import TimeTablePage from '@/pages/TimeTablePage';
@@ -45,8 +46,9 @@ function App() {
       <Route element={<MapLayout />}>
         <Route path="/map" element={<MapPage />} />
       </Route>
-      <Route element={<AdminMainLayout />}>
-        <Route path="/admin" element={<AdminHomePage />} />
+      <Route path="/admin" element={<AdminMainLayout />}>
+        <Route index element={<AdminHomePage />} />
+        <Route path="notice" element={<AdminNoticePage />} />
       </Route>
       <Route path="/admin/login" element={<LoginPage />} />
       <Route element={<DetailLayout title="부스 상세" fallbackPath="/map" />}>

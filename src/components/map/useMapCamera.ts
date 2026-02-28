@@ -192,7 +192,7 @@ export function useMapCamera(containerRef: RefObject<HTMLDivElement | null>) {
     const initialScale = scale.get();
 
     const initialX = (rect.width - WORLD_WIDTH * initialScale) / 2 + 80;
-    const initialY = rect.height - WORLD_HEIGHT * initialScale + 400;
+    const initialY = rect.height - WORLD_HEIGHT * initialScale + 300;
 
     x.set(initialX);
     y.set(initialY);

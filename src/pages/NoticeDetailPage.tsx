@@ -38,9 +38,9 @@ export default function NoticeDetailPage() {
         />
       </div>
 
-      <div className="flex items-center space-x-2 p-3 bg-blue-50 border border-blue-200 text-blue-800 rounded-md mb-10">
-        <FaInfoCircle className="text-xl" />
-        <p className="typo-body-2">분실물은 총동연 부스에서 수령가능합니다</p>
+      <div className="flex items-center space-x-3 p-4 bg-red-50/50 border border-red-100 text-red-900 rounded-xl mb-10 shadow-sm">
+        <FaInfoCircle className="text-xl text-knu-red" />
+        <p className="typo-body-2 font-semibold">분실물은 총동연 부스에서 수령가능합니다</p>
       </div>
     </div>
   );

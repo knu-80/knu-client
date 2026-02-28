@@ -28,7 +28,7 @@ function ApplyButton({
         }}
         className="h-8 px-4 bg-gray-600 text-white rounded-full typo-body-3 font-semibold cursor-not-allowed"
       >
-        모집마감
+        운영마감
       </button>
     );
   }

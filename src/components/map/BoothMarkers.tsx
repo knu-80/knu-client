@@ -22,7 +22,8 @@ export const BoothMarkers = memo(function BoothMarkers({
             key={boothNum}
             {...coord}
             name={boothInfo.name}
-            bgColorClass={isSelected ? 'bg-knu-red text-white' : 'bg-vanilla'}
+            bgColorClass={isSelected ? 'bg-knu-red' : 'bg-vanilla'}
+            isSelected={isSelected}
             isOpen={boothInfo.isActive}
             onClick={() => onBoothClick(boothNum)}
           />

@@ -10,6 +10,7 @@ import MapPage from '@/pages/MapPage';
 import NoticePage from '@/pages/NoticePage';
 import NoticeDetailPage from '@/pages/NoticeDetailPage';
 import AdminNoticeDetailPage from '@/pages/admin/AdminNoticeDetailPage';
+import AdminNoticeCreatePage from '@/pages/admin/AdminNoticeCreatePage';
 import LoginPage from '@/pages/admin/LoginPage';
 import AdminHomePage from '@/pages/admin/AdminHomePage';
 import AdminNoticePage from '@/pages/admin/AdminNoticePage';
@@ -55,6 +56,9 @@ function App() {
       <Route path="/admin/login" element={<LoginPage />} />
       <Route element={<AdminDetailLayout title="공지사항 상세" fallbackPath="/admin/notice" />}>
         <Route path="/admin/notice/:id" element={<AdminNoticeDetailPage />} />
+      </Route>
+      <Route element={<AdminDetailLayout title="공지 작성" fallbackPath="/admin/notice" />}>
+        <Route path="/admin/notice/write" element={<AdminNoticeCreatePage />} />
       </Route>
       <Route element={<DetailLayout title="부스 상세" fallbackPath="/map" />}>
         <Route path="/booths/:id" element={<BoothDetailPage />} />

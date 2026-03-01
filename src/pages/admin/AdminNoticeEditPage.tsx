@@ -109,7 +109,7 @@ export default function AdminNoticeEditPage() {
         </div>
       )}
 
-      <div className="h-px w-full bg-gray-100 my-8" />
+      <div className="h-px w-full bg-gray-200 my-5" />
 
       <div className="mb-10 text-black">
         <textarea

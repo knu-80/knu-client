@@ -1,14 +1,14 @@
 import { useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaCamera, FaTimes, FaCheck } from 'react-icons/fa';
+import { FaCheck } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
+import ImageUploader from '@/components/ImageUploader';
 import { NOTICES } from '@/mocks/notices';
 
 export default function AdminNoticeEditPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const initialNotice = NOTICES.find((n) => n.id === Number(id));
@@ -60,28 +60,7 @@ export default function AdminNoticeEditPage() {
     setAlertConfig({ isOpen: true, title, message, onClose });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedImage(reader.result as string);
-      };
-      reader.onerror = () => {
-        showAlert('오류', '사진을 읽어오는 중 오류가 발생했습니다.');
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleRemoveImage = () => {
-    setSelectedImage(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
-  const handleSubmit = () => {
+  const handlehandleSubmit = () => {
     if (!isFormValid) {
       showAlert('알림', '제목과 내용을 모두 입력해주세요.');
       return;
@@ -130,7 +109,7 @@ export default function AdminNoticeEditPage() {
         </div>
       )}
 
-      <div className="h-px w-full bg-gray-200 my-5" />
+      <div className="h-px w-full bg-gray-100 my-8" />
 
       <div className="mb-10 text-black">
         <textarea
@@ -142,48 +121,19 @@ export default function AdminNoticeEditPage() {
         />
       </div>
 
-      <div className="mb-12">
-        <h3 className="typo-heading-3 text-black mb-4">관련 사진</h3>
-        <input
-          type="file"
-          accept="image/*"
-          className="hidden"
-          ref={fileInputRef}
-          onChange={handleImageChange}
-        />
-
-        {selectedImage ? (
-          <div className="relative group rounded-2xl overflow-hidden shadow-md border border-gray-100">
-            <img
-              src={selectedImage}
-              alt="미리보기"
-              className="w-full h-auto object-cover max-h-100"
-            />
-            <button
-              onClick={handleRemoveImage}
-              className="absolute top-3 right-3 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
-            >
-              <FaTimes />
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="w-full aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center space-y-3 text-gray-400 hover:bg-gray-100 hover:border-gray-300 transition-all group"
-          >
-            <div className="p-4 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform">
-              <FaCamera className="text-2xl text-gray-400" />
-            </div>
-            <span className="text-sm font-medium">사진 첨부하기</span>
-          </button>
-        )}
-      </div>
+      <ImageUploader
+        label="관련 사진"
+        previewImage={selectedImage}
+        onImageChange={(imageUrl) => setSelectedImage(imageUrl)}
+        onDelete={() => setSelectedImage(null)}
+        className="mb-12"
+      />
 
       <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50">
         <AdminActionButton
           label="수정 완료하기"
           icon={FaCheck}
-          onClick={handleSubmit}
+          onClick={handlehandleSubmit}
           className={`${isFormValid ? 'bg-knu-red' : 'bg-gray-400 cursor-not-allowed'}`}
         />
       </div>

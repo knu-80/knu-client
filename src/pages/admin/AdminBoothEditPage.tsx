@@ -1,16 +1,15 @@
 import { useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaInstagram, FaPhoneAlt, FaCheck, FaChevronDown } from 'react-icons/fa';
-import { FiCamera, FiX } from 'react-icons/fi';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
 import ClubCategory from '@/components/ClubCategory';
+import ImageUploader from '@/components/ImageUploader';
 import { DIVISION_INFO, MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
 
 export default function AdminBoothEditPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const booth = MOCK_BOOTHS[Number(id)];
@@ -195,58 +194,19 @@ export default function AdminBoothEditPage() {
         />
       </div>
 
-      <div className="mb-12">
-        <h3 className="typo-heading-3 text-black mb-4">동아리 대표 사진</h3>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = () => {
-                const result = reader.result as string;
-                setPreviewImage(result);
-                setFormData((prev) => ({ ...prev, imageUrl: result }));
-              };
-              reader.readAsDataURL(file);
-            }
-          }}
-          accept="image/*"
-          className="hidden"
-        />
-
-        <div className="relative w-full aspect-3/2 bg-gray-50 overflow-hidden rounded-2xl border border-gray-100 shadow-sm">
-          {previewImage ? (
-            <img src={previewImage} alt="미리보기" className="h-full w-full object-cover" />
-          ) : (
-            <div className="flex h-full w-full flex-col items-center justify-center text-gray-400">
-              <FiCamera className="mb-2 h-8 w-8" />
-              <span className="text-xs">이미지 없음</span>
-            </div>
-          )}
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/20 opacity-0 transition-opacity hover:opacity-100"
-          >
-            <div className="rounded-full bg-white/90 p-3 shadow-md">
-              <FiCamera className="h-5 w-5 text-gray-700" />
-            </div>
-          </div>
-          {previewImage && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setPreviewImage(null);
-                setFormData((prev) => ({ ...prev, imageUrl: '' }));
-              }}
-              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-500 shadow-md transition-transform active:scale-90 z-10"
-            >
-              <FiX className="h-4 w-4" />
-            </button>
-          )}
-        </div>
-      </div>
+      <ImageUploader
+        label="동아리 대표 사진"
+        previewImage={previewImage}
+        onImageChange={(imageUrl) => {
+          setPreviewImage(imageUrl);
+          setFormData((prev) => ({ ...prev, imageUrl }));
+        }}
+        onDelete={() => {
+          setPreviewImage(null);
+          setFormData((prev) => ({ ...prev, imageUrl: '' }));
+        }}
+        className="mb-12"
+      />
 
       <div className="mb-10">
         <h3 className="typo-heading-3 mb-5 text-black">문의하기</h3>

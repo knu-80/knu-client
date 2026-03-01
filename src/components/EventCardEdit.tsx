@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react';
-import { FiClock, FiMapPin, FiCheck, FiX, FiCamera } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiClock, FiMapPin, FiCheck, FiX } from 'react-icons/fi';
 import { type FestivalEvent } from '@/mocks/events';
 import AlertModal from './AlertModal';
+import ImageUploader from './ImageUploader';
 
 interface EventCardEditProps {
   initialData: FestivalEvent;
@@ -10,7 +11,6 @@ interface EventCardEditProps {
 }
 
 export default function EventCardEdit({ initialData, onSave, onCancel }: EventCardEditProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FestivalEvent>(initialData);
   const [previewImage, setPreviewImage] = useState<string | null>(initialData.imageUrl);
   const [alertConfig, setAlertConfig] = useState<{
@@ -22,19 +22,6 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
     title: '',
     message: '',
   });
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result as string;
-        setPreviewImage(result);
-        setFormData((prev) => ({ ...prev, imageUrl: result }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleSaveClick = () => {
     const { title, description, startDate, endDate, location } = formData;
@@ -53,29 +40,14 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
 
   return (
     <div className="relative overflow-hidden rounded-2xl border-2 border-knu-red/30 bg-white shadow-lg animate-in fade-in zoom-in duration-200">
-      <div className="relative h-45 w-full bg-gray-50 overflow-hidden rounded-lg">
-        {previewImage ? (
-          <img src={previewImage} alt="미리보기" className="h-full w-full object-cover" />
-        ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center text-gray-400">
-            <FiCamera className="mb-2 h-8 w-8" />
-            <span className="text-xs">이미지 없음</span>
-          </div>
-        )}
-        <div
-          onClick={() => fileInputRef.current?.click()}
-          className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/20 opacity-0 transition-opacity hover:opacity-100"
-        >
-          <div className="rounded-full bg-white/90 p-3 shadow-md">
-            <FiCamera className="h-5 w-5 text-gray-700" />
-          </div>
-        </div>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleImageChange}
-          accept="image/*"
-          className="hidden"
+      <div className="relative w-full overflow-hidden rounded-lg">
+        <ImageUploader
+          previewImage={previewImage}
+          onImageChange={(imageUrl) => {
+            setPreviewImage(imageUrl);
+            setFormData((prev) => ({ ...prev, imageUrl }));
+          }}
+          aspectRatio="h-45"
         />
 
         <div className="absolute right-3 top-3 flex gap-2 z-10">

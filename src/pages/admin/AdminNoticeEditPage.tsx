@@ -79,10 +79,9 @@ export default function AdminNoticeEditPage() {
     }
 
     showAlert('수정 완료', '공지사항이 성공적으로 수정되었습니다.', () => {
-      navigate(`/admin/notice/${id}`);
+      navigate(`/admin/notice/${id}`, { replace: true });
     });
   };
-
   const isFormValid = title.trim() !== '' && content.trim() !== '';
 
   return (
@@ -113,7 +112,7 @@ export default function AdminNoticeEditPage() {
             <label className="text-xs font-bold text-gray-500 ml-1">습득 장소</label>
             <input
               type="text"
-              placeholder="예: 대강당 앞 벤치"
+              placeholder="예: 일청담 벤치"
               value={foundLocation}
               onChange={(e) => setFoundLocation(e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-knu-red transition-colors"

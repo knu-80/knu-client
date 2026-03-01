@@ -1,5 +1,6 @@
 import axios, { AxiosHeaders } from 'axios';
 
+import { clearAccessToken, getAccessToken } from './auth';
 import { toApiClientError } from './error';
 
 const FALLBACK_API_BASE_URL = 'https://api.knu80th.kro.kr';
@@ -16,14 +17,18 @@ export const http = axios.create({
   },
 });
 
+let unauthorizedHandler: ((status: number) => void) | null = null;
+
+export function setUnauthorizedHandler(handler: ((status: number) => void) | null): void {
+  unauthorizedHandler = handler;
+}
+
 http.interceptors.request.use((config) => {
   const headers = AxiosHeaders.from(config.headers);
 
-  if (typeof window !== 'undefined') {
-    const accessToken = window.localStorage.getItem('accessToken');
-    if (accessToken) {
-      headers.set('Authorization', `Bearer ${accessToken}`);
-    }
+  const accessToken = getAccessToken();
+  if (accessToken) {
+    headers.set('Authorization', `Bearer ${accessToken}`);
   }
 
   config.headers = headers;
@@ -32,5 +37,14 @@ http.interceptors.request.use((config) => {
 
 http.interceptors.response.use(
   (response) => response,
-  (error: unknown) => Promise.reject(toApiClientError(error)),
+  (error: unknown) => {
+    const parsedError = toApiClientError(error);
+
+    if (parsedError.status === 401) {
+      clearAccessToken();
+      unauthorizedHandler?.(parsedError.status);
+    }
+
+    return Promise.reject(parsedError);
+  },
 );

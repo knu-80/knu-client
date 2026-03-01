@@ -4,7 +4,7 @@ import { FiBell, FiCalendar, FiHome, FiTool } from 'react-icons/fi';
 const ADMIN_MENUS = [
   { id: 'notice', label: '공지 관리', icon: FiBell, path: '/admin/notice' },
   { id: 'event', label: '이벤트 관리', icon: FiCalendar, path: '/admin/event' },
-  { id: 'booth', label: '내 부스', icon: FiHome, path: '/admin/booth' },
+  { id: 'booth', label: '내 부스', icon: FiHome, path: '/admin/booths/edit/1' },
   { id: 'pub', label: '주막 관리', icon: FiTool, path: '/admin/pub' },
 ];
 

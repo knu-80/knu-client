@@ -4,6 +4,7 @@ import { FaRegCalendar, FaInfoCircle, FaUser, FaEdit, FaTrash } from 'react-icon
 import RepresentativeImage from '@/components/RepresentativeImage';
 import FoundItemCard from '@/components/FoundItemCard';
 import ConfirmModal from '@/components/ConfirmModal';
+import AdminActionButton from '@/components/AdminActionButton';
 import { NOTICES } from '@/mocks/notices';
 
 export default function AdminNoticeDetailPage() {
@@ -72,20 +73,18 @@ export default function AdminNoticeDetailPage() {
       )}
 
       <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center gap-3 w-fit px-4">
-        <button
+        <AdminActionButton
+          label="수정하기"
+          icon={FaEdit}
           onClick={handleEdit}
-          className="flex h-12 items-center justify-center gap-2 rounded-full bg-[#0F172A] px-6 text-white shadow-2xl transition-all hover:scale-105 active:scale-95"
-        >
-          <FaEdit className="h-4 w-4" />
-          <span className="text-base font-bold whitespace-nowrap">수정하기</span>
-        </button>
-        <button
+          className="bg-[#0F172A]"
+        />
+        <AdminActionButton
+          label="삭제하기"
+          icon={FaTrash}
           onClick={() => setIsDeleteModalOpen(true)}
-          className="flex h-12 items-center justify-center gap-2 rounded-full bg-red-600 px-6 text-white shadow-2xl transition-all hover:scale-105 active:scale-95"
-        >
-          <FaTrash className="h-4 w-4" />
-          <span className="text-base font-bold whitespace-nowrap">삭제하기</span>
-        </button>
+          className="bg-red-600"
+        />
       </div>
 
       <ConfirmModal

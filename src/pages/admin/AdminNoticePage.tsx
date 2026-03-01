@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GrAnnounce } from 'react-icons/gr';
+import { SlPencil } from 'react-icons/sl';
 import NoticeCard from '@/components/NoticeCard';
-import AdminAddFloatingButton from '@/components/AdminAddFloatingButton';
+import AdminActionButton from '@/components/AdminActionButton';
 import { NOTICES } from '@/mocks/notices';
 
 export default function AdminNoticePage() {
@@ -16,6 +17,10 @@ export default function AdminNoticePage() {
       : NOTICES.filter((notice) => {
           return notice.category === activeTab;
         });
+
+  const handleWrite = () => {
+    navigate('/admin/notice/write');
+  };
 
   return (
     <div className="pt-5 sm:p-5 relative pb-24">
@@ -70,10 +75,14 @@ export default function AdminNoticePage() {
         </div>
       </div>
 
-      <AdminAddFloatingButton
-        label="공지 추가하기"
-        onClick={() => navigate('/admin/notice/write')}
-      />
+      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50">
+        <AdminActionButton
+          label="공지 추가하기"
+          icon={SlPencil}
+          onClick={handleWrite}
+          className="bg-[#0F172A]"
+        />
+      </div>
     </div>
   );
 }

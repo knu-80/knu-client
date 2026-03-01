@@ -28,7 +28,7 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
 
   return (
     <div className="relative overflow-hidden rounded-2xl border-2 border-knu-red/30 bg-white shadow-lg animate-in fade-in zoom-in duration-200">
-      <div className="relative h-45 w-full bg-gray-50">
+      <div className="relative h-45 w-full bg-gray-50 overflow-hidden rounded-lg">
         {previewImage ? (
           <img src={previewImage} alt="미리보기" className="h-full w-full object-cover" />
         ) : (
@@ -72,20 +72,20 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
       </div>
 
       <div className="flex flex-col gap-4 p-5">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <input
             type="text"
             placeholder="이벤트 제목"
             value={formData.title}
             onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-            className="text-lg font-bold text-gray-900 border-b border-gray-100 focus:border-knu-red focus:outline-none caret-knu-red py-1 placeholder-gray-300"
+            className="text-lg font-bold text-gray-900 border-b border-gray-100 focus:border-knu-red focus:outline-none focus:ring-0 p-0 caret-knu-red placeholder-gray-300 bg-transparent transition-colors"
           />
           <textarea
             placeholder="이벤트 설명"
             value={formData.description}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             rows={2}
-            className="text-sm text-gray-600 focus:outline-none p-0 resize-none placeholder-gray-300 caret-knu-red min-h-15"
+            className="text-sm text-gray-600 border-none focus:ring-0 focus:outline-none p-0 resize-none placeholder-gray-300 caret-knu-red min-h-15 bg-transparent"
           />
         </div>
 

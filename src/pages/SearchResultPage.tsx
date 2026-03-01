@@ -28,7 +28,7 @@ export default function SearchResultPage() {
         <button onClick={() => navigate(-1)} className="p-1 -ml-2 text-gray-600">
           <FiArrowLeft size={24} />
         </button>
-        <div className="flex-1" onClick={() => navigate(-1)}>
+        <div className="flex-1">
           <SearchBar
             value={query}
             onChange={handleQueryChange}

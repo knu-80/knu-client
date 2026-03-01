@@ -1,12 +1,13 @@
 import axios from 'axios';
 
-import type { ApiResponse, ApiResult } from './types';
+import type { ApiResponse, ApiResult, BackendErrorEnvelope } from './types';
 
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
 
 function pickErrorInfo(payload: unknown): {
+  status?: number;
   message?: string;
   code?: string;
   result?: ApiResult;
@@ -15,12 +16,20 @@ function pickErrorInfo(payload: unknown): {
     return {};
   }
 
-  const message = typeof payload.message === 'string' ? payload.message : undefined;
-  const code = typeof payload.code === 'string' ? payload.code : undefined;
-  const result =
-    payload.result === 'SUCCESS' || payload.result === 'FAIL' ? payload.result : undefined;
+  const envelope = payload as BackendErrorEnvelope;
+  const nestedError = isObject(envelope.error) ? envelope.error : undefined;
+  const nestedStatus = typeof nestedError?.state === 'number' ? nestedError.state : undefined;
 
-  return { message, code, result };
+  const message =
+    (typeof envelope.message === 'string' ? envelope.message : undefined) ??
+    (typeof nestedError?.message === 'string' ? nestedError.message : undefined);
+  const code =
+    (typeof envelope.code === 'string' ? envelope.code : undefined) ??
+    (typeof nestedError?.code === 'string' ? nestedError.code : undefined);
+  const result =
+    envelope.result === 'SUCCESS' || envelope.result === 'FAIL' ? envelope.result : undefined;
+
+  return { status: nestedStatus, message, code, result };
 }
 
 export class ApiClientError extends Error {
@@ -53,8 +62,8 @@ export function toApiClientError(error: unknown): ApiClientError {
   }
 
   if (axios.isAxiosError(error)) {
-    const status = error.response?.status ?? 0;
     const info = pickErrorInfo(error.response?.data);
+    const status = info.status ?? error.response?.status ?? 0;
     const message = info.message ?? error.message ?? '요청 처리 중 오류가 발생했습니다.';
 
     return new ApiClientError(message, {

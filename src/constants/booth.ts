@@ -4,32 +4,211 @@ export const DIVISION_INFO = {
   SPORTS_DIVISION: { name: '체육부', shortName: '체육', color: 'bg-[var(--color-knu-lavender)]' },
   SOCIAL_DIVISION: { name: '사회부', shortName: '사회', color: 'bg-[var(--color-knu-mint)]' },
   RELIGIOUS_DIVISION: { name: '종교부', shortName: '종교', color: 'bg-[var(--color-knu-silver)]' },
-  MANAGEMENT: { name: '총동아리연합회', shortName: '총동연', color: 'bg-knu-red' },
+  MANAGEMENT: { name: '총동연', shortName: '총동연', color: 'bg-knu-red' },
+  EXTERNAL_SUPPORT: { name: '외부부스', shortName: '외부', color: 'bg-gray-400' },
 } as const;
 
+export type DivisionType = keyof typeof DIVISION_INFO;
+
+export const DIVISION_LIST: DivisionType[] = [
+  'CULTURE_ART_DIVISION',
+  'SOCIAL_DIVISION',
+  'ACADEMIC_DIVISION',
+  'SPORTS_DIVISION',
+  'RELIGIOUS_DIVISION',
+];
+
 export interface BoothDetail {
-  booth_number: number;
+  id: number;
+  boothNumber: number;
   name: string;
-  division:
-    | 'ACADEMIC_DIVISION'
-    | 'CULTURE_ART_DIVISION'
-    | 'SPORTS_DIVISION'
-    | 'SOCIAL_DIVISION'
-    | 'RELIGIOUS_DIVISION'
-    | 'MANAGEMENT';
-  is_active: boolean;
+  division: DivisionType;
+  description: string;
+  applyLink: string;
+  imageUrl: string;
+  isActive: boolean;
 }
 
+export const DEFAULT_BOOTH: BoothDetail = {
+  id: 0,
+  boothNumber: 0,
+  name: '부스이름',
+  division: 'ACADEMIC_DIVISION',
+  isActive: false,
+  description: '설명',
+  applyLink: '',
+  imageUrl: '',
+};
+
 export const MOCK_BOOTHS: Record<number, BoothDetail> = {
-  1: { booth_number: 1, name: '테스트 학술', division: 'ACADEMIC_DIVISION', is_active: false },
-  2: { booth_number: 2, name: '테스트 문예', division: 'CULTURE_ART_DIVISION', is_active: false },
-  3: { booth_number: 3, name: '테스트 체육', division: 'SPORTS_DIVISION', is_active: false },
-  4: { booth_number: 4, name: '테스트 사회', division: 'SOCIAL_DIVISION', is_active: false },
-  5: { booth_number: 5, name: '테스트 종교', division: 'RELIGIOUS_DIVISION', is_active: false },
-  6: { booth_number: 6, name: '테스트 학술2', division: 'ACADEMIC_DIVISION', is_active: true },
-  7: { booth_number: 7, name: '테스트 문예2', division: 'CULTURE_ART_DIVISION', is_active: true },
-  8: { booth_number: 8, name: '테스트 체육2', division: 'SPORTS_DIVISION', is_active: false },
-  9: { booth_number: 9, name: '테스트 사회2', division: 'SOCIAL_DIVISION', is_active: false },
-  10: { booth_number: 10, name: '테스트 종교2', division: 'RELIGIOUS_DIVISION', is_active: true },
-  100: { booth_number: 99, name: '총동연', division: 'MANAGEMENT', is_active: false },
+  1: {
+    id: 1,
+    boothNumber: 1,
+    name: '쌩목',
+    division: 'CULTURE_ART_DIVISION',
+    isActive: false,
+    description: '예시!!!!!!!',
+    applyLink: '',
+    imageUrl: '',
+  },
+  2: {
+    id: 2,
+    boothNumber: 2,
+    name: '브리드',
+    division: 'CULTURE_ART_DIVISION',
+    isActive: false,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  3: {
+    id: 3,
+    boothNumber: 3,
+    name: '크누피',
+    division: 'CULTURE_ART_DIVISION',
+    isActive: false,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  4: {
+    id: 4,
+    boothNumber: 4,
+    name: '에이밍',
+    division: 'SPORTS_DIVISION',
+    isActive: false,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  5: {
+    id: 5,
+    boothNumber: 5,
+    name: 'DFC',
+    division: 'RELIGIOUS_DIVISION',
+    isActive: false,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  6: {
+    id: 6,
+    boothNumber: 6,
+    name: '뜨람',
+    division: 'ACADEMIC_DIVISION',
+    isActive: true,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  7: {
+    id: 7,
+    boothNumber: 7,
+    name: '수리영역',
+    division: 'ACADEMIC_DIVISION',
+    isActive: true,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  8: {
+    id: 8,
+    boothNumber: 8,
+    name: '합창단',
+    division: 'CULTURE_ART_DIVISION',
+    isActive: true,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  9: {
+    id: 9,
+    boothNumber: 9,
+    name: '크누모빌리티',
+    division: 'ACADEMIC_DIVISION',
+    isActive: true,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  10: {
+    id: 10,
+    boothNumber: 10,
+    name: 'H.P',
+    division: 'RELIGIOUS_DIVISION',
+    isActive: true,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  101: {
+    id: 101,
+    boothNumber: 101,
+    name: '총동아리연합회',
+    division: 'MANAGEMENT',
+    isActive: false,
+    description: '경북대학교 제XX대 총동아리연합회입니다.',
+    applyLink: '',
+    imageUrl: '',
+  },
+  102: {
+    id: 102,
+    boothNumber: 102,
+    name: '외부부스',
+    division: 'EXTERNAL_SUPPORT',
+    isActive: false,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  103: {
+    id: 103,
+    boothNumber: 103,
+    name: '외부부스',
+    division: 'EXTERNAL_SUPPORT',
+    isActive: false,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  104: {
+    id: 104,
+    boothNumber: 104,
+    name: '외부부스',
+    division: 'EXTERNAL_SUPPORT',
+    isActive: false,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  105: {
+    id: 105,
+    boothNumber: 105,
+    name: '외부부스',
+    division: 'EXTERNAL_SUPPORT',
+    isActive: false,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  106: {
+    id: 106,
+    boothNumber: 106,
+    name: '외부부스',
+    division: 'EXTERNAL_SUPPORT',
+    isActive: false,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
+  107: {
+    id: 107,
+    boothNumber: 107,
+    name: '외부부스',
+    division: 'EXTERNAL_SUPPORT',
+    isActive: false,
+    description: '',
+    applyLink: '',
+    imageUrl: '',
+  },
 };

@@ -8,7 +8,7 @@ export interface FestivalEvent {
   startDate: string;
   endDate: string;
   location: string;
-  imageUrl: string;
+  imageUrl: string | null;
 }
 
 export const ALL_EVENTS: FestivalEvent[] = [

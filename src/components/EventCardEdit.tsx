@@ -89,7 +89,7 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
             value={formData.description}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
             rows={2}
-            className="text-sm text-gray-600 border-none focus:ring-0 p-0 resize-none placeholder-gray-300 caret-knu-red min-h-15"
+            className="text-sm text-gray-600 focus:outline-none p-0 resize-none placeholder-gray-300 caret-knu-red min-h-15"
           />
         </div>
 

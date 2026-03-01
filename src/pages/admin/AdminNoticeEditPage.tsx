@@ -17,9 +17,7 @@ export default function AdminNoticeEditPage() {
   const [content, setContent] = useState(initialNotice?.content || '');
   const [itemName, setItemName] = useState(initialNotice?.itemName || '');
   const [foundLocation, setFoundLocation] = useState(initialNotice?.foundLocation || '');
-  const [selectedImage, setSelectedImage] = useState<string | null>(
-    initialNotice ? 'https://picsum.photos/600/400' : null,
-  );
+  const [selectedImage, setSelectedImage] = useState<string | null>(initialNotice?.imgUrl || null);
 
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;

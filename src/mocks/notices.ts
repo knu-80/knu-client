@@ -7,6 +7,7 @@ export interface Notice {
   content: string;
   itemName?: string;
   foundLocation?: string;
+  imgUrl?: string;
 }
 
 export const NOTICES: Notice[] = [
@@ -18,6 +19,7 @@ export const NOTICES: Notice[] = [
     category: '공지',
     content:
       '안녕하세요, 운영팀입니다.\n행사 진행 상황에 따라 일부 부스의 운영시간이 오후 8시까지로 연장되었습니다.\n이용에 참고하시기 바랍니다.',
+    imgUrl: 'https://picsum.photos/id/10/600/400',
   },
   {
     id: 102,
@@ -29,6 +31,7 @@ export const NOTICES: Notice[] = [
       '안녕하세요, 학생회관에서 지갑을 분실하신 분을 찾습니다. 아래 물품 정보를 확인하시고 본인인 경우 부스로 방문해 주세요.',
     itemName: '검은색 가죽 지갑',
     foundLocation: '학생회관 1층 식당',
+    imgUrl: 'https://picsum.photos/id/20/600/400',
   },
   {
     id: 103,
@@ -38,6 +41,7 @@ export const NOTICES: Notice[] = [
     category: '공지',
     content:
       '시험 기간을 맞아 중앙도서관 열람실을 24시간 개방합니다.\n쾌적한 학습 환경을 위해 정숙을 유지해 주세요.',
+    imgUrl: 'https://picsum.photos/id/30/600/400',
   },
   {
     id: 104,
@@ -49,6 +53,7 @@ export const NOTICES: Notice[] = [
       '본관 앞에서 에어팟 프로를 습득했습니다.\n케이스가 독특하니 본인이 맞는지 확인을 위해 부스에 방문해 주세요.',
     itemName: '에어팟 프로 2세대',
     foundLocation: '본관 앞 잔디광장',
+    imgUrl: 'https://picsum.photos/id/40/600/400',
   },
   {
     id: 105,
@@ -57,6 +62,7 @@ export const NOTICES: Notice[] = [
     date: '2026.10.22',
     category: '공지',
     content: '축제 당일 인파 밀집이 예상됩니다.\n안전 요원의 안내에 적극 협조해 주시기 바랍니다.',
+    imgUrl: 'https://picsum.photos/id/50/600/400',
   },
   {
     id: 106,
@@ -67,5 +73,6 @@ export const NOTICES: Notice[] = [
     content: '정문 버류장 인근에서 파란색 장우산을 습득하여 보관 중입니다.',
     itemName: '파란색 장우산',
     foundLocation: '정문 버스정류장 인근',
+    imgUrl: 'https://picsum.photos/id/60/600/400',
   },
 ];

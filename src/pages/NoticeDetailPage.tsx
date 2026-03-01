@@ -43,13 +43,12 @@ export default function NoticeDetailPage() {
         <p className="typo-body-1 whitespace-pre-wrap">{notice.content}</p>
       </div>
 
-      <div className="mb-5">
-        <h3 className="typo-heading-3 text-black mb-3">관련 사진</h3>
-        <RepresentativeImage
-          imageUrl="https://picsum.photos/600/400"
-          altText={`${notice.title} 관련 사진`}
-        />
-      </div>
+      {notice.imgUrl && (
+        <div className="mb-5">
+          <h3 className="typo-heading-3 text-black mb-3">관련 사진</h3>
+          <RepresentativeImage imageUrl={notice.imgUrl} altText={`${notice.title} 관련 사진`} />
+        </div>
+      )}
 
       {isLostItem && (
         <div className="flex items-center space-x-3 p-4 bg-red-50/50 border border-red-100 text-red-900 rounded-xl mb-10 shadow-sm">

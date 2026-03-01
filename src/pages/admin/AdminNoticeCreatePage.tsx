@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaCamera, FaTimes, FaCheck } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
 import SegmentedControl from '@/components/SegmentedControl';
+import AlertModal from '@/components/AlertModal';
 
 export default function AdminNoticeCreatePage() {
   const navigate = useNavigate();
@@ -15,6 +16,28 @@ export default function AdminNoticeCreatePage() {
   const [foundLocation, setFoundLocation] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  // 알림 모달 상태
+  const [alertConfig, setAlertConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onClose?: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+  });
+
+  const showAlert = (title: string, message: string, onClose?: () => void) => {
+    setAlertConfig({ isOpen: true, title, message, onClose });
+  };
+
+  const closeAlert = () => {
+    const { onClose } = alertConfig;
+    setAlertConfig((prev) => ({ ...prev, isOpen: false }));
+    if (onClose) onClose();
+  };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -23,7 +46,7 @@ export default function AdminNoticeCreatePage() {
         setSelectedImage(reader.result as string);
       };
       reader.onerror = () => {
-        alert('사진을 읽어오는 중 오류가 발생했습니다.');
+        showAlert('오류', '사진을 읽어오는 중 오류가 발생했습니다.');
       };
       reader.readAsDataURL(file);
     }
@@ -38,11 +61,14 @@ export default function AdminNoticeCreatePage() {
 
   const handleSubmit = () => {
     if (!isFormValid) {
-      alert('제목과 내용을 모두 입력해주세요.');
+      showAlert('알림', '제목과 내용을 모두 입력해주세요.');
       return;
     }
-    alert('공지사항이 등록되었습니다.');
-    navigate('/admin/notice');
+
+    // 등록 성공 시 알림 후 이동
+    showAlert('등록 완료', '공지사항이 성공적으로 등록되었습니다.', () => {
+      navigate('/admin/notice');
+    });
   };
 
   const isFormValid = title.trim() !== '' && content.trim() !== '';
@@ -152,6 +178,13 @@ export default function AdminNoticeCreatePage() {
           className={`${isFormValid ? 'bg-knu-red' : 'bg-gray-400 cursor-not-allowed'}`}
         />
       </div>
+
+      <AlertModal
+        isOpen={alertConfig.isOpen}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        onClose={closeAlert}
+      />
     </div>
   );
 }

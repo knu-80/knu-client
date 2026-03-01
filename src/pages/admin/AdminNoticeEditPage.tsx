@@ -9,12 +9,21 @@ export default function AdminNoticeEditPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const initialNotice = NOTICES.find((n) => n.id === Number(id));
   const category = (initialNotice?.category as '공지' | '분실물') || '공지';
 
   const [title, setTitle] = useState(initialNotice?.title || '');
   const [content, setContent] = useState(initialNotice?.content || '');
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
   const [itemName, setItemName] = useState(initialNotice?.itemName || '');
   const [foundLocation, setFoundLocation] = useState(initialNotice?.foundLocation || '');
   const [selectedImage, setSelectedImage] = useState<string | null>(initialNotice?.imgUrl || null);
@@ -123,17 +132,17 @@ export default function AdminNoticeEditPage() {
 
       <div className="h-px w-full bg-gray-200 my-5" />
 
-      <div className="mb-5 text-black">
+      <div className="mb-10 text-black">
         <textarea
+          ref={textareaRef}
           placeholder="내용을 입력하세요."
           value={content}
-          onChange={(e) => setContent(e.target.value)}
-          rows={10}
-          className="typo-body-1 w-full border-none focus:ring-0 p-0 placeholder-gray-400 resize-none min-h-75 caret-knu-red outline-none"
+          onChange={handleTextareaChange}
+          className="typo-body-1 w-full border-none focus:ring-0 p-0 placeholder-gray-400 resize-none min-h-37.5 caret-knu-red outline-none leading-relaxed overflow-hidden"
         />
       </div>
 
-      <div className="mb-10">
+      <div className="mb-12">
         <h3 className="typo-heading-3 text-black mb-4">관련 사진</h3>
         <input
           type="file"

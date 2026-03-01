@@ -68,7 +68,7 @@ export default function EventCard({
       <div className="flex flex-col gap-4 p-5">
         <div className="flex flex-col gap-1">
           <h3 className="text-lg font-bold text-gray-900">{title}</h3>
-          <p className="text-sm text-gray-600 line-clamp-3">{description}</p>
+          <p className="text-sm text-gray-600 line-clamp-4">{description}</p>
         </div>
 
         <div className="flex flex-col gap-1.5 pt-1">

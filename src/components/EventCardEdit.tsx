@@ -109,8 +109,8 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
             placeholder="이벤트 설명"
             value={formData.description}
             onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
-            rows={2}
-            className="text-sm text-gray-600 border-none focus:ring-0 focus:outline-none p-0 resize-none placeholder-gray-300 caret-knu-red min-h-15 bg-transparent"
+            rows={4}
+            className="text-sm text-gray-600 border-none focus:ring-0 focus:outline-none p-0 resize-none placeholder-gray-300 caret-knu-red min-h-20 bg-transparent"
           />
         </div>
 

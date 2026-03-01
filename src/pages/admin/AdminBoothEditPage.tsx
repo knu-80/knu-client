@@ -11,8 +11,17 @@ export default function AdminBoothEditPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const booth = MOCK_BOOTHS[Number(id)];
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData({ ...formData, description: e.target.value });
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
 
   const [formData, setFormData] = useState({
     name: booth?.name || '',
@@ -178,9 +187,10 @@ export default function AdminBoothEditPage() {
 
       <div className="mb-10 text-black">
         <textarea
+          ref={textareaRef}
           value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="typo-body-1 w-full bg-transparent border-none focus:ring-0 p-0 resize-none min-h-37.5 caret-knu-red outline-none leading-relaxed"
+          onChange={handleTextareaChange}
+          className="typo-body-1 w-full bg-transparent border-none focus:ring-0 p-0 resize-none min-h-37.5 caret-knu-red outline-none leading-relaxed overflow-hidden"
           placeholder="동아리 상세 설명을 입력해주세요."
         />
       </div>

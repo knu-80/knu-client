@@ -1,4 +1,4 @@
-import { FiClock, FiMapPin } from 'react-icons/fi';
+import { FiClock, FiMapPin, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import RepresentativeImage from './RepresentativeImage';
 
 interface EventCardProps {
@@ -7,6 +7,9 @@ interface EventCardProps {
   date: string;
   location: string;
   imageUrl: string | null;
+  isAdmin?: boolean;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 export default function EventCard({
@@ -15,15 +18,45 @@ export default function EventCard({
   date,
   location,
   imageUrl,
+  isAdmin = false,
+  onEdit,
+  onDelete,
 }: EventCardProps) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
-      <RepresentativeImage
-        imageUrl={imageUrl}
-        altText={`${title} 포스터`}
-        height="h-45"
-        isZoomable={false}
-      />
+    <div className="relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
+      <div className="relative">
+        <RepresentativeImage
+          imageUrl={imageUrl}
+          altText={`${title} 포스터`}
+          height="h-45"
+          isZoomable={false}
+        />
+
+        {isAdmin && (
+          <div className="absolute right-3 top-3 flex gap-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit?.();
+              }}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md transition-all hover:bg-white hover:text-knu-red active:scale-90"
+              aria-label="수정"
+            >
+              <FiEdit2 className="h-4 w-4" />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete?.();
+              }}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md transition-all hover:bg-white hover:text-red-600 active:scale-90"
+              aria-label="삭제"
+            >
+              <FiTrash2 className="h-4 w-4" />
+            </button>
+          </div>
+        )}
+      </div>
 
       <div className="flex flex-col gap-4 p-5">
         <div className="flex flex-col gap-1">

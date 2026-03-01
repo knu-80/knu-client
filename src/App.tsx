@@ -17,6 +17,7 @@ import LoginPage from '@/pages/admin/LoginPage';
 import AdminHomePage from '@/pages/admin/AdminHomePage';
 import AdminNoticePage from '@/pages/admin/AdminNoticePage';
 import AdminEventPage from '@/pages/admin/AdminEventPage';
+import AdminPubPage from '@/pages/admin/AdminPubPage';
 import AdminMainLayout from '@/components/layouts/AdminMainLayout';
 import AdminDetailLayout from '@/components/layouts/AdminDetailLayout';
 import EventPage from '@/pages/EventPage';
@@ -56,6 +57,7 @@ function App() {
         <Route index element={<AdminHomePage />} />
         <Route path="notice" element={<AdminNoticePage />} />
         <Route path="event" element={<AdminEventPage />} />
+        <Route path="pub" element={<AdminPubPage />} />
       </Route>
       <Route path="/admin/login" element={<LoginPage />} />
       <Route element={<AdminDetailLayout title="공지사항 상세" fallbackPath="/admin/notice" />}>

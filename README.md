@@ -49,4 +49,6 @@
   - `VITE_API_BASE_URL`
   - `VITE_API_TIMEOUT_MS`
 - 공통 응답 포맷은 `ApiResponse<T>`를 사용하며, `result === "FAIL"`은 공통 에러로 처리합니다.
+- 백엔드 에러 포맷(`error.state`, `error.code`, `error.message`)도 공통 파서에서 처리합니다.
+- 수정 API(PATCH)는 변경 필드만 보내는 방식(`Partial`)을 기본 규칙으로 사용합니다.
 - 상세 사용 방식은 `src/apis/README.md`를 참고해주세요.

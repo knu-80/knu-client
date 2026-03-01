@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { FiClock, FiMapPin, FiCheck, FiX, FiCamera } from 'react-icons/fi';
 import { type FestivalEvent } from '@/mocks/events';
+import AlertModal from './AlertModal';
 
 interface EventCardEditProps {
   initialData: FestivalEvent;
@@ -12,6 +13,15 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FestivalEvent>(initialData);
   const [previewImage, setPreviewImage] = useState<string | null>(initialData.imageUrl);
+  const [alertConfig, setAlertConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+  });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -24,6 +34,21 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleSaveClick = () => {
+    const { title, description, startDate, endDate, location } = formData;
+
+    if (!title.trim() || !description.trim() || !startDate || !endDate || !location.trim()) {
+      setAlertConfig({
+        isOpen: true,
+        title: '입력 오류',
+        message: '모든 항목(제목, 설명, 기간, 장소)을 입력해주세요.',
+      });
+      return;
+    }
+
+    onSave(formData);
   };
 
   return (
@@ -55,7 +80,7 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
 
         <div className="absolute right-3 top-3 flex gap-2 z-10">
           <button
-            onClick={() => onSave(formData)}
+            onClick={handleSaveClick}
             className="flex h-8 w-8 items-center justify-center rounded-full bg-knu-red text-white shadow-md transition-transform active:scale-90"
             aria-label="저장"
           >
@@ -130,6 +155,13 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
           </div>
         </div>
       </div>
+
+      <AlertModal
+        isOpen={alertConfig.isOpen}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        onClose={() => setAlertConfig((prev) => ({ ...prev, isOpen: false }))}
+      />
     </div>
   );
 }

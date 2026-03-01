@@ -1,20 +1,16 @@
 import { useState, useRef } from 'react';
 import { FiClock, FiMapPin, FiCheck, FiX, FiCamera } from 'react-icons/fi';
-import { type EventCardProps } from './EventCard';
-
-interface EventData extends EventCardProps {
-  id: number;
-}
+import { type FestivalEvent } from '@/mocks/events';
 
 interface EventCardEditProps {
-  initialData: EventData;
-  onSave: (data: EventData) => void;
+  initialData: FestivalEvent;
+  onSave: (data: FestivalEvent) => void;
   onCancel: () => void;
 }
 
 export default function EventCardEdit({ initialData, onSave, onCancel }: EventCardEditProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [formData, setFormData] = useState<EventData>(initialData);
+  const [formData, setFormData] = useState<FestivalEvent>(initialData);
   const [previewImage, setPreviewImage] = useState<string | null>(initialData.imageUrl);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

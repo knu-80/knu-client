@@ -1,16 +1,12 @@
 import { useState } from 'react';
 import { MdEventNote } from 'react-icons/md';
 import { SlPencil } from 'react-icons/sl';
-import EventCard, { type EventCardProps } from '@/components/EventCard';
+import EventCard from '@/components/EventCard';
 import EventCardEdit from '@/components/EventCardEdit';
 import SegmentedControl from '@/components/SegmentedControl';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
 import { ALL_EVENTS, type EventType, type FestivalEvent } from '@/mocks/events';
-
-interface EventData extends EventCardProps {
-  id: number;
-}
 
 export default function AdminEventPage() {
   const [events, setEvents] = useState<FestivalEvent[]>(ALL_EVENTS);
@@ -37,19 +33,14 @@ export default function AdminEventPage() {
     }, 100);
   };
 
-  const handleSave = (data: EventData) => {
+  const handleSave = (data: FestivalEvent) => {
     if (isAdding) {
-      const nextId = Math.max(...events.map((e) => e.id), 0) + 1;
+      const nextId = Math.max(...events.map((event) => event.id), 0) + 1;
 
       const newEvent: FestivalEvent = {
+        ...data,
         id: nextId,
         type: selectedType,
-        title: data.title,
-        description: data.description,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        location: data.location,
-        imageUrl: data.imageUrl || '',
       };
       setEvents((prev) => [...prev, newEvent]);
       setIsAdding(false);
@@ -124,6 +115,7 @@ export default function AdminEventPage() {
           <EventCardEdit
             initialData={{
               id: 0,
+              type: selectedType,
               title: '',
               description: '',
               startDate: '',

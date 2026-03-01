@@ -1,10 +1,11 @@
 import { FiClock, FiMapPin, FiEdit2, FiTrash2 } from 'react-icons/fi';
 import RepresentativeImage from './RepresentativeImage';
 
-interface EventCardProps {
+export interface EventCardProps {
   title: string;
   description: string;
-  date: string;
+  startDate: string;
+  endDate: string;
   location: string;
   imageUrl: string | null;
   isAdmin?: boolean;
@@ -15,13 +16,19 @@ interface EventCardProps {
 export default function EventCard({
   title,
   description,
-  date,
+  startDate,
+  endDate,
   location,
   imageUrl,
   isAdmin = false,
   onEdit,
   onDelete,
 }: EventCardProps) {
+  const formatDateTime = (dateTimeStr: string) => {
+    if (!dateTimeStr) return '미지정';
+    return dateTimeStr.replace('T', ' ').replace(/-/g, '.');
+  };
+
   return (
     <div className="relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
       <div className="relative">
@@ -67,7 +74,9 @@ export default function EventCard({
         <div className="flex flex-col gap-1.5 pt-1">
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <FiClock className="h-3.5 w-3.5 shrink-0 text-knu-red" />
-            <span>{date}</span>
+            <span className="truncate">
+              {formatDateTime(startDate)} ~ {formatDateTime(endDate)}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <FiMapPin className="h-3.5 w-3.5 shrink-0 text-knu-red" />

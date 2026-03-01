@@ -34,7 +34,8 @@ export default function EventPage() {
               key={event.id}
               title={event.title}
               description={event.description}
-              date={event.date}
+              startDate={event.startDate}
+              endDate={event.endDate}
               location={event.location}
               imageUrl={event.imageUrl}
             />

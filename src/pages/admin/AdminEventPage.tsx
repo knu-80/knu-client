@@ -1,14 +1,20 @@
 import { useState } from 'react';
 import { MdEventNote } from 'react-icons/md';
 import { SlPencil } from 'react-icons/sl';
-import EventCard from '@/components/EventCard';
+import EventCard, { type EventCardProps } from '@/components/EventCard';
+import EventCardEdit from '@/components/EventCardEdit';
 import SegmentedControl from '@/components/SegmentedControl';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
 import { ALL_EVENTS, type EventType } from '@/mocks/events';
 
+interface EventData extends EventCardProps {
+  id: number;
+}
+
 export default function AdminEventPage() {
   const [selectedType, setSelectedType] = useState<EventType>('RECRUITMENT');
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;
@@ -30,12 +36,17 @@ export default function AdminEventPage() {
     });
   };
 
-  const handleEdit = (id: number) => {
+  const handleSave = (data: EventData) => {
+    setEditingId(null);
     setAlertConfig({
       isOpen: true,
-      title: '수정',
-      message: `ID: ${id} 이벤트를 수정합니다.`,
+      title: '성공',
+      message: `"${data.title}" 이벤트가 수정되었습니다.`,
     });
+  };
+
+  const handleCancel = () => {
+    setEditingId(null);
   };
 
   const handleDelete = (id: number) => {
@@ -66,19 +77,29 @@ export default function AdminEventPage() {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 px-2 sm:px-0">
         {filteredEvents.length > 0 ? (
-          filteredEvents.map((event) => (
-            <EventCard
-              key={event.id}
-              title={event.title}
-              description={event.description}
-              date={event.date}
-              location={event.location}
-              imageUrl={event.imageUrl}
-              isAdmin={true}
-              onEdit={() => handleEdit(event.id)}
-              onDelete={() => handleDelete(event.id)}
-            />
-          ))
+          filteredEvents.map((event) =>
+            editingId === event.id ? (
+              <EventCardEdit
+                key={event.id}
+                initialData={event}
+                onSave={handleSave}
+                onCancel={handleCancel}
+              />
+            ) : (
+              <EventCard
+                key={event.id}
+                title={event.title}
+                description={event.description}
+                startDate={event.startDate}
+                endDate={event.endDate}
+                location={event.location}
+                imageUrl={event.imageUrl}
+                isAdmin={true}
+                onEdit={() => setEditingId(event.id)}
+                onDelete={() => handleDelete(event.id)}
+              />
+            ),
+          )
         ) : (
           <div className="col-span-full flex flex-col items-center justify-center py-20 text-gray-500">
             <MdEventNote className="h-12 w-12 mb-4 opacity-20" />

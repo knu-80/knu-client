@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaInstagram, FaPhoneAlt, FaCheck, FaChevronDown } from 'react-icons/fa';
+import { FaInstagram, FaPhoneAlt, FaCheck, FaChevronDown, FaLink } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
 import ClubCategory from '@/components/ClubCategory';
@@ -16,6 +16,7 @@ interface BoothEditForm {
   instagram: string;
   phone: string;
   imageUrl: string;
+  applyUrl: string;
 }
 
 interface BoothUpdatePayload {
@@ -27,6 +28,7 @@ interface BoothUpdatePayload {
   instagram: string;
   phone: string;
   imageUrl: string;
+  applyUrl: string;
 }
 
 export default function AdminBoothEditPage() {
@@ -53,6 +55,7 @@ export default function AdminBoothEditPage() {
     instagram: 'knu_club',
     phone: '010-1234-5678',
     imageUrl: 'https://picsum.photos/600/400',
+    applyUrl: 'https://example.com/apply',
   });
 
   const [previewImage, setPreviewImage] = useState<string | null>(formData.imageUrl);
@@ -102,6 +105,7 @@ export default function AdminBoothEditPage() {
       instagram: formData.instagram,
       phone: formData.phone,
       imageUrl: formData.imageUrl,
+      applyUrl: formData.applyUrl,
     };
 
     console.log('Saving payload:', payload);
@@ -115,7 +119,10 @@ export default function AdminBoothEditPage() {
   };
 
   const isFormValid =
-    formData.name.trim() !== '' && formData.description.trim() !== '' && formData.fee.trim() !== '';
+    formData.name.trim() !== '' &&
+    formData.description.trim() !== '' &&
+    formData.fee.trim() !== '' &&
+    formData.applyUrl.trim() !== '';
 
   if (!booth) {
     return (
@@ -271,6 +278,24 @@ export default function AdminBoothEditPage() {
                 placeholder="010-0000-0000"
               />
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-10">
+        <h3 className="typo-heading-3 mb-5 text-black">지원하기</h3>
+        <div className="flex items-center space-x-4">
+          <div className="bg-gray-800 p-2.5 rounded-2xl text-white shadow-sm">
+            <FaLink className="h-5 w-5" />
+          </div>
+          <div className="flex-1 bg-gray-50 rounded-2xl px-4 py-3 border border-gray-100 focus-within:border-knu-red transition-colors">
+            <input
+              type="text"
+              value={formData.applyUrl}
+              onChange={(e) => setFormData({ ...formData, applyUrl: e.target.value })}
+              className="bg-transparent border-none outline-none focus:ring-0 p-0 typo-body-1 font-semibold text-black w-full"
+              placeholder="지원 링크 (구글 폼 등)"
+            />
           </div>
         </div>
       </div>

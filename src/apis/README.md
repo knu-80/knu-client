@@ -36,6 +36,14 @@ src/apis
 
 - 수정 API는 "변경된 필드만 전송" 정책을 따릅니다.
 - 모듈별 `update*` 함수는 `Partial` 타입을 사용하고 `undefined` 필드는 자동 제거합니다.
+- `null`은 백엔드에서 허용한 필드에 한해 "명시적 비움" 의도로 전송합니다.
+- 허용 여부가 명확하지 않은 경우 `null`도 보내지 않고, 변경값만 전송합니다.
+
+## Endpoint Rule
+
+- 일반 조회 API는 `api/v1` 경로를 사용합니다.
+- Access Token이 필요한 API는 `admin/v1` 경로를 사용합니다.
+- 경로 정책은 `src/apis/endpoints.ts`에서 단일 관리합니다.
 
 ## Notice Create Rule
 

@@ -1,20 +1,21 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaCamera, FaTimes, FaCheck } from 'react-icons/fa';
+import { FaCheck } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
 import SegmentedControl from '@/components/SegmentedControl';
 import AlertModal from '@/components/AlertModal';
+import ImageCarouselUploader from '@/components/ImageCarouselUploader';
 
 export default function AdminNoticeCreatePage() {
   const navigate = useNavigate();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [category, setCategory] = useState<'공지' | '분실물'>('공지');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [itemName, setItemName] = useState('');
   const [foundLocation, setFoundLocation] = useState('');
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;
@@ -37,24 +38,11 @@ export default function AdminNoticeCreatePage() {
     if (onClose) onClose();
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedImage(reader.result as string);
-      };
-      reader.onerror = () => {
-        showAlert('오류', '사진을 읽어오는 중 오류가 발생했습니다.');
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleRemoveImage = () => {
-    setSelectedImage(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   };
 
@@ -68,6 +56,17 @@ export default function AdminNoticeCreatePage() {
       showAlert('알림', '제목과 내용을 모두 입력해주세요.');
       return;
     }
+
+    // 전송할 데이터 준비
+    const payload = {
+      title,
+      content,
+      category,
+      itemName: category === '분실물' ? itemName : undefined,
+      foundLocation: category === '분실물' ? foundLocation : undefined,
+      imgUrls: imageUrls,
+    };
+    console.log('Create Notice Payload:', payload);
 
     showAlert('등록 완료', '공지사항이 성공적으로 등록되었습니다.', () => {
       navigate('/admin/notice');
@@ -132,52 +131,23 @@ export default function AdminNoticeCreatePage() {
 
       <div className="h-px w-full bg-gray-200 my-5" />
 
-      <div className="mb-5 text-black">
+      <div className="mb-10 text-black">
         <textarea
+          ref={textareaRef}
           placeholder="내용을 입력하세요."
           value={content}
-          onChange={(e) => setContent(e.target.value)}
-          rows={10}
-          className="typo-body-1 w-full border-none focus:ring-0 p-0 placeholder-gray-400 resize-none min-h-75 caret-knu-red outline-none"
+          onChange={handleTextareaChange}
+          className="typo-body-1 w-full border-none focus:ring-0 p-0 placeholder-gray-400 resize-none min-h-37.5 caret-knu-red outline-none leading-relaxed overflow-hidden"
         />
       </div>
 
-      <div className="mb-10">
-        <h3 className="typo-heading-3 text-black mb-4">관련 사진</h3>
-        <input
-          type="file"
-          accept="image/*"
-          className="hidden"
-          ref={fileInputRef}
-          onChange={handleImageChange}
-        />
-
-        {selectedImage ? (
-          <div className="relative group rounded-2xl overflow-hidden shadow-md border border-gray-100">
-            <img
-              src={selectedImage}
-              alt="미리보기"
-              className="w-full h-auto object-cover max-h-100"
-            />
-            <button
-              onClick={handleRemoveImage}
-              className="absolute top-3 right-3 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
-            >
-              <FaTimes />
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="w-full aspect-video bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center space-y-3 text-gray-400 hover:bg-gray-100 hover:border-gray-300 transition-all group"
-          >
-            <div className="p-4 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform">
-              <FaCamera className="text-2xl text-gray-400" />
-            </div>
-            <span className="text-sm font-medium">사진 첨부하기</span>
-          </button>
-        )}
-      </div>
+      <ImageCarouselUploader
+        label="관련 사진 관리"
+        imageUrls={imageUrls}
+        onImagesChange={(urls) => setImageUrls(urls)}
+        maxCount={5}
+        className="mb-12"
+      />
 
       <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50">
         <AdminActionButton

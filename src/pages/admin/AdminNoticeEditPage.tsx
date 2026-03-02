@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
-import ImageUploader from '@/components/ImageUploader';
+import ImageCarouselUploader from '@/components/ImageCarouselUploader';
 import { NOTICES } from '@/mocks/notices';
 
 export default function AdminNoticeEditPage() {
@@ -26,9 +26,7 @@ export default function AdminNoticeEditPage() {
   };
   const [itemName, setItemName] = useState(initialNotice?.itemName || '');
   const [foundLocation, setFoundLocation] = useState(initialNotice?.foundLocation || '');
-  const [selectedImage, setSelectedImage] = useState<string | null>(
-    initialNotice?.imgUrls?.[0] || null,
-  );
+  const [imageUrls, setImageUrls] = useState<string[]>(initialNotice?.imgUrls || []);
 
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;
@@ -72,6 +70,17 @@ export default function AdminNoticeEditPage() {
       showAlert('알림', '제목과 내용을 모두 입력해주세요.');
       return;
     }
+
+    // 전송할 데이터 준비 예시
+    const payload = {
+      title,
+      content,
+      category,
+      itemName: category === '분실물' ? itemName : undefined,
+      foundLocation: category === '분실물' ? foundLocation : undefined,
+      imgUrls: imageUrls,
+    };
+    console.log('Update Notice Payload:', payload);
 
     showAlert('수정 완료', '공지사항이 성공적으로 수정되었습니다.', () => {
       navigate(`/admin/notice/${id}`, { replace: true });
@@ -135,11 +144,11 @@ export default function AdminNoticeEditPage() {
         />
       </div>
 
-      <ImageUploader
-        label="관련 사진"
-        previewImage={selectedImage}
-        onImageChange={(imageUrl) => setSelectedImage(imageUrl)}
-        onDelete={() => setSelectedImage(null)}
+      <ImageCarouselUploader
+        label="관련 사진 관리"
+        imageUrls={imageUrls}
+        onImagesChange={(urls) => setImageUrls(urls)}
+        maxCount={5}
         className="mb-12"
       />
 

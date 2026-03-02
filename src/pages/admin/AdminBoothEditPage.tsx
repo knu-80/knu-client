@@ -4,7 +4,7 @@ import { FaInstagram, FaPhoneAlt, FaCheck, FaChevronDown, FaLink } from 'react-i
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
 import ClubCategory from '@/components/ClubCategory';
-import ImageUploader from '@/components/ImageUploader';
+import ImageCarouselUploader from '@/components/ImageCarouselUploader';
 import { DIVISION_INFO, MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
 
 interface BoothEditForm {
@@ -15,7 +15,7 @@ interface BoothEditForm {
   description: string;
   instagram: string;
   phone: string;
-  imageUrl: string;
+  imageUrls: string[];
   applyUrl: string;
 }
 
@@ -27,7 +27,7 @@ interface BoothUpdatePayload {
   description: string;
   instagram: string;
   phone: string;
-  imageUrl: string;
+  imageUrls: string[];
   applyUrl: string;
 }
 
@@ -54,11 +54,10 @@ export default function AdminBoothEditPage() {
     description: '안녕하세요 저희는 경북대 동아리입니다.',
     instagram: 'knu_club',
     phone: '010-1234-5678',
-    imageUrl: 'https://picsum.photos/600/400',
+    imageUrls: booth?.imgUrls || ['https://picsum.photos/600/400'],
     applyUrl: 'https://example.com/apply',
   });
 
-  const [previewImage, setPreviewImage] = useState<string | null>(formData.imageUrl);
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;
@@ -91,7 +90,7 @@ export default function AdminBoothEditPage() {
       setAlertConfig({
         isOpen: true,
         title: '입력 오류',
-        message: '모든 필수 항목(이름, 설명, 회비)을 입력해주세요.',
+        message: '모든 필수 항목(이름, 소개, 회비)을 입력해주세요.',
       });
       return;
     }
@@ -104,7 +103,7 @@ export default function AdminBoothEditPage() {
       description: formData.description,
       instagram: formData.instagram,
       phone: formData.phone,
-      imageUrl: formData.imageUrl,
+      imageUrls: formData.imageUrls,
       applyUrl: formData.applyUrl,
     };
 
@@ -119,10 +118,7 @@ export default function AdminBoothEditPage() {
   };
 
   const isFormValid =
-    formData.name.trim() !== '' &&
-    formData.description.trim() !== '' &&
-    formData.fee.trim() !== '' &&
-    formData.applyUrl.trim() !== '';
+    formData.name.trim() !== '' && formData.description.trim() !== '' && formData.fee.trim() !== '';
 
   if (!booth) {
     return (
@@ -229,21 +225,15 @@ export default function AdminBoothEditPage() {
           value={formData.description}
           onChange={handleTextareaChange}
           className="typo-body-1 w-full bg-transparent border-none focus:ring-0 p-0 resize-none min-h-37.5 caret-knu-red outline-none leading-relaxed overflow-hidden"
-          placeholder="동아리 상세 설명을 입력해주세요."
+          placeholder="동아리 상세 소개를 입력해주세요."
         />
       </div>
 
-      <ImageUploader
-        label="동아리 대표 사진"
-        previewImage={previewImage}
-        onImageChange={(imageUrl) => {
-          setPreviewImage(imageUrl);
-          setFormData((prev) => ({ ...prev, imageUrl }));
-        }}
-        onDelete={() => {
-          setPreviewImage(null);
-          setFormData((prev) => ({ ...prev, imageUrl: '' }));
-        }}
+      <ImageCarouselUploader
+        label="동아리 활동 사진"
+        imageUrls={formData.imageUrls}
+        onImagesChange={(urls) => setFormData((prev) => ({ ...prev, imageUrls: urls }))}
+        maxCount={5}
         className="mb-12"
       />
 

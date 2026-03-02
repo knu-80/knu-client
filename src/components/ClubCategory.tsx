@@ -7,11 +7,12 @@ interface ClubCategoryProps {
 export default function ClubCategory({ divisionName }: ClubCategoryProps) {
   const info = Object.values(DIVISION_INFO).find((v) => v.name === divisionName);
   const circleColorClass = info?.color ?? 'bg-gray-500';
+  const displayName = divisionName === '총동아리연합회' ? '총동연' : divisionName;
 
   return (
     <div className="flex items-center space-x-1">
       <div className={`w-3 h-3 rounded-full ${circleColorClass}`}></div>
-      <p className="typo-body-1">{divisionName}</p>
+      <p className="typo-body-1">{displayName}</p>
     </div>
   );
 }

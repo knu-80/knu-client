@@ -76,7 +76,7 @@ export async function createNotice(
 ): Promise<NoticeMutationResponse> {
   const formData = buildJsonFormData(payload, images);
   const { data } = await http.post<ApiResponse<NoticeMutationResponse>>(
-    ENDPOINTS.notices,
+    ENDPOINTS.adminNotices,
     formData,
   );
 
@@ -89,7 +89,7 @@ export async function updateNotice(
 ): Promise<NoticeMutationResponse> {
   const patchPayload = omitUndefined(payload);
   const { data } = await http.patch<ApiResponse<NoticeMutationResponse>>(
-    ENDPOINTS.noticeById(noticeId),
+    ENDPOINTS.adminNoticeById(noticeId),
     patchPayload,
   );
 
@@ -97,5 +97,5 @@ export async function updateNotice(
 }
 
 export async function deleteNotice(noticeId: number): Promise<void> {
-  await http.delete<ApiResponse<unknown>>(ENDPOINTS.noticeById(noticeId));
+  await http.delete<ApiResponse<unknown>>(ENDPOINTS.adminNoticeById(noticeId));
 }

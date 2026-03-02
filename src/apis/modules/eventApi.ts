@@ -41,7 +41,7 @@ export interface EventCreateInput {
 export type EventUpdateInput = PartialUpdate<EventCreateInput>;
 
 export async function createEvent(payload: EventCreateInput): Promise<EventItem> {
-  const { data } = await http.post<ApiResponse<EventItem>>(ENDPOINTS.events, payload);
+  const { data } = await http.post<ApiResponse<EventItem>>(ENDPOINTS.adminEvents, payload);
 
   return unwrapApiResponse(data);
 }
@@ -49,7 +49,7 @@ export async function createEvent(payload: EventCreateInput): Promise<EventItem>
 export async function updateEvent(eventId: number, payload: EventUpdateInput): Promise<EventItem> {
   const patchPayload = omitUndefined(payload);
   const { data } = await http.patch<ApiResponse<EventItem>>(
-    ENDPOINTS.eventUpdateById(eventId),
+    ENDPOINTS.adminEventById(eventId),
     patchPayload,
   );
 
@@ -57,5 +57,5 @@ export async function updateEvent(eventId: number, payload: EventUpdateInput): P
 }
 
 export async function deleteEvent(eventId: number): Promise<void> {
-  await http.delete<ApiResponse<unknown>>(ENDPOINTS.eventById(eventId));
+  await http.delete<ApiResponse<unknown>>(ENDPOINTS.adminEventById(eventId));
 }

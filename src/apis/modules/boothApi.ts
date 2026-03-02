@@ -67,7 +67,7 @@ export async function updateBooth(
 ): Promise<BoothSummary> {
   const patchPayload = omitUndefined(payload);
   const { data } = await http.patch<ApiResponse<BoothSummary>>(
-    ENDPOINTS.boothUpdateById(boothId),
+    ENDPOINTS.adminBoothById(boothId),
     patchPayload,
   );
 

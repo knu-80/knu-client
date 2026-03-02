@@ -7,6 +7,28 @@ import ClubCategory from '@/components/ClubCategory';
 import ImageUploader from '@/components/ImageUploader';
 import { DIVISION_INFO, MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
 
+interface BoothEditForm {
+  name: string;
+  divisionKey: BoothDetail['division'];
+  grades: number[];
+  fee: string;
+  description: string;
+  instagram: string;
+  phone: string;
+  imageUrl: string;
+}
+
+interface BoothUpdatePayload {
+  name: string;
+  division: string;
+  recruitmentGrades: string;
+  fee: string;
+  description: string;
+  instagram: string;
+  phone: string;
+  imageUrl: string;
+}
+
 export default function AdminBoothEditPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -22,7 +44,7 @@ export default function AdminBoothEditPage() {
     }
   };
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<BoothEditForm>({
     name: booth?.name || '',
     divisionKey: (booth?.division || 'ACADEMIC_DIVISION') as BoothDetail['division'],
     grades: [1, 2, 3, 4],
@@ -66,10 +88,23 @@ export default function AdminBoothEditPage() {
       setAlertConfig({
         isOpen: true,
         title: '입력 오류',
-        message: '모든 필수 항목(이름, 모집 학년, 회비, 소개)을 입력해주세요.',
+        message: '모든 필수 항목(이름, 설명, 회비)을 입력해주세요.',
       });
       return;
     }
+
+    const payload: BoothUpdatePayload = {
+      name: formData.name,
+      division: DIVISION_INFO[formData.divisionKey].name,
+      recruitmentGrades: getGradeText(),
+      fee: formData.fee,
+      description: formData.description,
+      instagram: formData.instagram,
+      phone: formData.phone,
+      imageUrl: formData.imageUrl,
+    };
+
+    console.log('Saving payload:', payload);
 
     setAlertConfig({
       isOpen: true,
@@ -80,10 +115,7 @@ export default function AdminBoothEditPage() {
   };
 
   const isFormValid =
-    formData.name.trim() !== '' &&
-    formData.description.trim() !== '' &&
-    formData.fee.trim() !== '' &&
-    formData.grades.length > 0;
+    formData.name.trim() !== '' && formData.description.trim() !== '' && formData.fee.trim() !== '';
 
   if (!booth) {
     return (

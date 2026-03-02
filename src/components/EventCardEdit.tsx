@@ -35,6 +35,15 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
       return;
     }
 
+    if (new Date(startDate) > new Date(endDate)) {
+      setAlertConfig({
+        isOpen: true,
+        title: '날짜 오류',
+        message: '시작 일시는 종료 일시보다\n빨라야 합니다.',
+      });
+      return;
+    }
+
     onSave(formData);
   };
 

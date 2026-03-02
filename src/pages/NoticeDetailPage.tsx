@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { FaRegCalendar, FaInfoCircle, FaUser } from 'react-icons/fa';
-import RepresentativeImage from '@/components/RepresentativeImage';
+import ImageCarousel from '@/components/ImageCarousel';
 import FoundItemCard from '@/components/FoundItemCard';
 import { NOTICES } from '@/mocks/notices';
 
@@ -43,10 +43,10 @@ export default function NoticeDetailPage() {
         <p className="typo-body-1 whitespace-pre-wrap">{notice.content}</p>
       </div>
 
-      {notice.imgUrl && (
-        <div className="mb-5">
+      {notice.imgUrls && notice.imgUrls.length > 0 && (
+        <div className="mb-10">
           <h3 className="typo-heading-3 text-black mb-3">관련 사진</h3>
-          <RepresentativeImage imageUrl={notice.imgUrl} altText={`${notice.title} 관련 사진`} />
+          <ImageCarousel imageUrls={notice.imgUrls} altText={`${notice.title} 관련 사진`} />
         </div>
       )}
 

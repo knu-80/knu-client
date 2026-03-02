@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaRegCalendar, FaInfoCircle, FaUser, FaEdit, FaTrash } from 'react-icons/fa';
-import RepresentativeImage from '@/components/RepresentativeImage';
+import ImageCarousel from '@/components/ImageCarousel';
 import FoundItemCard from '@/components/FoundItemCard';
 import ConfirmModal from '@/components/ConfirmModal';
 import AdminActionButton from '@/components/AdminActionButton';
@@ -57,10 +57,10 @@ export default function AdminNoticeDetailPage() {
         <p className="typo-body-1 whitespace-pre-wrap">{notice.content}</p>
       </div>
 
-      {notice.imgUrl && (
+      {notice.imgUrls && notice.imgUrls.length > 0 && (
         <div className="mb-12">
           <h3 className="typo-heading-3 text-black mb-3">관련 사진</h3>
-          <RepresentativeImage imageUrl={notice.imgUrl} altText={`${notice.title} 관련 사진`} />
+          <ImageCarousel imageUrls={notice.imgUrls} altText={`${notice.title} 관련 사진`} />
         </div>
       )}
 

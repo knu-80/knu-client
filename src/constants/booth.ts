@@ -18,18 +18,50 @@ export interface BoothDetail {
     | 'RELIGIOUS_DIVISION'
     | 'MANAGEMENT';
   is_active: boolean;
+  recruitmentGrades?: string;
+  fee?: string;
+  description?: string;
+  instagram?: string;
+  phone?: string;
+  imgUrls?: string[];
+  applyUrl?: string;
 }
 
 export const MOCK_BOOTHS: Record<number, BoothDetail> = {
-  1: { booth_number: 1, name: '테스트 학술', division: 'ACADEMIC_DIVISION', is_active: false },
-  2: { booth_number: 2, name: '테스트 문예', division: 'CULTURE_ART_DIVISION', is_active: false },
-  3: { booth_number: 3, name: '테스트 체육', division: 'SPORTS_DIVISION', is_active: false },
-  4: { booth_number: 4, name: '테스트 사회', division: 'SOCIAL_DIVISION', is_active: false },
-  5: { booth_number: 5, name: '테스트 종교', division: 'RELIGIOUS_DIVISION', is_active: false },
-  6: { booth_number: 6, name: '테스트 학술2', division: 'ACADEMIC_DIVISION', is_active: true },
-  7: { booth_number: 7, name: '테스트 문예2', division: 'CULTURE_ART_DIVISION', is_active: true },
-  8: { booth_number: 8, name: '테스트 체육2', division: 'SPORTS_DIVISION', is_active: false },
-  9: { booth_number: 9, name: '테스트 사회2', division: 'SOCIAL_DIVISION', is_active: false },
-  10: { booth_number: 10, name: '테스트 종교2', division: 'RELIGIOUS_DIVISION', is_active: true },
-  100: { booth_number: 99, name: '총동연', division: 'MANAGEMENT', is_active: false },
+  1: {
+    booth_number: 1,
+    name: '테스트 학술',
+    division: 'ACADEMIC_DIVISION',
+    is_active: false,
+    recruitmentGrades: '전 학년 모집',
+    fee: '40,000',
+    description: '저희는 경북대 학술 동아리입니다. 함께 공부해요!',
+    instagram: 'knu_academic',
+    phone: '010-0000-0000',
+    imgUrls: [
+      'https://picsum.photos/id/101/600/400',
+      'https://picsum.photos/id/102/600/400',
+      'https://picsum.photos/id/103/600/400',
+    ],
+    applyUrl: 'https://example.com/apply',
+  },
+  2: {
+    booth_number: 2,
+    name: '테스트 문예',
+    division: 'CULTURE_ART_DIVISION',
+    is_active: false,
+    recruitmentGrades: '1, 2학년 모집',
+    fee: '30,000',
+    description: '문예부에서 창작의 즐거움을 느껴보세요.',
+    instagram: 'knu_culture',
+    imgUrls: ['https://picsum.photos/id/201/600/400', 'https://picsum.photos/id/202/600/400'],
+  },
+  100: {
+    booth_number: 99,
+    name: '총동연',
+    division: 'MANAGEMENT',
+    is_active: false,
+    recruitmentGrades: '모집 마감',
+    imgUrls: ['https://picsum.photos/id/301/600/400'],
+  },
 };

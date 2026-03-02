@@ -26,7 +26,9 @@ export default function AdminNoticeEditPage() {
   };
   const [itemName, setItemName] = useState(initialNotice?.itemName || '');
   const [foundLocation, setFoundLocation] = useState(initialNotice?.foundLocation || '');
-  const [selectedImage, setSelectedImage] = useState<string | null>(initialNotice?.imgUrl || null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(
+    initialNotice?.imgUrls?.[0] || null,
+  );
 
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;

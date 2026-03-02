@@ -62,7 +62,12 @@ export default function RepresentativeImage({
           }`}
           onClick={handleImageClick}
         >
-          <img src={imageUrl} alt={altText} className="w-full h-full object-cover" />
+          <img
+            src={imageUrl}
+            alt={altText}
+            className="w-full h-full object-cover"
+            draggable="false"
+          />
         </div>
       ) : (
         <div

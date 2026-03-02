@@ -18,8 +18,7 @@ import AdminHomePage from '@/pages/admin/AdminHomePage';
 import AdminNoticePage from '@/pages/admin/AdminNoticePage';
 import AdminEventPage from '@/pages/admin/AdminEventPage';
 import AdminPubPage from '@/pages/admin/AdminPubPage';
-import AdminMainLayout from '@/components/layouts/AdminMainLayout';
-import AdminDetailLayout from '@/components/layouts/AdminDetailLayout';
+import AdminLayout from '@/components/layouts/AdminLayout';
 import EventPage from '@/pages/EventPage';
 import TimeTablePage from '@/pages/TimeTablePage';
 import SplashScreen from '@/components/home/SplashScreen';
@@ -53,23 +52,23 @@ function App() {
       <Route element={<MapLayout />}>
         <Route path="/map" element={<MapPage />} />
       </Route>
-      <Route path="/admin" element={<AdminMainLayout />}>
+      <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminHomePage />} />
         <Route path="notice" element={<AdminNoticePage />} />
         <Route path="event" element={<AdminEventPage />} />
         <Route path="pub" element={<AdminPubPage />} />
       </Route>
       <Route path="/admin/login" element={<LoginPage />} />
-      <Route element={<AdminDetailLayout title="공지사항 상세" fallbackPath="/admin/notice" />}>
+      <Route element={<AdminLayout title="공지사항 상세" fallbackPath="/admin/notice" />}>
         <Route path="/admin/notice/:id" element={<AdminNoticeDetailPage />} />
       </Route>
-      <Route element={<AdminDetailLayout title="공지 작성" fallbackPath="/admin/notice" />}>
+      <Route element={<AdminLayout title="공지 작성" fallbackPath="/admin/notice" />}>
         <Route path="/admin/notice/write" element={<AdminNoticeCreatePage />} />
       </Route>
-      <Route element={<AdminDetailLayout title="공지 수정" fallbackPath="/admin/notice" />}>
+      <Route element={<AdminLayout title="공지 수정" fallbackPath="/admin/notice" />}>
         <Route path="/admin/notice/edit/:id" element={<AdminNoticeEditPage />} />
       </Route>
-      <Route element={<AdminDetailLayout title="부스 수정" fallbackPath="/admin" />}>
+      <Route element={<AdminLayout title="부스 수정" fallbackPath="/admin" />}>
         <Route path="/admin/booths/edit/:id" element={<AdminBoothEditPage />} />
       </Route>
       <Route element={<DetailLayout title="부스 상세" fallbackPath="/map" />}>

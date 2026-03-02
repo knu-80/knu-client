@@ -61,7 +61,12 @@ export default function AdminNoticeEditPage() {
   };
 
   const handlehandleSubmit = () => {
-    if (!isFormValid) {
+    if (category === '분실물' && (!itemName.trim() || !foundLocation.trim())) {
+      showAlert('알림', '물품명과 습득 장소를 모두 입력해주세요.');
+      return;
+    }
+
+    if (!title.trim() || !content.trim()) {
       showAlert('알림', '제목과 내용을 모두 입력해주세요.');
       return;
     }
@@ -70,7 +75,14 @@ export default function AdminNoticeEditPage() {
       navigate(`/admin/notice/${id}`, { replace: true });
     });
   };
-  const isFormValid = title.trim() !== '' && content.trim() !== '';
+
+  const isFormValid = (() => {
+    const commonValid = title.trim() !== '' && content.trim() !== '';
+    if (category === '분실물') {
+      return commonValid && itemName.trim() !== '' && foundLocation.trim() !== '';
+    }
+    return commonValid;
+  })();
 
   return (
     <div className="pt-5 pb-24 px-1">

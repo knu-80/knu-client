@@ -16,7 +16,6 @@ export default function AdminNoticeCreatePage() {
   const [foundLocation, setFoundLocation] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  // 알림 모달 상태
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;
     title: string;
@@ -60,18 +59,28 @@ export default function AdminNoticeCreatePage() {
   };
 
   const handleSubmit = () => {
-    if (!isFormValid) {
+    if (category === '분실물' && (!itemName.trim() || !foundLocation.trim())) {
+      showAlert('알림', '물품명과 습득 장소를 모두 입력해주세요.');
+      return;
+    }
+
+    if (!title.trim() || !content.trim()) {
       showAlert('알림', '제목과 내용을 모두 입력해주세요.');
       return;
     }
 
-    // 등록 성공 시 알림 후 이동
     showAlert('등록 완료', '공지사항이 성공적으로 등록되었습니다.', () => {
       navigate('/admin/notice');
     });
   };
 
-  const isFormValid = title.trim() !== '' && content.trim() !== '';
+  const isFormValid = (() => {
+    const commonValid = title.trim() !== '' && content.trim() !== '';
+    if (category === '분실물') {
+      return commonValid && itemName.trim() !== '' && foundLocation.trim() !== '';
+    }
+    return commonValid;
+  })();
 
   return (
     <div className="pt-5 pb-24 px-1">

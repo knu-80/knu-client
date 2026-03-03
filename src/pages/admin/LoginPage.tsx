@@ -1,13 +1,49 @@
 import { useState, type FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { HiOutlineMail, HiOutlineLockClosed, HiOutlineLogin } from 'react-icons/hi';
+import { ApiClientError, login } from '@/apis';
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Login attempt:', { id, password });
+    if (isSubmitting) {
+      return;
+    }
+
+    const trimmedId = id.trim();
+    const trimmedPassword = password.trim();
+
+    if (!trimmedId || !trimmedPassword) {
+      setErrorMessage('아이디와 비밀번호를 모두 입력해주세요.');
+      return;
+    }
+
+    setErrorMessage('');
+    setIsSubmitting(true);
+
+    try {
+      const parsedBoothNumber = Number(trimmedId);
+      const loginPayload = Number.isInteger(parsedBoothNumber)
+        ? { boothNumber: parsedBoothNumber, password: trimmedPassword }
+        : { loginId: trimmedId, password: trimmedPassword };
+
+      await login(loginPayload);
+      navigate('/admin', { replace: true });
+    } catch (error) {
+      if (error instanceof ApiClientError) {
+        setErrorMessage(error.message || '로그인에 실패했습니다. 아이디/비밀번호를 확인해주세요.');
+      } else {
+        setErrorMessage('로그인 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -34,9 +70,15 @@ export default function LoginPage() {
                 id="admin-id"
                 type="text"
                 value={id}
-                onChange={(e) => setId(e.target.value)}
+                onChange={(e) => {
+                  setId(e.target.value);
+                  if (errorMessage) {
+                    setErrorMessage('');
+                  }
+                }}
                 className="typo-body-2 block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-knu-red focus:border-knu-red transition-all"
                 placeholder="ID를 입력하세요"
+                autoComplete="username"
                 required
               />
             </div>
@@ -57,19 +99,32 @@ export default function LoginPage() {
                 id="admin-password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errorMessage) {
+                    setErrorMessage('');
+                  }
+                }}
                 className="typo-body-2 block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-knu-red focus:border-knu-red transition-all"
                 placeholder="••••••••"
+                autoComplete="current-password"
                 required
               />
             </div>
           </div>
 
+          {errorMessage && (
+            <p className="typo-body-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-red-700">
+              {errorMessage}
+            </p>
+          )}
+
           <button
             type="submit"
-            className="typo-body-2 w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm font-semibold text-white bg-knu-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-knu-red transition-colors cursor-pointer"
+            disabled={isSubmitting}
+            className="typo-body-2 w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm font-semibold text-white bg-knu-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-knu-red transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
           >
-            로그인
+            {isSubmitting ? '로그인 중...' : '로그인'}
             <HiOutlineLogin className="ml-2 w-5 h-5" />
           </button>
         </form>

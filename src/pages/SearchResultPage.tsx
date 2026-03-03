@@ -15,7 +15,8 @@ export default function SearchResultPage() {
   };
 
   const filteredResults = Object.values(MOCK_BOOTHS).filter(
-    (booth) => booth.name.includes(query) || booth.description.includes(query),
+    (booth) =>
+      booth.name.includes(query) || (booth.description && booth.description.includes(query)),
   );
   const recommendedBooths = Object.values(MOCK_BOOTHS).slice(0, 3);
 

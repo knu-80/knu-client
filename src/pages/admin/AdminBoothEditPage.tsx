@@ -146,9 +146,7 @@ export default function AdminBoothEditPage() {
             onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
             className="flex items-center space-x-1 hover:bg-gray-50 px-2 py-1 rounded-lg transition-colors group"
           >
-            <ClubCategory
-              divisionName={DIVISION_INFO[formData.divisionKey as keyof typeof DIVISION_INFO].name}
-            />
+            <ClubCategory division={formData.divisionKey} />
             <FaChevronDown
               className={`text-[10px] text-gray-400 transition-transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`}
             />

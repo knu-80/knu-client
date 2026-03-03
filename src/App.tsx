@@ -21,6 +21,8 @@ import AdminPubPage from '@/pages/admin/AdminPubPage';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import EventPage from '@/pages/EventPage';
 import TimeTablePage from '@/pages/TimeTablePage';
+import SearchPage from './pages/SearchPage';
+import SearchResultPage from '@/pages/SearchResultPage';
 import SplashScreen from '@/components/home/SplashScreen';
 
 const SPLASH_DURATION_MS = 1500;
@@ -48,6 +50,8 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="notice" element={<NoticePage />} />
         <Route path="event" element={<EventPage />} />
+        <Route path="search" element={<SearchPage />} />
+        <Route path="search/result" element={<SearchResultPage />} />
       </Route>
       <Route element={<MapLayout />}>
         <Route path="/map" element={<MapPage />} />

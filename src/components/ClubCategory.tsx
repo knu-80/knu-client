@@ -1,34 +1,32 @@
-import { DIVISION_INFO } from '@/constants/booth';
+import { DIVISION_INFO, type DivisionType } from '@/constants/booth';
 
 interface ClubCategoryProps {
-  divisionName: string;
+  division: DivisionType;
 }
 
-export default function ClubCategory({ divisionName }: ClubCategoryProps) {
-  const info = Object.values(DIVISION_INFO).find((v) => v.name === divisionName);
-  const circleColorClass = info?.color ?? 'bg-gray-500';
-  const displayName = divisionName === '총동아리연합회' ? '총동연' : divisionName;
+export function ClubCategory({ division }: ClubCategoryProps) {
+  const info = DIVISION_INFO[division];
+  if (!info) return null;
 
   return (
     <div className="flex items-center space-x-1">
-      <div className={`w-3 h-3 rounded-full ${circleColorClass}`}></div>
-      <p className="typo-body-1">{displayName}</p>
+      <div className={`w-3 h-3 rounded-full ${info.color}`}></div>
+      <p className="typo-body-1">{info.name}</p>
     </div>
   );
 }
 
-interface MapPageClubCategoryProps {
-  divisionName: string;
-}
+export default ClubCategory;
 
-export function MapPageClubCategory({ divisionName }: MapPageClubCategoryProps) {
-  const info = Object.values(DIVISION_INFO).find((v) => v.name === divisionName);
+export function MapPageClubCategory({ division }: ClubCategoryProps) {
+  const info = DIVISION_INFO[division];
+  if (!info) return null;
 
   return (
     <div className="h-8 px-2.5 border border-gray-200 rounded-full bg-white flex items-center shrink-0">
       <div className="flex items-center space-x-1">
-        <div className={`w-2 h-2 rounded-full ${info?.color ?? 'bg-gray-500'}`}></div>
-        <p className="typo-body-2 text-black">{info?.shortName ?? divisionName}</p>
+        <div className={`w-2 h-2 rounded-full ${info.color}`}></div>
+        <p className="typo-body-2 text-black">{info.shortName}</p>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { FaInstagram, FaPhoneAlt } from 'react-icons/fa';
 import ImageCarousel from '@/components/ImageCarousel';
 import ApplyButton from '@/components/ApplyButton';
 import ClubCategory from '@/components/ClubCategory';
-import { MOCK_BOOTHS, DIVISION_INFO } from '@/constants/booth';
+import { MOCK_BOOTHS } from '@/constants/booth';
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -13,13 +13,11 @@ export default function BoothDetailPage() {
     return <div className="py-20 text-center text-gray-500">부스 정보를 찾을 수 없습니다.</div>;
   }
 
-  const divisionName = DIVISION_INFO[booth.division].name;
-
   return (
     <div className="pt-5">
       <div className="flex items-center space-x-4 mb-2 text-black">
         <h2 className="typo-heading-3">{booth.name}</h2>
-        <ClubCategory divisionName={divisionName} />
+        <ClubCategory division={booth.division} />
       </div>
 
       <div className="flex items-center space-x-2 mb-4 typo-muted text-knu-gray">
@@ -64,7 +62,7 @@ export default function BoothDetailPage() {
         </div>
       )}
 
-      {booth.applyUrl && <ApplyButton url={booth.applyUrl} />}
+      {booth.applyLink && <ApplyButton url={booth.applyLink} />}
     </div>
   );
 }

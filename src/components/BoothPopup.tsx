@@ -13,7 +13,8 @@ export const BoothPopup = memo(function BoothPopup({ boothId, onClose }: BoothPo
   if (!boothId) return null;
 
   const booth = MOCK_BOOTHS[boothId] || DEFAULT_BOOTH;
-  const hasImage = booth.imageUrl && booth.imageUrl.trim() !== '';
+  const thumbnail = booth.imgUrls?.[0];
+  const hasImage = thumbnail && thumbnail.trim() !== '';
 
   const handlePopupClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -30,7 +31,7 @@ export const BoothPopup = memo(function BoothPopup({ boothId, onClose }: BoothPo
       >
         {hasImage ? (
           <img
-            src={booth.imageUrl}
+            src={thumbnail}
             alt={booth.name}
             className="w-[88px] h-[88px] object-cover rounded-[4px] shrink-0"
           />

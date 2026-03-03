@@ -1,11 +1,16 @@
-import { useParams } from 'react-router-dom';
-import { FaRegCalendar, FaInfoCircle, FaUser } from 'react-icons/fa';
+import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { FaRegCalendar, FaInfoCircle, FaUser, FaEdit, FaTrash } from 'react-icons/fa';
 import ImageCarousel from '@/components/ImageCarousel';
 import FoundItemCard from '@/components/FoundItemCard';
+import ConfirmModal from '@/components/ConfirmModal';
+import AdminActionButton from '@/components/AdminActionButton';
 import { NOTICES } from '@/mocks/notices';
 
-export default function NoticeDetailPage() {
+export default function AdminNoticeDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const notice = NOTICES.find((n) => n.id === Number(id));
 
@@ -15,8 +20,17 @@ export default function NoticeDetailPage() {
 
   const isLostItem = notice.category === '분실물';
 
+  const handleEdit = () => {
+    navigate(`/admin/notice/edit/${id}`);
+  };
+
+  const handleDeleteConfirm = () => {
+    setIsDeleteModalOpen(false);
+    navigate('/admin/notice');
+  };
+
   return (
-    <div className="pt-5">
+    <div className="pt-5 pb-24 px-1">
       <div className="flex flex-col space-y-1 mb-8 text-black">
         <h2 className="typo-heading-3">{notice.title}</h2>
         <div className="flex items-center space-x-4 text-sm text-gray-500 mt-1 pt-1">
@@ -58,6 +72,31 @@ export default function NoticeDetailPage() {
           <p className="typo-body-2 font-semibold">분실물은 총동연 부스에서 수령 가능합니다</p>
         </div>
       )}
+
+      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center gap-3 w-fit px-4">
+        <AdminActionButton
+          label="수정하기"
+          icon={FaEdit}
+          onClick={handleEdit}
+          className="bg-[#0F172A]"
+        />
+        <AdminActionButton
+          label="삭제하기"
+          icon={FaTrash}
+          onClick={() => setIsDeleteModalOpen(true)}
+          className="bg-red-600"
+        />
+      </div>
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="공지사항 삭제"
+        message="정말 이 공지사항을 삭제하시겠습니까? 삭제된 데이터는 복구할 수 없습니다."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        confirmText="삭제"
+        cancelText="취소"
+      />
     </div>
   );
 }

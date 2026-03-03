@@ -1,9 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GrAnnounce } from 'react-icons/gr';
+import { SlPencil } from 'react-icons/sl';
 import NoticeCard from '@/components/NoticeCard';
+import AdminActionButton from '@/components/AdminActionButton';
 import { NOTICES } from '@/mocks/notices';
 
-export default function NoticePage() {
+export default function AdminNoticePage() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('전체');
   const tabs = ['전체', '공지', '분실물'];
 
@@ -14,11 +18,15 @@ export default function NoticePage() {
           return notice.category === activeTab;
         });
 
+  const handleWrite = () => {
+    navigate('/admin/notice/write');
+  };
+
   return (
-    <div className="pt-5 sm:p-5">
+    <div className="pt-5 sm:p-5 relative pb-24">
       <div className="flex items-center space-x-2 mb-4 px-2 sm:px-0">
         <GrAnnounce className="h-6 w-6 text-black" />
-        <h2 className="typo-heading-2 text-black font-bold">공지사항</h2>
+        <h2 className="typo-heading-2 text-black font-bold">공지사항 관리</h2>
       </div>
 
       <div className="flex space-x-2 mb-6 px-2 sm:px-0">
@@ -60,10 +68,20 @@ export default function NoticePage() {
                 title={notice.title}
                 date={notice.date}
                 category={notice.category}
+                basePath="/admin/notice"
               />
             ))
           )}
         </div>
+      </div>
+
+      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50">
+        <AdminActionButton
+          label="공지 추가하기"
+          icon={SlPencil}
+          onClick={handleWrite}
+          className="bg-[#0F172A]"
+        />
       </div>
     </div>
   );

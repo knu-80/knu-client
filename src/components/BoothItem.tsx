@@ -47,13 +47,14 @@ function ApplyButton({
 }
 
 export function BoothItem({ booth, onClick, onLocationClick }: BoothItemProps) {
-  const hasImage = booth.imageUrl && booth.imageUrl.trim() !== '';
+  const thumbnail = booth.imgUrls?.[0];
+  const hasImage = thumbnail && thumbnail.trim() !== '';
 
   return (
     <div className="w-full h-[100px] bg-white flex gap-4 items-center cursor-pointer shrink-0">
       {hasImage ? (
         <img
-          src={booth.imageUrl}
+          src={thumbnail}
           alt={booth.name}
           className="w-[100px] h-[100px] object-cover rounded-[4px] shrink-0"
         />

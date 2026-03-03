@@ -34,10 +34,12 @@ export default function BoothDetailPage() {
       </div>
 
       {booth.imgUrls && booth.imgUrls.length > 0 && (
-        <div className="mb-10">
-          <h3 className="typo-heading-3 text-black mb-3">동아리 활동 사진</h3>
-          <ImageCarousel imageUrls={booth.imgUrls} altText={`${booth.name} 사진`} />
-        </div>
+        <ImageCarousel
+          imageUrls={booth.imgUrls}
+          altText={`${booth.name} 사진`}
+          label="동아리 활동 사진"
+          className="mb-10"
+        />
       )}
 
       {(booth.instagram || booth.phone) && (

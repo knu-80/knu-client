@@ -97,7 +97,7 @@ export default function ImageCarouselUploader({
 
   return (
     <div className={`flex flex-col ${className}`}>
-      {label && <h3 className="typo-heading-3 text-black mb-4 px-1">{label}</h3>}
+      {label && <h3 className="typo-heading-3 text-black mb-5 px-1">{label}</h3>}
 
       <div ref={containerRef} className="relative w-full overflow-hidden select-none touch-pan-y">
         <motion.div
@@ -117,9 +117,10 @@ export default function ImageCarouselUploader({
                 width: `${itemWidthPercent}%`,
                 marginRight: `${gap}px`,
                 flexShrink: 0,
-                opacity: currentIndex === index ? 1 : 0.4,
-                scale: currentIndex === index ? 1 : 0.9,
-                transition: 'opacity 0.4s, scale 0.4s',
+                opacity: currentIndex === index ? 1 : 0.3,
+                scale: currentIndex === index ? 1 : 0.85,
+                transition:
+                  'opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), scale 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             >
               <ImageUploader

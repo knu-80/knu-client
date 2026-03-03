@@ -71,7 +71,6 @@ export default function AdminNoticeEditPage() {
       return;
     }
 
-    // 전송할 데이터 준비 예시
     const payload = {
       title,
       content,
@@ -149,7 +148,7 @@ export default function AdminNoticeEditPage() {
         imageUrls={imageUrls}
         onImagesChange={(urls) => setImageUrls(urls)}
         maxCount={5}
-        className="mb-12"
+        className="mb-10"
       />
 
       <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50">

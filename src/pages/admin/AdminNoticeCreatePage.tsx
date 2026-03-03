@@ -57,7 +57,6 @@ export default function AdminNoticeCreatePage() {
       return;
     }
 
-    // 전송할 데이터 준비
     const payload = {
       title,
       content,
@@ -146,7 +145,7 @@ export default function AdminNoticeCreatePage() {
         imageUrls={imageUrls}
         onImagesChange={(urls) => setImageUrls(urls)}
         maxCount={5}
-        className="mb-12"
+        className="mb-10"
       />
 
       <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50">

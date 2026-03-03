@@ -234,7 +234,7 @@ export default function AdminBoothEditPage() {
         imageUrls={formData.imageUrls}
         onImagesChange={(urls) => setFormData((prev) => ({ ...prev, imageUrls: urls }))}
         maxCount={5}
-        className="mb-12"
+        className="mb-10"
       />
 
       <div className="mb-10">

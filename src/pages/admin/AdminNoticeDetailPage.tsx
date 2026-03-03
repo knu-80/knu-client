@@ -58,10 +58,12 @@ export default function AdminNoticeDetailPage() {
       </div>
 
       {notice.imgUrls && notice.imgUrls.length > 0 && (
-        <div className="mb-12">
-          <h3 className="typo-heading-3 text-black mb-3">관련 사진</h3>
-          <ImageCarousel imageUrls={notice.imgUrls} altText={`${notice.title} 관련 사진`} />
-        </div>
+        <ImageCarousel
+          imageUrls={notice.imgUrls}
+          altText={`${notice.title} 관련 사진`}
+          label="관련 사진"
+          className="mb-10"
+        />
       )}
 
       {isLostItem && (

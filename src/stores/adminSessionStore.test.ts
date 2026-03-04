@@ -16,6 +16,18 @@ const mockedGetAccessToken = vi.mocked(getAccessToken);
 const mockedClearAccessToken = vi.mocked(clearAccessToken);
 const mockedGetAdminProfile = vi.mocked(getAdminProfile);
 
+function createDeferred<T>(): {
+  promise: Promise<T>;
+  resolve: (value: T) => void;
+} {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((resolver) => {
+    resolve = resolver;
+  });
+
+  return { promise, resolve };
+}
+
 function resetStoreState(): void {
   useAdminSessionStore.setState({
     status: 'idle',
@@ -89,24 +101,15 @@ describe('adminSessionStore', () => {
       role: 'ADMIN',
       boothId: 1,
     };
+    const deferred = createDeferred<typeof profile>();
 
-    let resolveProfile: ((value: typeof profile) => void) | null = null;
-    mockedGetAdminProfile.mockImplementation(
-      () =>
-        new Promise((resolve) => {
-          resolveProfile = resolve;
-        }),
-    );
+    mockedGetAdminProfile.mockImplementation(() => deferred.promise);
 
     const task1 = useAdminSessionStore.getState().bootstrapSession();
     const task2 = useAdminSessionStore.getState().bootstrapSession();
 
     expect(mockedGetAdminProfile).toHaveBeenCalledTimes(1);
-
-    if (!resolveProfile) {
-      throw new Error('resolveProfile is not initialized');
-    }
-    resolveProfile(profile);
+    deferred.resolve(profile);
 
     await Promise.all([task1, task2]);
 

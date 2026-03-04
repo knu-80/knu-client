@@ -1,14 +1,42 @@
-import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { HiOutlineMail, HiOutlineLockClosed, HiOutlineLogin } from 'react-icons/hi';
 import { ApiClientError, login } from '@/apis';
+import { useAdminSessionStore } from '@/stores/adminSessionStore';
+
+function resolveRedirectPath(rawPath: string | null): string {
+  if (!rawPath || !rawPath.startsWith('/') || rawPath.startsWith('//')) {
+    return '/admin';
+  }
+
+  return rawPath;
+}
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const status = useAdminSessionStore((state) => state.status);
+  const isInitialized = useAdminSessionStore((state) => state.isInitialized);
+  const bootstrapSession = useAdminSessionStore((state) => state.bootstrapSession);
+  const redirectPath = useMemo(
+    () => resolveRedirectPath(searchParams.get('redirect')),
+    [searchParams],
+  );
+
+  useEffect(() => {
+    if (!isInitialized || status === 'idle') {
+      void bootstrapSession();
+      return;
+    }
+
+    if (status === 'authenticated') {
+      navigate(redirectPath, { replace: true });
+    }
+  }, [bootstrapSession, isInitialized, navigate, redirectPath, status]);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,7 +62,8 @@ export default function LoginPage() {
         : { loginId: trimmedId, password: trimmedPassword };
 
       await login(loginPayload);
-      navigate('/admin', { replace: true });
+      await bootstrapSession();
+      navigate(redirectPath, { replace: true });
     } catch (error) {
       if (error instanceof ApiClientError) {
         setErrorMessage(error.message || '로그인에 실패했습니다. 아이디/비밀번호를 확인해주세요.');

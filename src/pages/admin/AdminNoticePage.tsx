@@ -72,7 +72,7 @@ export default function AdminNoticePage() {
                 title={notice.title}
                 date={notice.createdAt.split('T')[0].replace(/-/g, '.')}
                 category={notice.type === 'GENERAL' ? '공지' : '분실물'}
-                basePath="/admin/notice"
+                basePath="/admin/notice/edit"
               />
             ))
           )}

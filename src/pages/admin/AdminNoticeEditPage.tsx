@@ -4,78 +4,60 @@ import { FaCheck } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
 import ImageCarouselUploader from '@/components/ImageCarouselUploader';
-import { NOTICES } from '@/mocks/notices';
+import { useNoticeDetail } from '@/hooks/useNoticeDetail';
+import type { NoticeDetail } from '@/apis/modules/noticeApi';
 
-export default function AdminNoticeEditPage() {
-  const { id } = useParams<{ id: string }>();
+function NoticeEditForm({ notice }: { notice: NoticeDetail }) {
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const initialNotice = NOTICES.find((n) => n.id === Number(id));
-  const category = (initialNotice?.category as '공지' | '분실물') || '공지';
+  const [formData, setFormData] = useState({
+    category: (notice.type === 'GENERAL' ? '공지' : '분실물') as '공지' | '분실물',
+    title: notice.title,
+    content: notice.content,
+    itemName: notice.lostFoundDetail?.foundItem || '',
+    foundLocation: notice.lostFoundDetail?.foundPlace || '',
+  });
 
-  const [title, setTitle] = useState(initialNotice?.title || '');
-  const [content, setContent] = useState(initialNotice?.content || '');
-  const [itemName, setItemName] = useState(initialNotice?.itemName || '');
-  const [foundLocation, setFoundLocation] = useState(initialNotice?.foundLocation || '');
   const [imageFiles, setImageFiles] = useState<File[]>([]);
-
-  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  };
-
-  const [alertConfig, setAlertConfig] = useState<{
-    isOpen: boolean;
-    title: string;
-    message: string;
-    onClose?: () => void;
-  }>({
+  const [alertConfig, setAlertConfig] = useState({
     isOpen: false,
     title: '',
     message: '',
+    onClose: undefined as (() => void) | undefined,
   });
 
-  // 초기 렌더링 시 텍스트 영역 높이 조절
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  }, []);
+  }, [formData.content]);
 
-  if (!initialNotice) {
-    return (
-      <AlertModal
-        isOpen={true}
-        title="오류"
-        message="존재하지 않는 공지사항입니다."
-        onClose={() => navigate('/admin/notice')}
-      />
-    );
-  }
-
-  const closeAlert = () => {
-    const { onClose } = alertConfig;
-    setAlertConfig((prev) => ({ ...prev, isOpen: false }));
-    if (onClose) onClose();
+  const handleInputChange = (field: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const showAlert = (title: string, message: string, onClose?: () => void) => {
-    setAlertConfig({ isOpen: true, title, message, onClose });
-  };
+  const handleSubmit = () => {
+    const { category, title, content, itemName, foundLocation } = formData;
 
-  const handlehandleSubmit = () => {
     if (category === '분실물' && (!itemName.trim() || !foundLocation.trim())) {
-      showAlert('알림', '물품명과 습득 장소를 모두 입력해주세요.');
+      setAlertConfig({
+        isOpen: true,
+        title: '알림',
+        message: '물품명과 습득 장소를 모두 입력해주세요.',
+        onClose: undefined,
+      });
       return;
     }
 
     if (!title.trim() || !content.trim()) {
-      showAlert('알림', '제목과 내용을 모두 입력해주세요.');
+      setAlertConfig({
+        isOpen: true,
+        title: '알림',
+        message: '제목과 내용을 모두 입력해주세요.',
+        onClose: undefined,
+      });
       return;
     }
 
@@ -86,20 +68,18 @@ export default function AdminNoticeEditPage() {
       itemName: category === '분실물' ? itemName : undefined,
       foundLocation: category === '분실물' ? foundLocation : undefined,
     };
-    console.log('Update Notice Payload with files:', payload, imageFiles);
 
-    showAlert('수정 완료', '공지사항이 성공적으로 수정되었습니다.', () => {
-      navigate(`/admin/notice`, { replace: true });
+    console.log('Update Notice Payload:', payload, imageFiles);
+
+    setAlertConfig({
+      isOpen: true,
+      title: '수정 완료',
+      message: '공지사항이 성공적으로 수정되었습니다.',
+      onClose: () => navigate('/admin/notice'),
     });
   };
 
-  const isFormValid = (() => {
-    const commonValid = title.trim() !== '' && content.trim() !== '';
-    if (category === '분실물') {
-      return commonValid && itemName.trim() !== '' && foundLocation.trim() !== '';
-    }
-    return commonValid;
-  })();
+  const isFormValid = formData.title.trim() !== '' && formData.content.trim() !== '';
 
   return (
     <div className="pt-5 pb-24 px-1">
@@ -107,21 +87,21 @@ export default function AdminNoticeEditPage() {
         <input
           type="text"
           placeholder="제목을 입력해주세요."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={formData.title}
+          onChange={(e) => handleInputChange('title', e.target.value)}
           className="typo-heading-3 w-full border-none focus:ring-0 p-0 placeholder-gray-400 text-black caret-knu-red outline-none"
         />
       </div>
 
-      {category === '분실물' && (
+      {formData.category === '분실물' && (
         <div className="bg-gray-50 p-5 rounded-2xl mb-8 space-y-4 border border-gray-100">
           <div className="flex flex-col space-y-2">
             <label className="text-xs font-bold text-gray-500 ml-1">물품명</label>
             <input
               type="text"
               placeholder="예: 아이폰 14 프로"
-              value={itemName}
-              onChange={(e) => setItemName(e.target.value)}
+              value={formData.itemName}
+              onChange={(e) => handleInputChange('itemName', e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-knu-red transition-colors"
             />
           </div>
@@ -130,8 +110,8 @@ export default function AdminNoticeEditPage() {
             <input
               type="text"
               placeholder="예: 일청담 벤치"
-              value={foundLocation}
-              onChange={(e) => setFoundLocation(e.target.value)}
+              value={formData.foundLocation}
+              onChange={(e) => handleInputChange('foundLocation', e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-knu-red transition-colors"
             />
           </div>
@@ -144,15 +124,15 @@ export default function AdminNoticeEditPage() {
         <textarea
           ref={textareaRef}
           placeholder="내용을 입력하세요."
-          value={content}
-          onChange={handleTextareaChange}
+          value={formData.content}
+          onChange={(e) => handleInputChange('content', e.target.value)}
           className="typo-body-1 w-full border-none focus:ring-0 p-0 placeholder-gray-400 resize-none min-h-37.5 caret-knu-red outline-none leading-relaxed overflow-hidden"
         />
       </div>
 
       <ImageCarouselUploader
         label="관련 사진 관리"
-        initialUrls={initialNotice.imgUrls}
+        initialUrls={notice.imageUrls || []}
         onFilesChange={setImageFiles}
         maxCount={5}
         className="mb-10"
@@ -162,7 +142,7 @@ export default function AdminNoticeEditPage() {
         <AdminActionButton
           label="수정 완료하기"
           icon={FaCheck}
-          onClick={handlehandleSubmit}
+          onClick={handleSubmit}
           className={`${isFormValid ? 'bg-knu-red' : 'bg-gray-400 cursor-not-allowed'}`}
         />
       </div>
@@ -171,8 +151,49 @@ export default function AdminNoticeEditPage() {
         isOpen={alertConfig.isOpen}
         title={alertConfig.title}
         message={alertConfig.message}
-        onClose={closeAlert}
+        onClose={() => {
+          setAlertConfig((prev) => ({ ...prev, isOpen: false }));
+          if (alertConfig.onClose) alertConfig.onClose();
+        }}
       />
     </div>
   );
+}
+
+export default function AdminNoticeEditPage() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { notice, isLoading, error } = useNoticeDetail(id ? Number(id) : null);
+
+  if (error) {
+    return (
+      <AlertModal
+        isOpen={true}
+        title="오류"
+        message={error.message}
+        onClose={() => navigate('/admin/notice')}
+      />
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="typo-body-1 text-gray-500">데이터를 불러오는 중...</div>
+      </div>
+    );
+  }
+
+  if (!notice) {
+    return (
+      <AlertModal
+        isOpen={true}
+        title="알림"
+        message="해당 공지사항을 찾을 수 없습니다."
+        onClose={() => navigate('/admin/notice')}
+      />
+    );
+  }
+
+  return <NoticeEditForm notice={notice} />;
 }

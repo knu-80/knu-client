@@ -17,9 +17,8 @@ export interface NoticeListItem {
 }
 
 export interface LostFoundDetail {
-  foundPlace?: string;
-  keepingPlace?: string;
-  description?: string;
+  foundPlace: string;
+  foundItem: string;
 }
 
 export interface NoticeDetail {

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
@@ -16,6 +16,9 @@ export default function AdminNoticeEditPage() {
 
   const [title, setTitle] = useState(initialNotice?.title || '');
   const [content, setContent] = useState(initialNotice?.content || '');
+  const [itemName, setItemName] = useState(initialNotice?.itemName || '');
+  const [foundLocation, setFoundLocation] = useState(initialNotice?.foundLocation || '');
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
@@ -24,9 +27,6 @@ export default function AdminNoticeEditPage() {
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   };
-  const [itemName, setItemName] = useState(initialNotice?.itemName || '');
-  const [foundLocation, setFoundLocation] = useState(initialNotice?.foundLocation || '');
-  const [imageUrls, setImageUrls] = useState<string[]>(initialNotice?.imgUrls || []);
 
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;
@@ -38,6 +38,14 @@ export default function AdminNoticeEditPage() {
     title: '',
     message: '',
   });
+
+  // 초기 렌더링 시 텍스트 영역 높이 조절
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, []);
 
   if (!initialNotice) {
     return (
@@ -77,12 +85,11 @@ export default function AdminNoticeEditPage() {
       category,
       itemName: category === '분실물' ? itemName : undefined,
       foundLocation: category === '분실물' ? foundLocation : undefined,
-      imgUrls: imageUrls,
     };
-    console.log('Update Notice Payload:', payload);
+    console.log('Update Notice Payload with files:', payload, imageFiles);
 
     showAlert('수정 완료', '공지사항이 성공적으로 수정되었습니다.', () => {
-      navigate(`/admin/notice/${id}`, { replace: true });
+      navigate(`/admin/notice`, { replace: true });
     });
   };
 
@@ -145,8 +152,8 @@ export default function AdminNoticeEditPage() {
 
       <ImageCarouselUploader
         label="관련 사진 관리"
-        imageUrls={imageUrls}
-        onImagesChange={(urls) => setImageUrls(urls)}
+        initialUrls={initialNotice.imgUrls}
+        onFilesChange={setImageFiles}
         maxCount={5}
         className="mb-10"
       />

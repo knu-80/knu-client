@@ -38,14 +38,6 @@ export default function AdminBoothEditPage() {
 
   const booth = MOCK_BOOTHS[Number(id)];
 
-  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFormData({ ...formData, description: e.target.value });
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  };
-
   const [formData, setFormData] = useState<BoothEditForm>({
     name: booth?.name || '',
     divisionKey: (booth?.division || 'ACADEMIC_DIVISION') as BoothDetail['division'],
@@ -57,6 +49,16 @@ export default function AdminBoothEditPage() {
     imageUrls: booth?.imgUrls || ['https://picsum.photos/600/400'],
     applyUrl: 'https://example.com/apply',
   });
+
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData({ ...formData, description: e.target.value });
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
 
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const [alertConfig, setAlertConfig] = useState<{
@@ -107,7 +109,7 @@ export default function AdminBoothEditPage() {
       applyUrl: formData.applyUrl,
     };
 
-    console.log('Saving payload:', payload);
+    console.log('Saving payload with files:', payload, imageFiles);
 
     setAlertConfig({
       isOpen: true,
@@ -229,8 +231,8 @@ export default function AdminBoothEditPage() {
 
       <ImageCarouselUploader
         label="동아리 활동 사진"
-        imageUrls={formData.imageUrls}
-        onImagesChange={(urls) => setFormData((prev) => ({ ...prev, imageUrls: urls }))}
+        initialUrls={formData.imageUrls}
+        onFilesChange={setImageFiles}
         maxCount={5}
         className="mb-10"
       />

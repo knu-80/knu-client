@@ -2,9 +2,15 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, type PanInfo } from 'framer-motion';
 import ImageUploader from './ImageUploader';
 
+interface ImageItem {
+  id: string;
+  previewUrl: string;
+  file: File | null;
+}
+
 interface ImageCarouselUploaderProps {
-  imageUrls: string[];
-  onImagesChange: (urls: string[]) => void;
+  initialUrls?: string[];
+  onFilesChange: (files: File[]) => void;
   maxCount?: number;
   label?: string;
   className?: string;
@@ -12,13 +18,25 @@ interface ImageCarouselUploaderProps {
 }
 
 export default function ImageCarouselUploader({
-  imageUrls,
-  onImagesChange,
+  initialUrls = [],
+  onFilesChange,
   maxCount = 5,
   label,
   className = '',
   aspectRatio = 'aspect-square',
 }: ImageCarouselUploaderProps) {
+  // 고유 ID 생성을 위한 카운터
+  const idCounter = useRef(0);
+
+  // 컴포넌트 내부에서 이미지 목록(미리보기 + 파일)을 관리합니다.
+  const [items, setItems] = useState<ImageItem[]>(() =>
+    initialUrls.map((url, index) => ({
+      id: `initial-${index}`, // ref 대신 index 사용
+      previewUrl: url,
+      file: null,
+    })),
+  );
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -53,30 +71,44 @@ export default function ImageCarouselUploader({
     return () => window.removeEventListener('resize', updateWidth);
   }, [currentIndex, getTargetX, x]);
 
-  const handleImageChange = (index: number, newUrl: string) => {
-    const newImages = [...imageUrls];
-    if (index < imageUrls.length) {
-      newImages[index] = newUrl;
+  // 새로운 이미지 추가 또는 변경 시 호출
+  const handleImageChange = (index: number, newPreviewUrl: string, file: File) => {
+    const newItems = [...items];
+    const newItem: ImageItem = {
+      // Date.now()를 제거하고 idCounter만 사용합니다.
+      id: `file-${idCounter.current++}`,
+      previewUrl: newPreviewUrl,
+      file,
+    };
+
+    if (index < items.length) {
+      newItems[index] = newItem;
     } else {
-      newImages.push(newUrl);
-      setCurrentIndex(newImages.length);
+      newItems.push(newItem);
+      setCurrentIndex(newItems.length);
     }
-    onImagesChange(newImages);
+
+    setItems(newItems);
+    // 부모에게 신규 파일들(null이 아닌 것)만 전달합니다.
+    onFilesChange(newItems.map((item) => item.file).filter((f): f is File => f !== null));
   };
 
+  // 이미지 삭제 시 호출
   const handleImageDelete = (index: number) => {
-    const newImages = imageUrls.filter((_, i) => i !== index);
-    onImagesChange(newImages);
+    const newItems = items.filter((_, i) => i !== index);
+    setItems(newItems);
+    // 부모에게 변경된 파일 배열 전달
+    onFilesChange(newItems.map((item) => item.file).filter((f): f is File => f !== null));
 
-    if (currentIndex >= newImages.length && currentIndex > 0) {
-      setCurrentIndex(newImages.length);
+    if (currentIndex >= newItems.length && currentIndex > 0) {
+      setCurrentIndex(newItems.length);
     }
   };
 
   const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const swipeThreshold = 50;
     const { offset, velocity } = info;
-    const totalItems = imageUrls.length < maxCount ? imageUrls.length + 1 : imageUrls.length;
+    const totalItems = items.length < maxCount ? items.length + 1 : items.length;
 
     if (offset.x < -swipeThreshold || velocity.x < -500) {
       if (currentIndex < totalItems - 1) {
@@ -90,9 +122,10 @@ export default function ImageCarouselUploader({
     x.set(getTargetX(currentIndex, containerWidth));
   };
 
-  const displayItems = [...imageUrls];
-  if (imageUrls.length < maxCount) {
-    displayItems.push('');
+  // 업로드 가능한 슬롯(비어있는 칸)을 포함하여 보여줍니다.
+  const displayItems = [...items];
+  if (items.length < maxCount) {
+    displayItems.push({ id: 'placeholder', previewUrl: '', file: null });
   }
 
   return (
@@ -110,9 +143,9 @@ export default function ImageCarouselUploader({
           onDragEnd={handleDragEnd}
           className="flex cursor-grab active:cursor-grabbing"
         >
-          {displayItems.map((url, index) => (
+          {displayItems.map((item, index) => (
             <div
-              key={index}
+              key={item.id}
               style={{
                 width: `${itemWidthPercent}%`,
                 marginRight: `${gap}px`,
@@ -124,9 +157,9 @@ export default function ImageCarouselUploader({
               }}
             >
               <ImageUploader
-                previewImage={url || null}
-                onImageChange={(newUrl) => handleImageChange(index, newUrl)}
-                onDelete={url ? () => handleImageDelete(index) : undefined}
+                previewImage={item.previewUrl || null}
+                onImageChange={(newUrl, file) => handleImageChange(index, newUrl, file)}
+                onDelete={item.previewUrl ? () => handleImageDelete(index) : undefined}
                 aspectRatio={aspectRatio}
                 className="w-full"
               />
@@ -147,7 +180,7 @@ export default function ImageCarouselUploader({
             ))}
           </div>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
-            {imageUrls.length} / {maxCount} 이미지
+            {items.length} / {maxCount} 이미지
           </p>
         </div>
       </div>

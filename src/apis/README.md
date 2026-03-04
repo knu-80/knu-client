@@ -43,6 +43,7 @@ src/apis
 
 - 일반 조회 API는 `api/v1` 경로를 사용합니다.
 - Access Token이 필요한 API는 `admin/v1` 경로를 사용합니다.
+- 관리자 로그인은 토큰 발급 전 요청이므로 `api/v1/login` 경로를 사용합니다.
 - 경로 정책은 `src/apis/endpoints.ts`에서 단일 관리합니다.
 
 ## Notice Create Rule

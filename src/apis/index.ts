@@ -65,6 +65,7 @@ export {
   getAdminProfile,
   login,
   toLoginRequest,
+  type AdminProfile,
   type LoginInput,
   type TokenResponse,
 } from '@/apis/modules/adminAuthApi';

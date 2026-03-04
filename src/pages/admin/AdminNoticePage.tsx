@@ -4,19 +4,19 @@ import { GrAnnounce } from 'react-icons/gr';
 import { SlPencil } from 'react-icons/sl';
 import NoticeCard from '@/components/NoticeCard';
 import AdminActionButton from '@/components/AdminActionButton';
-import { NOTICES } from '@/mocks/notices';
+import { useNotices } from '@/hooks/useNotices';
 
 export default function AdminNoticePage() {
   const navigate = useNavigate();
+  const { notices, isLoading } = useNotices();
   const [activeTab, setActiveTab] = useState('전체');
   const tabs = ['전체', '공지', '분실물'];
 
-  const filteredNotices =
-    activeTab === '전체'
-      ? NOTICES
-      : NOTICES.filter((notice) => {
-          return notice.category === activeTab;
-        });
+  const filteredNotices = notices.filter((notice) => {
+    if (activeTab === '전체') return true;
+    const category = notice.type === 'GENERAL' ? '공지' : '분실물';
+    return category === activeTab;
+  });
 
   const handleWrite = () => {
     navigate('/admin/notice/write');
@@ -54,20 +54,24 @@ export default function AdminNoticePage() {
         </div>
 
         <div className="divide-y divide-gray-100">
-          {filteredNotices.length === 0 ? (
+          {isLoading ? (
+            <div className="py-20 text-center text-gray-400 typo-body-2">
+              데이터를 불러오는 중...
+            </div>
+          ) : filteredNotices.length === 0 ? (
             <div className="py-20 text-center text-gray-400 typo-body-2">
               등록된 공지사항이 없습니다.
             </div>
           ) : (
             filteredNotices.map((notice, index) => (
               <NoticeCard
-                key={notice.id}
-                id={notice.id}
+                key={notice.noticeId}
+                id={notice.noticeId}
                 index={index}
                 totalCount={filteredNotices.length}
                 title={notice.title}
-                date={notice.date}
-                category={notice.category}
+                date={notice.createdAt.split('T')[0].replace(/-/g, '.')}
+                category={notice.type === 'GENERAL' ? '공지' : '분실물'}
                 basePath="/admin/notice"
               />
             ))

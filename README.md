@@ -54,3 +54,9 @@
 - PATCH 규칙: 기본적으로 변경된 필드만 전송합니다. `undefined`는 전송하지 않으며, `null`은 백엔드가 허용한 필드에서만 전송합니다.
 - 엔드포인트 규칙: 일반 조회는 `api/v1`, 토큰 필요 API는 `admin/v1`을 사용합니다.
 - 상세 사용 방식은 `src/apis/README.md`를 참고해주세요.
+
+## 6. 테스트 실행
+
+- 단위/통합 테스트 실행: `pnpm test`
+- 테스트 watch 모드: `pnpm test:watch`
+- 관리자 세션 가드 테스트 가이드: `docs/ADMIN_SESSION_GUARD_TESTING.md`

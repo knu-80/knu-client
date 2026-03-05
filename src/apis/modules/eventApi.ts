@@ -50,7 +50,7 @@ export async function createEvent(payload: EventCreateInput): Promise<EventItem>
 export async function updateEvent(eventId: number, payload: EventUpdateInput): Promise<EventItem> {
   const patchPayload = omitUndefined(payload);
   const { data } = await http.patch<ApiResponse<EventItem>>(
-    ENDPOINTS.adminEventById(eventId),
+    ENDPOINTS.adminUpdateEventById(eventId),
     patchPayload,
   );
 

@@ -15,7 +15,7 @@ import { type EventType } from '@/apis/endpoints';
 export default function AdminEventPage() {
   const [selectedType, setSelectedType] = useState<EventType>('RECRUITMENT');
   const { events, isLoading, refetch } = useEvents(selectedType);
-  const { mutateCreate, mutateDelete } = useEventMutation();
+  const { mutateCreate, mutateUpdate, mutateDelete } = useEventMutation();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [targetEventId, setTargetEventId] = useState<number | null>(null);
@@ -39,13 +39,13 @@ export default function AdminEventPage() {
   };
 
   const handleSave = async (data: EventItem) => {
-    if (isAdding) {
-      const formatAt = (at: string) => {
-        if (!at) return '';
-        const date = new Date(at);
-        return date.toISOString();
-      };
+    const formatAt = (at: string) => {
+      if (!at) return '';
+      const date = new Date(at);
+      return date.toISOString();
+    };
 
+    if (isAdding) {
       const payload = {
         title: data.title,
         description: data.description,
@@ -67,9 +67,26 @@ export default function AdminEventPage() {
           showAlert('실패', `등록 중 오류가 발생했습니다: ${err.message}`);
         },
       });
-    } else {
-      setEditingId(null);
-      showAlert('알림', `"${data.title}" 이벤트 수정 API 연동 예정입니다.`);
+    } else if (editingId !== null) {
+      const payload = {
+        title: data.title,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        startAt: formatAt(data.startAt),
+        endAt: formatAt(data.endAt),
+        location: data.location,
+      };
+
+      await mutateUpdate(editingId, payload, {
+        onSuccess: () => {
+          showAlert('성공', '이벤트 정보가 수정되었습니다.');
+          refetch();
+          setEditingId(null);
+        },
+        onError: (err) => {
+          showAlert('실패', `수정 중 오류가 발생했습니다: ${err.message}`);
+        },
+      });
     }
   };
 

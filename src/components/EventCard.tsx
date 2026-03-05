@@ -26,7 +26,7 @@ export default function EventCard({
 }: EventCardProps) {
   const formatDateTime = (dateTimeStr: string) => {
     if (!dateTimeStr) return '미지정';
-    return dateTimeStr.replace('T', ' ').replace(/-/g, '.');
+    return dateTimeStr.substring(0, 16).replace('T', ' ').replace(/-/g, '.');
   };
 
   return (

@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { createEvent, type EventCreateInput, type EventItem } from '@/apis/modules/eventApi';
+import {
+  createEvent,
+  deleteEvent,
+  type EventCreateInput,
+  type EventItem,
+} from '@/apis/modules/eventApi';
 
 export function useEventMutation() {
   const [isPending, setIsPending] = useState(false);
@@ -32,8 +37,35 @@ export function useEventMutation() {
     }
   };
 
+  const mutateDelete = async (
+    eventId: number,
+    options?: {
+      onSuccess?: () => void;
+      onError?: (error: Error) => void;
+    },
+  ) => {
+    try {
+      setIsPending(true);
+      setError(null);
+      await deleteEvent(eventId);
+      if (options?.onSuccess) {
+        options.onSuccess();
+      }
+    } catch (err) {
+      const errorObject =
+        err instanceof Error ? err : new Error('이벤트 삭제 중 오류가 발생했습니다.');
+      setError(errorObject);
+      if (options?.onError) {
+        options.onError(errorObject);
+      }
+    } finally {
+      setIsPending(false);
+    }
+  };
+
   return {
     mutateCreate,
+    mutateDelete,
     isPending,
     error,
   };

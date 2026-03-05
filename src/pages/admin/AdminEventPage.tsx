@@ -6,6 +6,7 @@ import EventCardEdit from '@/components/EventCardEdit';
 import SegmentedControl from '@/components/SegmentedControl';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
+import ConfirmModal from '@/components/ConfirmModal';
 import { useEvents } from '@/hooks/useEvents';
 import { useEventMutation } from '@/hooks/useEventMutation';
 import { type EventItem } from '@/apis/modules/eventApi';
@@ -14,9 +15,11 @@ import { type EventType } from '@/apis/endpoints';
 export default function AdminEventPage() {
   const [selectedType, setSelectedType] = useState<EventType>('RECRUITMENT');
   const { events, isLoading, refetch } = useEvents(selectedType);
-  const { mutateCreate } = useEventMutation();
+  const { mutateCreate, mutateDelete } = useEventMutation();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [targetEventId, setTargetEventId] = useState<number | null>(null);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;
@@ -75,9 +78,25 @@ export default function AdminEventPage() {
     setIsAdding(false);
   };
 
-  const handleDelete = (id: number) => {
-    const event = events.find((e) => e.id === id);
-    showAlert('알림', `"${event?.title || id}" 삭제 API 연동 예정입니다.`);
+  const handleDeleteClick = (id: number) => {
+    setTargetEventId(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (targetEventId !== null) {
+      await mutateDelete(targetEventId, {
+        onSuccess: () => {
+          showAlert('삭제 완료', '이벤트가 성공적으로 삭제되었습니다.');
+          refetch();
+        },
+        onError: (error) => {
+          showAlert('삭제 실패', error.message);
+        },
+      });
+      setIsConfirmModalOpen(false);
+      setTargetEventId(null);
+    }
   };
 
   const showAlert = (title: string, message: string) => {
@@ -128,11 +147,11 @@ export default function AdminEventPage() {
                 description={event.description}
                 startAt={event.startAt}
                 endAt={event.endAt}
-                location={event.location || ''}
+                location={event.location}
                 imageUrl={event.imageUrl}
                 isAdmin={true}
                 onEdit={() => setEditingId(event.id)}
-                onDelete={() => handleDelete(event.id)}
+                onDelete={() => handleDeleteClick(event.id)}
               />
             ),
           )
@@ -165,6 +184,15 @@ export default function AdminEventPage() {
           className="bg-[#0F172A]"
         />
       </div>
+
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        title="이벤트 삭제"
+        message={`정말로 이 이벤트를 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.`}
+        confirmText="삭제"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setIsConfirmModalOpen(false)}
+      />
 
       <AlertModal
         isOpen={alertConfig.isOpen}

@@ -13,7 +13,7 @@ export interface EventItem {
   startAt: string;
   endAt: string;
   isActive: boolean;
-  location?: string;
+  location: string;
 }
 
 export async function getEventsByType(eventType: EventType): Promise<EventItem[]> {

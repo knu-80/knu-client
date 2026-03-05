@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { FiClock, FiMapPin, FiCheck, FiX } from 'react-icons/fi';
-import { type FestivalEvent } from '@/mocks/events';
+import { type EventItem } from '@/apis/modules/eventApi';
 import AlertModal from './AlertModal';
 import ImageUploader from './ImageUploader';
 
 interface EventCardEditProps {
-  initialData: FestivalEvent;
-  onSave: (data: FestivalEvent) => void;
+  initialData: EventItem;
+  onSave: (data: EventItem) => void;
   onCancel: () => void;
 }
 
 export default function EventCardEdit({ initialData, onSave, onCancel }: EventCardEditProps) {
-  const [formData, setFormData] = useState<FestivalEvent>(initialData);
+  const [formData, setFormData] = useState<EventItem>(initialData);
   const [previewImage, setPreviewImage] = useState<string | null>(initialData.imageUrl);
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;
@@ -24,9 +24,9 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
   });
 
   const handleSaveClick = () => {
-    const { title, description, startDate, endDate, location } = formData;
+    const { title, description, startAt, endAt, location } = formData;
 
-    if (!title.trim() || !description.trim() || !startDate || !endDate || !location.trim()) {
+    if (!title.trim() || !description.trim() || !startAt || !endAt || !location?.trim()) {
       setAlertConfig({
         isOpen: true,
         title: '입력 오류',
@@ -35,7 +35,7 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
       return;
     }
 
-    if (new Date(startDate) > new Date(endDate)) {
+    if (new Date(startAt) > new Date(endAt)) {
       setAlertConfig({
         isOpen: true,
         title: '날짜 오류',
@@ -107,8 +107,8 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
                 <span className="w-8 shrink-0 text-[10px] font-bold text-gray-400">시작</span>
                 <input
                   type="datetime-local"
-                  value={formData.startDate}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, startDate: e.target.value }))}
+                  value={formData.startAt}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, startAt: e.target.value }))}
                   className="w-full focus:outline-none border-none p-0 focus:ring-0 placeholder-gray-300 caret-knu-red bg-transparent cursor-pointer"
                 />
               </div>
@@ -116,8 +116,8 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
                 <span className="w-8 shrink-0 text-[10px] font-bold text-gray-400">종료</span>
                 <input
                   type="datetime-local"
-                  value={formData.endDate}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, endDate: e.target.value }))}
+                  value={formData.endAt}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, endAt: e.target.value }))}
                   className="w-full focus:outline-none border-none p-0 focus:ring-0 placeholder-gray-300 caret-knu-red bg-transparent cursor-pointer"
                 />
               </div>
@@ -129,7 +129,7 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
             <input
               type="text"
               placeholder="장소"
-              value={formData.location}
+              value={formData.location || ''}
               onChange={(e) => setFormData((prev) => ({ ...prev, location: e.target.value }))}
               className="w-full focus:outline-none border-none p-0 focus:ring-0 placeholder-gray-300 caret-knu-red"
             />

@@ -6,11 +6,13 @@ import EventCardEdit from '@/components/EventCardEdit';
 import SegmentedControl from '@/components/SegmentedControl';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
-import { ALL_EVENTS, type EventType, type FestivalEvent } from '@/mocks/events';
+import { useEvents } from '@/hooks/useEvents';
+import { type EventItem } from '@/apis/modules/eventApi';
+import { type EventType } from '@/apis/endpoints';
 
 export default function AdminEventPage() {
-  const [events, setEvents] = useState<FestivalEvent[]>(ALL_EVENTS);
   const [selectedType, setSelectedType] = useState<EventType>('RECRUITMENT');
+  const { events, isLoading } = useEvents(selectedType);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
 
@@ -24,8 +26,6 @@ export default function AdminEventPage() {
     message: '',
   });
 
-  const filteredEvents = events.filter((event) => event.type === selectedType);
-
   const handleAddEvent = () => {
     setIsAdding(true);
     setTimeout(() => {
@@ -33,25 +33,10 @@ export default function AdminEventPage() {
     }, 100);
   };
 
-  const handleSave = (data: FestivalEvent) => {
-    if (isAdding) {
-      const nextId = Math.max(...events.map((event) => event.id), 0) + 1;
-
-      const newEvent: FestivalEvent = {
-        ...data,
-        id: nextId,
-        type: selectedType,
-      };
-      setEvents((prev) => [...prev, newEvent]);
-      setIsAdding(false);
-      showAlert('성공', '새로운 이벤트가 등록되었습니다.');
-    } else {
-      setEvents((prev) =>
-        prev.map((event) => (event.id === data.id ? { ...event, ...data } : event)),
-      );
-      setEditingId(null);
-      showAlert('성공', `"${data.title}" 이벤트가 수정되었습니다.`);
-    }
+  const handleSave = (data: EventItem) => {
+    setEditingId(null);
+    setIsAdding(false);
+    showAlert('알림', `"${data.title}" 이벤트 API 연동 예정입니다.`);
   };
 
   const handleCancel = () => {
@@ -60,8 +45,8 @@ export default function AdminEventPage() {
   };
 
   const handleDelete = (id: number) => {
-    setEvents((prev) => prev.filter((event) => event.id !== id));
-    showAlert('삭제 완료', '해당 이벤트가 삭제되었습니다.');
+    const event = events.find((e) => e.id === id);
+    showAlert('알림', `"${event?.title || id}" 삭제 API 연동 예정입니다.`);
   };
 
   const showAlert = (title: string, message: string) => {
@@ -69,7 +54,7 @@ export default function AdminEventPage() {
   };
 
   return (
-    <div className="pt-5 sm:p-5 relative pb-24">
+    <div className="pt-5 sm:p-5 relative pb-40">
       <div className="flex items-center space-x-2 mb-4 px-2 sm:px-0">
         <MdEventNote className="h-6 w-6 text-black" />
         <h2 className="typo-heading-2 text-black font-bold">이벤트 관리</h2>
@@ -79,60 +64,65 @@ export default function AdminEventPage() {
         <SegmentedControl
           options={[
             { label: '가두모집 이벤트', value: 'RECRUITMENT' },
-            { label: '주막이벤트', value: 'PUB' },
+            { label: '주막 이벤트', value: 'CLUB_FESTIVAL' },
           ]}
           selectedValue={selectedType}
-          onChange={setSelectedType}
+          onChange={(val) => setSelectedType(val as EventType)}
         />
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 px-2 sm:px-0">
-        {filteredEvents.map((event) =>
-          editingId === event.id ? (
-            <EventCardEdit
-              key={event.id}
-              initialData={event}
-              onSave={handleSave}
-              onCancel={handleCancel}
-            />
-          ) : (
-            <EventCard
-              key={event.id}
-              title={event.title}
-              description={event.description}
-              startDate={event.startDate}
-              endDate={event.endDate}
-              location={event.location}
-              imageUrl={event.imageUrl}
-              isAdmin={true}
-              onEdit={() => setEditingId(event.id)}
-              onDelete={() => handleDelete(event.id)}
-            />
-          ),
+        {isLoading ? (
+          <div className="col-span-full py-20 text-center text-gray-400 typo-body-2">
+            데이터를 불러오는 중...
+          </div>
+        ) : events.length === 0 && !isAdding ? (
+          <div className="col-span-full flex flex-col items-center justify-center py-20 text-gray-500">
+            <MdEventNote className="h-12 w-12 mb-4 opacity-20" />
+            <p className="typo-body-1">진행 중인 이벤트가 없습니다.</p>
+          </div>
+        ) : (
+          events.map((event) =>
+            editingId === event.id ? (
+              <EventCardEdit
+                key={event.id}
+                initialData={event}
+                onSave={handleSave}
+                onCancel={handleCancel}
+              />
+            ) : (
+              <EventCard
+                key={event.id}
+                title={event.title}
+                description={event.description}
+                startAt={event.startAt}
+                endAt={event.endAt}
+                location={event.location || ''}
+                imageUrl={event.imageUrl}
+                isAdmin={true}
+                onEdit={() => setEditingId(event.id)}
+                onDelete={() => handleDelete(event.id)}
+              />
+            ),
+          )
         )}
 
         {isAdding && (
           <EventCardEdit
             initialData={{
               id: 0,
-              type: selectedType,
               title: '',
               description: '',
-              startDate: '',
-              endDate: '',
-              location: '',
+              eventType: selectedType,
               imageUrl: null,
+              startAt: '',
+              endAt: '',
+              isActive: true,
+              location: '',
             }}
             onSave={handleSave}
             onCancel={handleCancel}
           />
-        )}
-
-        {filteredEvents.length === 0 && !isAdding && (
-          <div className="col-span-full flex flex-col items-center justify-center py-20 text-gray-500">
-            <MdEventNote className="h-12 w-12 mb-4 opacity-20" />
-            <p className="typo-body-1">진행 중인 이벤트가 없습니다.</p>
-          </div>
         )}
       </div>
 

@@ -4,8 +4,8 @@ import RepresentativeImage from './RepresentativeImage';
 export interface EventCardProps {
   title: string;
   description: string;
-  startDate: string;
-  endDate: string;
+  startAt: string;
+  endAt: string;
   location: string;
   imageUrl: string | null;
   isAdmin?: boolean;
@@ -16,8 +16,8 @@ export interface EventCardProps {
 export default function EventCard({
   title,
   description,
-  startDate,
-  endDate,
+  startAt,
+  endAt,
   location,
   imageUrl,
   isAdmin = false,
@@ -75,7 +75,7 @@ export default function EventCard({
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <FiClock className="h-3.5 w-3.5 shrink-0 text-knu-red" />
             <span className="truncate">
-              {formatDateTime(startDate)} ~ {formatDateTime(endDate)}
+              {formatDateTime(startAt)} ~ {formatDateTime(endAt)}
             </span>
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500">

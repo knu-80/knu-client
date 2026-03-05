@@ -20,10 +20,10 @@ export default function EventPage() {
         <SegmentedControl
           options={[
             { label: '가두모집 이벤트', value: 'RECRUITMENT' },
-            { label: '주막이벤트', value: 'PUB' },
+            { label: '주막 이벤트', value: 'CLUB_FESTIVAL' },
           ]}
           selectedValue={selectedType}
-          onChange={setSelectedType}
+          onChange={(val) => setSelectedType(val as EventType)}
         />
       </div>
 
@@ -34,8 +34,8 @@ export default function EventPage() {
               key={event.id}
               title={event.title}
               description={event.description}
-              startDate={event.startDate}
-              endDate={event.endDate}
+              startAt={event.startAt}
+              endAt={event.endAt}
               location={event.location}
               imageUrl={event.imageUrl}
             />

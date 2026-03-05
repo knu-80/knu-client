@@ -16,6 +16,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.6.1",
     "axios": "^1.13.6",
     "framer-motion": "^12.34.0",
     "react": "^19.2.0",

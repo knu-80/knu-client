@@ -35,7 +35,6 @@ export function useNoticeMutation() {
       if (options?.onError) {
         options.onError(errorObject);
       }
-      // 이제 throw 하지 않습니다.
     } finally {
       setIsPending(false);
     }

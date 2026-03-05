@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GrAnnounce } from 'react-icons/gr';
 import { SlPencil } from 'react-icons/sl';
+import { FiTrash2 } from 'react-icons/fi';
 import NoticeCard from '@/components/NoticeCard';
 import AdminActionButton from '@/components/AdminActionButton';
 import { useNotices } from '@/hooks/useNotices';
@@ -10,6 +11,7 @@ export default function AdminNoticePage() {
   const navigate = useNavigate();
   const { notices, isLoading } = useNotices();
   const [activeTab, setActiveTab] = useState('전체');
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
   const tabs = ['전체', '공지', '분실물'];
 
   const filteredNotices = notices.filter((notice) => {
@@ -22,8 +24,12 @@ export default function AdminNoticePage() {
     navigate('/admin/notice/write');
   };
 
+  const toggleDeleteMode = () => {
+    setIsDeleteMode((prev) => !prev);
+  };
+
   return (
-    <div className="pt-5 sm:p-5 relative pb-24">
+    <div className="pt-5 sm:p-5 relative pb-40">
       <div className="flex items-center space-x-2 mb-4 px-2 sm:px-0">
         <GrAnnounce className="h-6 w-6 text-black" />
         <h2 className="typo-heading-2 text-black font-bold">공지사항 관리</h2>
@@ -48,7 +54,7 @@ export default function AdminNoticePage() {
 
       <div className="mt-4">
         <div className="flex items-center gap-x-4 px-2 sm:px-4 py-3 text-[13px] font-bold text-gray-500 border-y border-gray-100 bg-gray-50/50">
-          <div className="w-8 text-center">번호</div>
+          <div className="w-8 text-center">{isDeleteMode ? '삭제' : '번호'}</div>
           <div className="flex-1 text-center">제목</div>
           <div className="w-16 text-center">날짜</div>
         </div>
@@ -73,19 +79,31 @@ export default function AdminNoticePage() {
                 date={notice.createdAt.split('T')[0].replace(/-/g, '.')}
                 category={notice.type === 'GENERAL' ? '공지' : '분실물'}
                 basePath="/admin/notice/edit"
+                isDeleteMode={isDeleteMode}
+                onDeleteClick={(id) => {
+                  console.log(`Delete clicked for id: ${id}`);
+                }}
               />
             ))
           )}
         </div>
       </div>
 
-      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50">
+      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-y-3">
         <AdminActionButton
-          label="공지 추가하기"
-          icon={SlPencil}
-          onClick={handleWrite}
-          className="bg-[#0F172A]"
+          label={isDeleteMode ? '삭제 취소하기' : '공지 삭제하기'}
+          icon={FiTrash2}
+          onClick={toggleDeleteMode}
+          className={isDeleteMode ? 'bg-gray-500' : 'bg-red-600'}
         />
+        {!isDeleteMode && (
+          <AdminActionButton
+            label="공지 추가하기"
+            icon={SlPencil}
+            onClick={handleWrite}
+            className="bg-[#0F172A]"
+          />
+        )}
       </div>
     </div>
   );

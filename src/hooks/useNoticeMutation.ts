@@ -2,7 +2,9 @@ import { useState } from 'react';
 import {
   createNotice,
   deleteNotice,
+  updateNotice,
   type NoticeCreateInput,
+  type NoticeUpdateInput,
   type NoticeMutationResponse,
 } from '@/apis/modules/noticeApi';
 
@@ -21,9 +23,7 @@ export function useNoticeMutation() {
     try {
       setIsPending(true);
       setError(null);
-
       const response = await createNotice(payload, images);
-
       if (options?.onSuccess) {
         options.onSuccess(response);
       }
@@ -32,7 +32,34 @@ export function useNoticeMutation() {
       const errorObject =
         err instanceof Error ? err : new Error('공지 등록 중 오류가 발생했습니다.');
       setError(errorObject);
+      if (options?.onError) {
+        options.onError(errorObject);
+      }
+    } finally {
+      setIsPending(false);
+    }
+  };
 
+  const mutateUpdate = async (
+    noticeId: number,
+    payload: NoticeUpdateInput,
+    options?: {
+      onSuccess?: (data: NoticeMutationResponse) => void;
+      onError?: (error: Error) => void;
+    },
+  ) => {
+    try {
+      setIsPending(true);
+      setError(null);
+      const response = await updateNotice(noticeId, payload);
+      if (options?.onSuccess) {
+        options.onSuccess(response);
+      }
+      return response;
+    } catch (err) {
+      const errorObject =
+        err instanceof Error ? err : new Error('공지 수정 중 오류가 발생했습니다.');
+      setError(errorObject);
       if (options?.onError) {
         options.onError(errorObject);
       }
@@ -51,9 +78,7 @@ export function useNoticeMutation() {
     try {
       setIsPending(true);
       setError(null);
-
       await deleteNotice(noticeId);
-
       if (options?.onSuccess) {
         options.onSuccess();
       }
@@ -61,7 +86,6 @@ export function useNoticeMutation() {
       const errorObject =
         err instanceof Error ? err : new Error('공지 삭제 중 오류가 발생했습니다.');
       setError(errorObject);
-
       if (options?.onError) {
         options.onError(errorObject);
       }
@@ -72,6 +96,7 @@ export function useNoticeMutation() {
 
   return {
     mutateCreate,
+    mutateUpdate,
     mutateDelete,
     isPending,
     error,

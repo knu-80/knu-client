@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   createNotice,
+  deleteNotice,
   type NoticeCreateInput,
   type NoticeMutationResponse,
 } from '@/apis/modules/noticeApi';
@@ -40,8 +41,38 @@ export function useNoticeMutation() {
     }
   };
 
+  const mutateDelete = async (
+    noticeId: number,
+    options?: {
+      onSuccess?: () => void;
+      onError?: (error: Error) => void;
+    },
+  ) => {
+    try {
+      setIsPending(true);
+      setError(null);
+
+      await deleteNotice(noticeId);
+
+      if (options?.onSuccess) {
+        options.onSuccess();
+      }
+    } catch (err) {
+      const errorObject =
+        err instanceof Error ? err : new Error('공지 삭제 중 오류가 발생했습니다.');
+      setError(errorObject);
+
+      if (options?.onError) {
+        options.onError(errorObject);
+      }
+    } finally {
+      setIsPending(false);
+    }
+  };
+
   return {
     mutateCreate,
+    mutateDelete,
     isPending,
     error,
   };

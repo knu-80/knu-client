@@ -6,15 +6,29 @@ import { FiTrash2 } from 'react-icons/fi';
 import NoticeCard from '@/components/NoticeCard';
 import AdminActionButton from '@/components/AdminActionButton';
 import ConfirmModal from '@/components/ConfirmModal';
+import AlertModal from '@/components/AlertModal';
 import { useNotices } from '@/hooks/useNotices';
+import { useNoticeMutation } from '@/hooks/useNoticeMutation';
 
 export default function AdminNoticePage() {
   const navigate = useNavigate();
-  const { notices, isLoading } = useNotices();
+  const { notices, isLoading, refetch } = useNotices();
+  const { mutateDelete } = useNoticeMutation();
+
   const [activeTab, setActiveTab] = useState('전체');
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [targetNoticeId, setTargetNoticeId] = useState<number | null>(null);
+
+  const [alertConfig, setAlertConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+  });
 
   const tabs = ['전체', '공지', '분실물'];
 
@@ -37,8 +51,25 @@ export default function AdminNoticePage() {
     setIsConfirmModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (targetNoticeId !== null) {
+      await mutateDelete(targetNoticeId, {
+        onSuccess: () => {
+          setAlertConfig({
+            isOpen: true,
+            title: '삭제 완료',
+            message: '공지사항이 삭제되었습니다.',
+          });
+          refetch();
+        },
+        onError: (error) => {
+          setAlertConfig({
+            isOpen: true,
+            title: '삭제 실패',
+            message: error.message,
+          });
+        },
+      });
       setIsConfirmModalOpen(false);
       setTargetNoticeId(null);
     }
@@ -47,6 +78,10 @@ export default function AdminNoticePage() {
   const handleCloseModal = () => {
     setIsConfirmModalOpen(false);
     setTargetNoticeId(null);
+  };
+
+  const closeAlert = () => {
+    setAlertConfig((prev) => ({ ...prev, isOpen: false }));
   };
 
   return (
@@ -132,6 +167,13 @@ export default function AdminNoticePage() {
         confirmText="삭제"
         onConfirm={handleConfirmDelete}
         onCancel={handleCloseModal}
+      />
+
+      <AlertModal
+        isOpen={alertConfig.isOpen}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        onClose={closeAlert}
       />
     </div>
   );

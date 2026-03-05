@@ -11,7 +11,26 @@ interface EventCardEditProps {
 }
 
 export default function EventCardEdit({ initialData, onSave, onCancel }: EventCardEditProps) {
-  const [formData, setFormData] = useState<EventItem>(initialData);
+  const toLocalISOString = (dateStr: string) => {
+    if (!dateStr) return '';
+
+    let normalizedStr = dateStr;
+    if (!normalizedStr.includes('Z') && !normalizedStr.includes('+')) {
+      normalizedStr += 'Z';
+    }
+
+    const date = new Date(normalizedStr);
+    if (isNaN(date.getTime())) return dateStr;
+    const offset = date.getTimezoneOffset() * 60000;
+    const localISOTime = new Date(date.getTime() - offset).toISOString().slice(0, 16);
+    return localISOTime;
+  };
+
+  const [formData, setFormData] = useState<EventItem>({
+    ...initialData,
+    startAt: toLocalISOString(initialData.startAt),
+    endAt: toLocalISOString(initialData.endAt),
+  });
   const [previewImage, setPreviewImage] = useState<string | null>(initialData.imageUrl);
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;

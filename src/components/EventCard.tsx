@@ -26,7 +26,13 @@ export default function EventCard({
 }: EventCardProps) {
   const formatDateTime = (dateTimeStr: string) => {
     if (!dateTimeStr) return '미지정';
-    const date = new Date(dateTimeStr);
+
+    let normalizedStr = dateTimeStr;
+    if (!normalizedStr.includes('Z') && !normalizedStr.includes('+')) {
+      normalizedStr += 'Z';
+    }
+
+    const date = new Date(normalizedStr);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');

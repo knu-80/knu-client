@@ -17,8 +17,8 @@ export const ENDPOINTS = {
   adminMe: `${ADMIN_API_PREFIX}/me`,
   adminNotices: `${ADMIN_API_PREFIX}/notices`,
   adminNoticeById: (noticeId: number | string) => `${ADMIN_API_PREFIX}/notices/${noticeId}`,
-  adminEvents: `${ADMIN_API_PREFIX}/events`,
-  adminEventById: (eventId: number | string) => `${ADMIN_API_PREFIX}/events/${eventId}`,
+  adminEvents: `${PUBLIC_API_PREFIX}/events`,
+  adminEventById: (eventId: number | string) => `${PUBLIC_API_PREFIX}/events/${eventId}`,
   adminBooths: `${ADMIN_API_PREFIX}/booths`,
   adminBoothById: (boothId: number | string) => `${ADMIN_API_PREFIX}/booths/${boothId}`,
 } as const;

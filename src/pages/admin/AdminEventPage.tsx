@@ -7,12 +7,14 @@ import SegmentedControl from '@/components/SegmentedControl';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
 import { useEvents } from '@/hooks/useEvents';
+import { useEventMutation } from '@/hooks/useEventMutation';
 import { type EventItem } from '@/apis/modules/eventApi';
 import { type EventType } from '@/apis/endpoints';
 
 export default function AdminEventPage() {
   const [selectedType, setSelectedType] = useState<EventType>('RECRUITMENT');
-  const { events, isLoading } = useEvents(selectedType);
+  const { events, isLoading, refetch } = useEvents(selectedType);
+  const { mutateCreate } = useEventMutation();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
 
@@ -33,10 +35,39 @@ export default function AdminEventPage() {
     }, 100);
   };
 
-  const handleSave = (data: EventItem) => {
-    setEditingId(null);
-    setIsAdding(false);
-    showAlert('알림', `"${data.title}" 이벤트 API 연동 예정입니다.`);
+  const handleSave = async (data: EventItem) => {
+    if (isAdding) {
+      const formatAt = (at: string) => {
+        if (!at) return '';
+        const date = new Date(at);
+        return date.toISOString();
+      };
+
+      const payload = {
+        title: data.title,
+        description: data.description,
+        eventType: selectedType,
+        imageUrl: data.imageUrl,
+        startAt: formatAt(data.startAt),
+        endAt: formatAt(data.endAt),
+        location: data.location,
+        isActive: true,
+      };
+
+      await mutateCreate(payload, {
+        onSuccess: () => {
+          showAlert('성공', '새로운 이벤트가 등록되었습니다.');
+          refetch();
+          setIsAdding(false);
+        },
+        onError: (err) => {
+          showAlert('실패', `등록 중 오류가 발생했습니다: ${err.message}`);
+        },
+      });
+    } else {
+      setEditingId(null);
+      showAlert('알림', `"${data.title}" 이벤트 수정 API 연동 예정입니다.`);
+    }
   };
 
   const handleCancel = () => {

@@ -35,6 +35,7 @@ export interface EventCreateInput {
   imageUrl?: string | null;
   startAt: string;
   endAt: string;
+  location?: string;
   isActive?: boolean;
 }
 

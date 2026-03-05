@@ -5,6 +5,7 @@ import { SlPencil } from 'react-icons/sl';
 import { FiTrash2 } from 'react-icons/fi';
 import NoticeCard from '@/components/NoticeCard';
 import AdminActionButton from '@/components/AdminActionButton';
+import ConfirmModal from '@/components/ConfirmModal';
 import { useNotices } from '@/hooks/useNotices';
 
 export default function AdminNoticePage() {
@@ -12,6 +13,9 @@ export default function AdminNoticePage() {
   const { notices, isLoading } = useNotices();
   const [activeTab, setActiveTab] = useState('전체');
   const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [targetNoticeId, setTargetNoticeId] = useState<number | null>(null);
+
   const tabs = ['전체', '공지', '분실물'];
 
   const filteredNotices = notices.filter((notice) => {
@@ -26,6 +30,23 @@ export default function AdminNoticePage() {
 
   const toggleDeleteMode = () => {
     setIsDeleteMode((prev) => !prev);
+  };
+
+  const openDeleteConfirm = (id: number) => {
+    setTargetNoticeId(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (targetNoticeId !== null) {
+      setIsConfirmModalOpen(false);
+      setTargetNoticeId(null);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsConfirmModalOpen(false);
+    setTargetNoticeId(null);
   };
 
   return (
@@ -80,9 +101,7 @@ export default function AdminNoticePage() {
                 category={notice.type === 'GENERAL' ? '공지' : '분실물'}
                 basePath="/admin/notice/edit"
                 isDeleteMode={isDeleteMode}
-                onDeleteClick={(id) => {
-                  console.log(`Delete clicked for id: ${id}`);
-                }}
+                onDeleteClick={openDeleteConfirm}
               />
             ))
           )}
@@ -105,6 +124,15 @@ export default function AdminNoticePage() {
           />
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        title="공지사항 삭제"
+        message={`정말로 이 공지사항을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.`}
+        confirmText="삭제"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCloseModal}
+      />
     </div>
   );
 }

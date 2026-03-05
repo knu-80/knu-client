@@ -18,7 +18,6 @@ export default function AdminNoticeCreatePage() {
   const [content, setContent] = useState('');
   const [itemName, setItemName] = useState('');
   const [foundLocation, setFoundLocation] = useState('');
-  // 이제 파일 배열만 관리합니다.
   const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   const [alertConfig, setAlertConfig] = useState<{
@@ -75,7 +74,6 @@ export default function AdminNoticeCreatePage() {
       }),
     };
 
-    // 이제 훅 내부에서 에러를 처리하므로 try-catch가 필요 없습니다.
     await mutateCreate(payload, imageFiles, {
       onSuccess: () => {
         showAlert('등록 완료', '공지사항이 성공적으로 등록되었습니다.', () => {
@@ -160,7 +158,6 @@ export default function AdminNoticeCreatePage() {
         />
       </div>
 
-      {/* 리팩토링된 인터페이스에 맞춰 수정되었습니다. */}
       <ImageCarouselUploader
         label="관련 사진 관리"
         onFilesChange={setImageFiles}

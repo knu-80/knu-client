@@ -25,13 +25,11 @@ export default function ImageCarouselUploader({
   className = '',
   aspectRatio = 'aspect-square',
 }: ImageCarouselUploaderProps) {
-  // 고유 ID 생성을 위한 카운터
   const idCounter = useRef(0);
 
-  // 컴포넌트 내부에서 이미지 목록(미리보기 + 파일)을 관리합니다.
   const [items, setItems] = useState<ImageItem[]>(() =>
     initialUrls.map((url, index) => ({
-      id: `initial-${index}`, // ref 대신 index 사용
+      id: `initial-${index}`,
       previewUrl: url,
       file: null,
     })),
@@ -71,11 +69,9 @@ export default function ImageCarouselUploader({
     return () => window.removeEventListener('resize', updateWidth);
   }, [currentIndex, getTargetX, x]);
 
-  // 새로운 이미지 추가 또는 변경 시 호출
   const handleImageChange = (index: number, newPreviewUrl: string, file: File) => {
     const newItems = [...items];
     const newItem: ImageItem = {
-      // Date.now()를 제거하고 idCounter만 사용합니다.
       id: `file-${idCounter.current++}`,
       previewUrl: newPreviewUrl,
       file,
@@ -89,15 +85,12 @@ export default function ImageCarouselUploader({
     }
 
     setItems(newItems);
-    // 부모에게 신규 파일들(null이 아닌 것)만 전달합니다.
     onFilesChange(newItems.map((item) => item.file).filter((f): f is File => f !== null));
   };
 
-  // 이미지 삭제 시 호출
   const handleImageDelete = (index: number) => {
     const newItems = items.filter((_, i) => i !== index);
     setItems(newItems);
-    // 부모에게 변경된 파일 배열 전달
     onFilesChange(newItems.map((item) => item.file).filter((f): f is File => f !== null));
 
     if (currentIndex >= newItems.length && currentIndex > 0) {
@@ -122,7 +115,6 @@ export default function ImageCarouselUploader({
     x.set(getTargetX(currentIndex, containerWidth));
   };
 
-  // 업로드 가능한 슬롯(비어있는 칸)을 포함하여 보여줍니다.
   const displayItems = [...items];
   if (items.length < maxCount) {
     displayItems.push({ id: 'placeholder', previewUrl: '', file: null });

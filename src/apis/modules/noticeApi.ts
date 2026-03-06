@@ -98,3 +98,17 @@ export async function updateNotice(
 export async function deleteNotice(noticeId: number): Promise<void> {
   await http.delete<ApiResponse<unknown>>(ENDPOINTS.adminNoticeById(noticeId));
 }
+
+export async function updateNoticeImages(noticeId: number, images: File[]): Promise<void> {
+  const formData = new FormData();
+  images.forEach((image) => formData.append('images', image));
+
+  await http.post(ENDPOINTS.adminNoticeImagesById(noticeId), formData);
+}
+
+export async function urlToFile(url: string): Promise<File> {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const filename = url.split('/').pop() || 'image.jpg';
+  return new File([blob], filename, { type: blob.type });
+}

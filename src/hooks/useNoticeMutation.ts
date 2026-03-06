@@ -3,6 +3,7 @@ import {
   createNotice,
   deleteNotice,
   updateNotice,
+  updateNoticeImages,
   type NoticeCreateInput,
   type NoticeUpdateInput,
   type NoticeMutationResponse,
@@ -11,6 +12,33 @@ import {
 export function useNoticeMutation() {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  const mutateUpdateImages = async (
+    noticeId: number,
+    images: File[],
+    options?: {
+      onSuccess?: () => void;
+      onError?: (error: Error) => void;
+    },
+  ) => {
+    try {
+      setIsPending(true);
+      setError(null);
+      await updateNoticeImages(noticeId, images);
+      if (options?.onSuccess) {
+        options.onSuccess();
+      }
+    } catch (err) {
+      const errorObject =
+        err instanceof Error ? err : new Error('이미지 수정 중 오류가 발생했습니다.');
+      setError(errorObject);
+      if (options?.onError) {
+        options.onError(errorObject);
+      }
+    } finally {
+      setIsPending(false);
+    }
+  };
 
   const mutateCreate = async (
     payload: NoticeCreateInput,
@@ -97,6 +125,7 @@ export function useNoticeMutation() {
   return {
     mutateCreate,
     mutateUpdate,
+    mutateUpdateImages,
     mutateDelete,
     isPending,
     error,

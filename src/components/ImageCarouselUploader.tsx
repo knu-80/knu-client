@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, type PanInfo } from 'framer-motion';
 import ImageUploader from './ImageUploader';
 
-interface ImageItem {
+export interface ImageItem {
   id: string;
   previewUrl: string;
   file: File | null;
@@ -10,7 +10,8 @@ interface ImageItem {
 
 interface ImageCarouselUploaderProps {
   initialUrls?: string[];
-  onFilesChange: (files: File[]) => void;
+  onFilesChange?: (files: File[]) => void;
+  onImagesChange?: (items: ImageItem[]) => void;
   maxCount?: number;
   label?: string;
   className?: string;
@@ -20,6 +21,7 @@ interface ImageCarouselUploaderProps {
 export default function ImageCarouselUploader({
   initialUrls = [],
   onFilesChange,
+  onImagesChange,
   maxCount = 5,
   label,
   className = '',
@@ -85,13 +87,23 @@ export default function ImageCarouselUploader({
     }
 
     setItems(newItems);
-    onFilesChange(newItems.map((item) => item.file).filter((f): f is File => f !== null));
+    if (onFilesChange) {
+      onFilesChange(newItems.map((item) => item.file).filter((f): f is File => f !== null));
+    }
+    if (onImagesChange) {
+      onImagesChange(newItems);
+    }
   };
 
   const handleImageDelete = (index: number) => {
     const newItems = items.filter((_, i) => i !== index);
     setItems(newItems);
-    onFilesChange(newItems.map((item) => item.file).filter((f): f is File => f !== null));
+    if (onFilesChange) {
+      onFilesChange(newItems.map((item) => item.file).filter((f): f is File => f !== null));
+    }
+    if (onImagesChange) {
+      onImagesChange(newItems);
+    }
 
     if (currentIndex >= newItems.length && currentIndex > 0) {
       setCurrentIndex(newItems.length);

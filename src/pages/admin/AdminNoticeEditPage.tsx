@@ -3,15 +3,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
-import ImageCarouselUploader from '@/components/ImageCarouselUploader';
+import ImageCarouselUploader, { type ImageItem } from '@/components/ImageCarouselUploader';
 import { useNoticeDetail } from '@/hooks/useNoticeDetail';
 import { useNoticeMutation } from '@/hooks/useNoticeMutation';
-import type { NoticeDetail } from '@/apis/modules/noticeApi';
+import { urlToFile, type NoticeDetail } from '@/apis/modules/noticeApi';
 
 function NoticeEditForm({ notice }: { notice: NoticeDetail }) {
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { mutateUpdate, isPending } = useNoticeMutation();
+  const { mutateUpdate, mutateUpdateImages, isPending } = useNoticeMutation();
 
   const [formData, setFormData] = useState({
     category: (notice.type === 'GENERAL' ? '공지' : '분실물') as '공지' | '분실물',
@@ -21,7 +21,13 @@ function NoticeEditForm({ notice }: { notice: NoticeDetail }) {
     foundLocation: notice.lostFoundDetail?.foundPlace || '',
   });
 
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [allImages, setAllImages] = useState<ImageItem[]>(() =>
+    (notice.imageUrls || []).map((url, index) => ({
+      id: `initial-${index}`,
+      previewUrl: url,
+      file: null,
+    })),
+  );
   const [alertConfig, setAlertConfig] = useState({
     isOpen: false,
     title: '',
@@ -63,36 +69,103 @@ function NoticeEditForm({ notice }: { notice: NoticeDetail }) {
       return;
     }
 
-    const payload = {
-      title,
-      content,
-      ...(category === '분실물' && {
-        lostFoundDetail: {
-          foundPlace: foundLocation,
-          foundItem: itemName,
-        },
-      }),
-    };
+    const isTextChanged =
+      title !== notice.title ||
+      content !== notice.content ||
+      (notice.type === 'LOST_FOUND' &&
+        (itemName !== (notice.lostFoundDetail?.foundItem || '') ||
+          foundLocation !== (notice.lostFoundDetail?.foundPlace || '')));
 
-    await mutateUpdate(notice.noticeId, payload, {
-      onSuccess: () => {
-        console.log('Images to be handled later:', imageFiles);
-        setAlertConfig({
-          isOpen: true,
-          title: '수정 완료',
-          message: '공지사항이 성공적으로 수정되었습니다.',
-          onClose: () => navigate('/admin/notice'),
+    const isImagesChanged =
+      allImages.length !== (notice.imageUrls?.length || 0) ||
+      allImages.some(
+        (item, index) => item.file !== null || item.previewUrl !== notice.imageUrls[index],
+      );
+
+    if (!isTextChanged && !isImagesChanged) {
+      setAlertConfig({
+        isOpen: true,
+        title: '알림',
+        message: '수정된 내용이 없습니다.',
+        onClose: undefined,
+      });
+      return;
+    }
+
+    const handleImageUpdate = async () => {
+      try {
+        const files = await Promise.all(
+          allImages.map(async (item) => {
+            if (item.file) return item.file;
+            return await urlToFile(item.previewUrl);
+          }),
+        );
+
+        await mutateUpdateImages(notice.noticeId, files, {
+          onSuccess: () => {
+            setAlertConfig({
+              isOpen: true,
+              title: '수정 완료',
+              message: '공지사항이 성공적으로 수정되었습니다.',
+              onClose: () => navigate('/admin/notice'),
+            });
+          },
+          onError: (err) => {
+            setAlertConfig({
+              isOpen: true,
+              title: '이미지 수정 실패',
+              message: `오류가 발생했습니다: ${err.message}`,
+              onClose: undefined,
+            });
+          },
         });
-      },
-      onError: (err) => {
+      } catch {
         setAlertConfig({
           isOpen: true,
-          title: '수정 실패',
-          message: `오류가 발생했습니다: ${err.message}`,
+          title: '오류',
+          message: '이미지 처리 중 오류가 발생했습니다.',
           onClose: undefined,
         });
-      },
-    });
+      }
+    };
+
+    if (isTextChanged) {
+      const payload = {
+        title,
+        content,
+        ...(category === '분실물' && {
+          lostFoundDetail: {
+            foundPlace: foundLocation,
+            foundItem: itemName,
+          },
+        }),
+      };
+
+      await mutateUpdate(notice.noticeId, payload, {
+        onSuccess: async () => {
+          if (isImagesChanged) {
+            await handleImageUpdate();
+          } else {
+            setAlertConfig({
+              isOpen: true,
+              title: '수정 완료',
+              message: '공지사항이 성공적으로 수정되었습니다.',
+              onClose: () => navigate('/admin/notice'),
+            });
+          }
+        },
+        onError: (err) => {
+          setAlertConfig({
+            isOpen: true,
+            title: '수정 실패',
+            message: `오류가 발생했습니다: ${err.message}`,
+            onClose: undefined,
+          });
+        },
+      });
+    } else if (isImagesChanged) {
+      await handleImageUpdate();
+    }
   };
 
   const isFormValid = formData.title.trim() !== '' && formData.content.trim() !== '' && !isPending;
@@ -153,7 +226,7 @@ function NoticeEditForm({ notice }: { notice: NoticeDetail }) {
       <ImageCarouselUploader
         label="관련 사진 관리"
         initialUrls={notice.imageUrls || []}
-        onFilesChange={setImageFiles}
+        onImagesChange={setAllImages}
         maxCount={5}
         className="mb-10"
       />

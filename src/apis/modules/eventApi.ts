@@ -16,8 +16,21 @@ export interface EventItem {
   location?: string;
 }
 
-export async function getEventsByType(eventType: EventType): Promise<EventItem[]> {
-  const { data } = await http.get<ApiResponse<EventItem[]>>(ENDPOINTS.eventsByType(eventType));
+export interface EventListParams {
+  day?: string;
+  size?: number;
+  sort?: string;
+  active?: boolean;
+}
+
+export async function getEventsByType(
+  eventType: EventType,
+  params: EventListParams = {},
+): Promise<EventItem[]> {
+  const queryParams = omitUndefined(params as Record<string, unknown>);
+  const { data } = await http.get<ApiResponse<EventItem[]>>(ENDPOINTS.eventsByType(eventType), {
+    params: queryParams,
+  });
 
   return unwrapApiResponse(data);
 }

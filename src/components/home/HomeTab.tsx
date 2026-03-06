@@ -1,7 +1,15 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiChevronRight } from 'react-icons/fi';
 import MapSvg from '@/assets/map.svg';
+import {
+  getBooths,
+  getEventsByType,
+  getNotices,
+  toNoticeLabel,
+  type EventItem,
+  type NoticeListItem,
+} from '@/apis';
 
 type DayKey = 'day1' | 'day2';
 
@@ -9,6 +17,7 @@ type DayOption = {
   key: DayKey;
   label: string;
   date: string;
+  queryDate: string;
 };
 
 type DayContent = {
@@ -25,8 +34,8 @@ type DayContent = {
 };
 
 const DAY_OPTIONS: DayOption[] = [
-  { key: 'day1', label: 'DAY 1', date: '03.16' },
-  { key: 'day2', label: 'DAY 2', date: '03.17' },
+  { key: 'day1', label: 'DAY 1', date: '03.16', queryDate: '2026-03-16' },
+  { key: 'day2', label: 'DAY 2', date: '03.17', queryDate: '2026-03-17' },
 ];
 
 const DAY_CONTENT: Record<DayKey, DayContent> = {
@@ -104,6 +113,45 @@ const DAY_CONTENT: Record<DayKey, DayContent> = {
   },
 };
 
+function getDatePart(value: string): string {
+  const [datePart] = value.split('T');
+  return datePart ?? '';
+}
+
+function toDotDate(value: string): string {
+  const datePart = getDatePart(value);
+  const [, month = '00', day = '00'] = datePart.split('-');
+  return `${month}.${day}`;
+}
+
+function toTimeRange(startAt: string, endAt: string): string {
+  const startTime = startAt.split('T')[1]?.slice(0, 5) ?? '--:--';
+  const endTime = endAt.split('T')[1]?.slice(0, 5) ?? '--:--';
+  return `${startTime} - ${endTime}`;
+}
+
+function mapEventsToPreview(
+  items: EventItem[],
+  targetDate: string,
+): DayContent['timetablePreview'] {
+  const filtered = items.filter((item) => getDatePart(item.startAt) === targetDate);
+  const source = filtered.length > 0 ? filtered : items;
+
+  return source.slice(0, 3).map((item) => ({
+    time: toTimeRange(item.startAt, item.endAt),
+    title: item.title,
+    location: item.location ?? '행사 장소 안내 준비중',
+  }));
+}
+
+function mapNoticesToPreview(items: NoticeListItem[]): DayContent['noticePreview'] {
+  return items.slice(0, 3).map((item) => ({
+    category: toNoticeLabel(item.type),
+    title: item.title,
+    date: toDotDate(item.createdAt),
+  }));
+}
+
 function SectionHeader({ title, to, label }: { title: string; to: string; label: string }) {
   return (
     <div className="mb-3 flex items-center justify-between">
@@ -122,9 +170,11 @@ function SectionHeader({ title, to, label }: { title: string; to: string; label:
 function TimeTablePreviewCard({
   dayLabel,
   items,
+  isLoading,
 }: {
   dayLabel: string;
   items: DayContent['timetablePreview'];
+  isLoading: boolean;
 }) {
   return (
     <div className="rounded-3xl bg-knu-mint/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
@@ -136,18 +186,28 @@ function TimeTablePreviewCard({
       </div>
 
       <div className="space-y-2">
-        {items.map((item) => (
-          <div
-            key={`${item.time}-${item.title}`}
-            className="grid grid-cols-[56px_1fr] gap-3 rounded-2xl bg-white/85 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
-          >
-            <p className="text-sm font-semibold text-knu-lavender">{item.time}</p>
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-knu-gray">{item.title}</p>
-              <p className="mt-1 truncate text-xs text-text-muted">{item.location}</p>
-            </div>
+        {isLoading ? (
+          <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
+            타임테이블 데이터를 불러오는 중입니다...
           </div>
-        ))}
+        ) : items.length > 0 ? (
+          items.map((item) => (
+            <div
+              key={`${item.time}-${item.title}`}
+              className="grid grid-cols-[90px_1fr] gap-3 rounded-2xl bg-white/85 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
+            >
+              <p className="text-sm font-semibold text-knu-lavender">{item.time}</p>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-knu-gray">{item.title}</p>
+                <p className="mt-1 truncate text-xs text-text-muted">{item.location}</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
+            등록된 타임테이블이 없습니다.
+          </div>
+        )}
       </div>
 
       <p className="mt-3 text-xs text-text-muted">
@@ -160,9 +220,11 @@ function TimeTablePreviewCard({
 function NoticePreviewCard({
   dayLabel,
   items,
+  isLoading,
 }: {
   dayLabel: string;
   items: DayContent['noticePreview'];
+  isLoading: boolean;
 }) {
   return (
     <div className="rounded-3xl bg-knu-lavender/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
@@ -174,26 +236,36 @@ function NoticePreviewCard({
       </div>
 
       <div className="space-y-2">
-        {items.map((item) => (
-          <div
-            key={`${item.date}-${item.category}-${item.title}`}
-            className="flex items-start justify-between gap-3 rounded-2xl bg-white/85 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
-          >
-            <div className="min-w-0">
-              <span
-                className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
-                  item.category === '공지'
-                    ? 'bg-knu-red/10 text-knu-red'
-                    : 'bg-knu-lavender/15 text-knu-lavender'
-                }`}
-              >
-                {item.category}
-              </span>
-              <p className="mt-2 truncate text-sm font-semibold text-knu-gray">{item.title}</p>
-            </div>
-            <span className="shrink-0 text-xs font-medium text-gray-500">{item.date}</span>
+        {isLoading ? (
+          <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
+            공지사항 데이터를 불러오는 중입니다...
           </div>
-        ))}
+        ) : items.length > 0 ? (
+          items.map((item) => (
+            <div
+              key={`${item.date}-${item.category}-${item.title}`}
+              className="flex items-start justify-between gap-3 rounded-2xl bg-white/85 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
+            >
+              <div className="min-w-0">
+                <span
+                  className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
+                    item.category === '공지'
+                      ? 'bg-knu-red/10 text-knu-red'
+                      : 'bg-knu-lavender/15 text-knu-lavender'
+                  }`}
+                >
+                  {item.category}
+                </span>
+                <p className="mt-2 truncate text-sm font-semibold text-knu-gray">{item.title}</p>
+              </div>
+              <span className="shrink-0 text-xs font-medium text-gray-500">{item.date}</span>
+            </div>
+          ))
+        ) : (
+          <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
+            등록된 공지사항이 없습니다.
+          </div>
+        )}
       </div>
 
       <p className="mt-3 text-xs text-text-muted">
@@ -203,7 +275,7 @@ function NoticePreviewCard({
   );
 }
 
-function MapPreviewCard() {
+function MapPreviewCard({ boothCount }: { boothCount: number | null }) {
   return (
     <Link
       to="/map"
@@ -230,7 +302,9 @@ function MapPreviewCard() {
             전체 배치도에서 부스 위치를 확인하고 탐색할 수 있어요.
           </p>
         </div>
-        <span className="mt-0.5 shrink-0 text-sm font-semibold text-knu-lavender">OPEN</span>
+        <span className="mt-0.5 shrink-0 text-sm font-semibold text-knu-lavender">
+          {boothCount === null ? 'OPEN' : `${boothCount}개`}
+        </span>
       </div>
     </Link>
   );
@@ -238,8 +312,104 @@ function MapPreviewCard() {
 
 export default function HomeTab() {
   const [activeDay, setActiveDay] = useState<DayKey>('day1');
+  const [contentByDay, setContentByDay] = useState<Record<DayKey, DayContent>>(DAY_CONTENT);
+  const [loadingByDay, setLoadingByDay] = useState<Record<DayKey, boolean>>({
+    day1: false,
+    day2: false,
+  });
+  const [boothCount, setBoothCount] = useState<number | null>(null);
 
-  const activeContent = useMemo(() => DAY_CONTENT[activeDay], [activeDay]);
+  const activeContent = useMemo(() => contentByDay[activeDay], [activeDay, contentByDay]);
+  const activeOption = useMemo(
+    () => DAY_OPTIONS.find((day) => day.key === activeDay) ?? DAY_OPTIONS[0],
+    [activeDay],
+  );
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchBoothSummary = async () => {
+      try {
+        const booths = await getBooths({ isActive: true });
+        if (!isMounted) {
+          return;
+        }
+        const activeBoothCount = booths.filter((booth) => booth.isActive).length;
+        setBoothCount(activeBoothCount);
+      } catch {
+        if (isMounted) {
+          setBoothCount(null);
+        }
+      }
+    };
+
+    void fetchBoothSummary();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchDayContent = async () => {
+      setLoadingByDay((prev) => ({ ...prev, [activeDay]: true }));
+
+      try {
+        const [events, notices] = await Promise.all([
+          getEventsByType('RECRUITMENT', {
+            day: activeOption.queryDate,
+            size: 6,
+            sort: 'startAt,asc',
+            active: true,
+          }),
+          getNotices({
+            day: activeOption.queryDate,
+            size: 6,
+            sort: 'createdAt,desc',
+          }),
+        ]);
+
+        if (!isMounted) {
+          return;
+        }
+
+        const timetablePreview = mapEventsToPreview(events, activeOption.queryDate);
+        const noticePreview = mapNoticesToPreview(notices);
+
+        setContentByDay((prev) => ({
+          ...prev,
+          [activeDay]: {
+            timetablePreview:
+              timetablePreview.length > 0
+                ? timetablePreview
+                : DAY_CONTENT[activeDay].timetablePreview,
+            noticePreview:
+              noticePreview.length > 0 ? noticePreview : DAY_CONTENT[activeDay].noticePreview,
+          },
+        }));
+      } catch {
+        if (!isMounted) {
+          return;
+        }
+        setContentByDay((prev) => ({
+          ...prev,
+          [activeDay]: DAY_CONTENT[activeDay],
+        }));
+      } finally {
+        if (isMounted) {
+          setLoadingByDay((prev) => ({ ...prev, [activeDay]: false }));
+        }
+      }
+    };
+
+    void fetchDayContent();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeDay, activeOption.queryDate]);
 
   return (
     <section aria-labelledby="home-day-toggle-title" className="rounded-t-[28px] bg-white pt-3">
@@ -291,7 +461,7 @@ export default function HomeTab() {
           <div id="home-map-preview-title" className="sr-only">
             부스 배치도 미리보기
           </div>
-          <MapPreviewCard />
+          <MapPreviewCard boothCount={boothCount} />
         </section>
 
         <section aria-labelledby="home-timetable-title">
@@ -299,6 +469,7 @@ export default function HomeTab() {
           <TimeTablePreviewCard
             dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
             items={activeContent.timetablePreview}
+            isLoading={loadingByDay[activeDay]}
           />
         </section>
 
@@ -307,6 +478,7 @@ export default function HomeTab() {
           <NoticePreviewCard
             dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
             items={activeContent.noticePreview}
+            isLoading={loadingByDay[activeDay]}
           />
         </section>
       </div>

@@ -26,6 +26,9 @@ export interface BoothSummary {
 
 export interface BoothListParams {
   keyword?: string;
+  division?: BoothDivision;
+  isActive?: boolean;
+  size?: number;
 }
 
 export interface BoothMutationInput {

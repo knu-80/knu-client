@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 
 import MainLayout from '@/components/layouts/MainLayout';
@@ -20,8 +20,11 @@ import AdminNoticePage from '@/pages/admin/AdminNoticePage';
 import AdminEventPage from '@/pages/admin/AdminEventPage';
 import AdminPubPage from '@/pages/admin/AdminPubPage';
 import AdminLayout from '@/components/layouts/AdminLayout';
+import AdminSessionGuard from '@/components/guards/AdminSessionGuard';
 import EventPage from '@/pages/EventPage';
 import TimeTablePage from '@/pages/TimeTablePage';
+import { setUnauthorizedHandler } from '@/apis';
+import { useAdminSessionStore } from '@/stores/adminSessionStore';
 import SearchPage from './pages/SearchPage';
 import SearchResultPage from '@/pages/SearchResultPage';
 import SplashScreen from '@/components/home/SplashScreen';
@@ -30,6 +33,10 @@ const SPLASH_DURATION_MS = 1500;
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const bootstrapSession = useAdminSessionStore((state) => state.bootstrapSession);
+  const setUnauthenticated = useAdminSessionStore((state) => state.setUnauthenticated);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -40,6 +47,29 @@ function App() {
       window.clearTimeout(timer);
     };
   }, []);
+
+  useEffect(() => {
+    void bootstrapSession();
+  }, [bootstrapSession]);
+
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      setUnauthenticated();
+
+      const isAdminPath = location.pathname.startsWith('/admin');
+      const isLoginPath = location.pathname === '/admin/login';
+      if (!isAdminPath || isLoginPath) {
+        return;
+      }
+
+      const redirect = `${location.pathname}${location.search}${location.hash}`;
+      navigate(`/admin/login?redirect=${encodeURIComponent(redirect)}`, { replace: true });
+    });
+
+    return () => {
+      setUnauthorizedHandler(null);
+    };
+  }, [location.hash, location.pathname, location.search, navigate, setUnauthenticated]);
 
   if (isLoading) {
     return <SplashScreen />;
@@ -58,13 +88,14 @@ function App() {
         <Route element={<MapLayout />}>
           <Route path="/map" element={<MapPage />} />
         </Route>
+        <Route path="/admin/login" element={<LoginPage />} />
+        <Route element={<AdminSessionGuard />}></Route>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminHomePage />} />
           <Route path="notice" element={<AdminNoticePage />} />
           <Route path="event" element={<AdminEventPage />} />
           <Route path="pub" element={<AdminPubPage />} />
         </Route>
-        <Route path="/admin/login" element={<LoginPage />} />
         <Route element={<AdminLayout title="공지사항 상세" fallbackPath="/admin/notice" />}>
           <Route path="/admin/notice/:id" element={<AdminNoticeDetailPage />} />
         </Route>

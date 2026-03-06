@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { FiChevronRight } from 'react-icons/fi';
 import MapSvg from '@/assets/map.svg';
 import {
-  getBooths,
   getEventsByType,
   getNotices,
   toNoticeLabel,
@@ -275,7 +274,7 @@ function NoticePreviewCard({
   );
 }
 
-function MapPreviewCard({ boothCount }: { boothCount: number | null }) {
+function MapPreviewCard() {
   return (
     <Link
       to="/map"
@@ -302,9 +301,7 @@ function MapPreviewCard({ boothCount }: { boothCount: number | null }) {
             전체 배치도에서 부스 위치를 확인하고 탐색할 수 있어요.
           </p>
         </div>
-        <span className="mt-0.5 shrink-0 text-sm font-semibold text-knu-lavender">
-          {boothCount === null ? 'OPEN' : `${boothCount}개`}
-        </span>
+        <span className="mt-0.5 shrink-0 text-sm font-semibold text-knu-lavender">OPEN</span>
       </div>
     </Link>
   );
@@ -317,38 +314,12 @@ export default function HomeTab() {
     day1: false,
     day2: false,
   });
-  const [boothCount, setBoothCount] = useState<number | null>(null);
 
   const activeContent = useMemo(() => contentByDay[activeDay], [activeDay, contentByDay]);
   const activeOption = useMemo(
     () => DAY_OPTIONS.find((day) => day.key === activeDay) ?? DAY_OPTIONS[0],
     [activeDay],
   );
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchBoothSummary = async () => {
-      try {
-        const booths = await getBooths({ isActive: true });
-        if (!isMounted) {
-          return;
-        }
-        const activeBoothCount = booths.filter((booth) => booth.isActive).length;
-        setBoothCount(activeBoothCount);
-      } catch {
-        if (isMounted) {
-          setBoothCount(null);
-        }
-      }
-    };
-
-    void fetchBoothSummary();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -461,7 +432,7 @@ export default function HomeTab() {
           <div id="home-map-preview-title" className="sr-only">
             부스 배치도 미리보기
           </div>
-          <MapPreviewCard boothCount={boothCount} />
+          <MapPreviewCard />
         </section>
 
         <section aria-labelledby="home-timetable-title">

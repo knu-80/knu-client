@@ -10,8 +10,8 @@ export function ClubCategory({ division }: ClubCategoryProps) {
 
   return (
     <div className="flex items-center space-x-1">
-      <div className={`w-3 h-3 rounded-full ${info.color}`}></div>
-      <p className="typo-body-1">{info.name}</p>
+      <div className={`w-2 h-2 rounded-full ${info.color}`}></div>
+      <p className="typo-body-3">{info.name}</p>
     </div>
   );
 }

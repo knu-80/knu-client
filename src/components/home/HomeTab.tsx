@@ -7,6 +7,7 @@ import {
   PERFORMANCE_PREVIEW_BY_DAY,
   PERFORMANCE_TIMELINE_BY_DAY,
   type DayKey,
+  type PerformanceTimelineItem,
 } from '@/constants/performanceTimetable';
 
 type DayOption = {
@@ -17,11 +18,7 @@ type DayOption = {
 };
 
 type DayContent = {
-  timetablePreview: {
-    time: string;
-    title: string;
-    location: string;
-  }[];
+  timetablePreview: PerformanceTimelineItem[];
   noticePreview: {
     category: '공지' | '분실물';
     title: string;
@@ -139,6 +136,9 @@ function TimeTablePreviewCard({
               <p className="text-sm font-semibold text-knu-gold">{item.time}</p>
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-knu-gray">{item.title}</p>
+                <p className="mt-1 truncate text-xs font-medium text-knu-gray/70">
+                  {item.sessionLabel}
+                </p>
                 <p className="mt-1 truncate text-xs text-text-muted">{item.location}</p>
               </div>
             </div>
@@ -177,14 +177,14 @@ function NoticePreviewCard({
 
       <div className="space-y-2">
         {isLoading ? (
-          <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted ">
+          <div className="rounded-2xl bg-white px-3 py-3 text-sm text-text-muted">
             공지사항 데이터를 불러오는 중입니다...
           </div>
         ) : items.length > 0 ? (
           items.map((item) => (
             <div
               key={`${item.date}-${item.category}-${item.title}`}
-              className="flex items-start justify-between gap-3 rounded-2xl bg-white/85 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
+              className="flex items-start justify-between gap-3 rounded-2xl border border-knu-silver/45 bg-knu-silver/10 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
             >
               <div className="min-w-0">
                 <span
@@ -202,7 +202,7 @@ function NoticePreviewCard({
             </div>
           ))
         ) : (
-          <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
+          <div className="rounded-2xl bg-white px-3 py-3 text-sm text-text-muted">
             등록된 공지사항이 없습니다.
           </div>
         )}
@@ -314,49 +314,47 @@ export default function HomeTab() {
   }, [activeDay, activeOption.queryDate]);
 
   return (
-    <section aria-labelledby="home-day-toggle-title" className="rounded-t-[28px] pt-3">
+    <section aria-labelledby="home-day-toggle-title" className="rounded-t-[28px]">
       <h2 id="home-day-toggle-title" className="sr-only">
         가두모집 날짜별 홈 안내
       </h2>
 
-      <div className="">
-        <div
-          role="tablist"
-          aria-label="가두모집 날짜 선택"
-          className="grid grid-cols-2 gap-2 sm:gap-3"
-        >
-          {DAY_OPTIONS.map((day) => {
-            const isActive = activeDay === day.key;
+      <div
+        role="tablist"
+        aria-label="가두모집 날짜 선택"
+        className="grid grid-cols-2 gap-2 sm:gap-3"
+      >
+        {DAY_OPTIONS.map((day) => {
+          const isActive = activeDay === day.key;
 
-            return (
-              <button
-                key={day.key}
-                id={`home-day-tab-${day.key}`}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                aria-controls={`home-day-panel-${day.key}`}
-                onClick={() => setActiveDay(day.key)}
-                className={`rounded-full px-3 py-2.5 text-sm font-semibold transition-all ${
-                  isActive
-                    ? 'bg-knu-red text-white shadow-[0_6px_14px_rgba(230,0,0,0.28)]'
-                    : 'bg-white text-knu-gray shadow-[inset_0_0_0_1px_rgba(204,204,204,0.9)] hover:text-knu-gold hover:shadow-[inset_0_0_0_1px_rgba(191,124,38,0.5)]'
-                }`}
-              >
-                <span className="whitespace-nowrap">
-                  {day.label} <span className="ml-1">{day.date}</span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
+          return (
+            <button
+              key={day.key}
+              id={`home-day-tab-${day.key}`}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={`home-day-panel-${day.key}`}
+              onClick={() => setActiveDay(day.key)}
+              className={`rounded-full px-3 py-2.5 text-sm font-semibold transition-all ${
+                isActive
+                  ? 'bg-knu-red text-white shadow-[0_6px_14px_rgba(230,0,0,0.28)]'
+                  : 'bg-white text-knu-gray shadow-[inset_0_0_0_1px_rgba(204,204,204,0.9)] hover:text-knu-gold hover:shadow-[inset_0_0_0_1px_rgba(191,124,38,0.5)]'
+              }`}
+            >
+              <span className="whitespace-nowrap">
+                {day.label} <span className="ml-1">{day.date}</span>
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       <div
         id={`home-day-panel-${activeDay}`}
         role="tabpanel"
         aria-labelledby={`home-day-tab-${activeDay}`}
-        className="space-y-14 pt-6"
+        className="space-y-14 pt-10"
       >
         <section aria-labelledby="home-map-preview-title">
           <SectionHeader title="부스 배치도" to="/map" label="더보기" />

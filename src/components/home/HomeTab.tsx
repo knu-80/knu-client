@@ -98,7 +98,7 @@ function SectionHeader({ title, to, label }: { title: string; to: string; label:
       <h3 className="typo-heading-2 text-knu-gray">{title}</h3>
       <Link
         to={to}
-        className="inline-flex items-center gap-1 text-sm font-semibold text-gray-400 transition hover:text-knu-lavender"
+        className="inline-flex items-center gap-1 text-sm font-semibold text-knu-gray/75 transition hover:text-knu-red"
       >
         {label}
         <FiChevronRight className="h-4 w-4" aria-hidden="true" />
@@ -115,7 +115,7 @@ function TimeTablePreviewCard({
   items: DayContent['timetablePreview'];
 }) {
   return (
-    <div className="rounded-3xl bg-knu-mint/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
+    <div className="rounded-3xl border border-knu-gold/25 bg-knu-gold/10 p-4 shadow-[0_3px_10px_rgba(15,23,42,0.05)]">
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-knu-gray">{dayLabel} 타임테이블 미리보기</p>
       </div>
@@ -127,7 +127,7 @@ function TimeTablePreviewCard({
               key={`${item.time}-${item.title}`}
               className="grid grid-cols-[90px_1fr] gap-3 rounded-2xl bg-white/85 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
             >
-              <p className="text-sm font-semibold text-knu-lavender">{item.time}</p>
+              <p className="text-sm font-semibold text-knu-gold">{item.time}</p>
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-knu-gray">{item.title}</p>
                 <p className="mt-1 truncate text-xs text-text-muted">{item.location}</p>
@@ -158,17 +158,17 @@ function NoticePreviewCard({
   isLoading: boolean;
 }) {
   return (
-    <div className="rounded-3xl bg-knu-lavender/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
+    <div className="rounded-3xl border border-knu-silver/65  p-4 shadow-[0_3px_10px_rgba(15,23,42,0.05)]">
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-knu-gray">{dayLabel} 공지 미리보기</p>
-        <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-knu-lavender">
+        <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-knu-gold">
           최신 순
         </span>
       </div>
 
       <div className="space-y-2">
         {isLoading ? (
-          <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
+          <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted ">
             공지사항 데이터를 불러오는 중입니다...
           </div>
         ) : items.length > 0 ? (
@@ -182,7 +182,7 @@ function NoticePreviewCard({
                   className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
                     item.category === '공지'
                       ? 'bg-knu-red/10 text-knu-red'
-                      : 'bg-knu-lavender/15 text-knu-lavender'
+                      : 'bg-knu-gray/15 text-knu-gray'
                   }`}
                 >
                   {item.category}
@@ -210,10 +210,10 @@ function MapPreviewCard() {
   return (
     <Link
       to="/map"
-      className="group block overflow-hidden rounded-3xl bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)] transition hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
+      className="group block overflow-hidden rounded-3xl border border-knu-silver/65 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)] transition hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
       aria-label="부스 배치도 지도 페이지로 이동"
     >
-      <div className="relative h-36 overflow-hidden bg-gray-100">
+      <div className="relative h-36 overflow-hidden bg-gray-100]">
         <img
           src={MapSvg}
           alt=""
@@ -221,7 +221,7 @@ function MapPreviewCard() {
           className="h-full w-full object-cover object-top opacity-85 transition duration-200 group-hover:scale-[1.02]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
-        <div className="absolute bottom-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-knu-lavender">
+        <div className="absolute bottom-3 left-3 rounded-full bg-white/95 px-2.5 py-1 text-xs font-semibold text-knu-red">
           탭하여 지도 보기
         </div>
       </div>
@@ -233,7 +233,7 @@ function MapPreviewCard() {
             전체 배치도에서 부스 위치를 확인하고 탐색할 수 있어요.
           </p>
         </div>
-        <span className="mt-0.5 shrink-0 text-sm font-semibold text-knu-lavender">OPEN</span>
+        <span className="mt-0.5 shrink-0 text-sm font-semibold text-knu-red">OPEN</span>
       </div>
     </Link>
   );
@@ -305,7 +305,7 @@ export default function HomeTab() {
   }, [activeDay, activeOption.queryDate]);
 
   return (
-    <section aria-labelledby="home-day-toggle-title" className="rounded-t-[28px] bg-white pt-2">
+    <section aria-labelledby="home-day-toggle-title" className="rounded-t-[28px] pt-2">
       <h2 id="home-day-toggle-title" className="sr-only">
         가두모집 날짜별 홈 안내
       </h2>
@@ -330,8 +330,8 @@ export default function HomeTab() {
                 onClick={() => setActiveDay(day.key)}
                 className={`rounded-full px-3 py-2.5 text-sm font-semibold transition-all ${
                   isActive
-                    ? 'bg-knu-lavender text-white shadow-md'
-                    : 'bg-knu-lavender/10 text-knu-lavender shadow-[inset_0_0_0_1px_rgba(172,172,230,0.22)]'
+                    ? 'bg-knu-red text-white shadow-[0_6px_14px_rgba(230,0,0,0.28)]'
+                    : 'bg-white text-knu-gray shadow-[inset_0_0_0_1px_rgba(204,204,204,0.9)] hover:shadow-[inset_0_0_0_1px_rgba(191,124,38,0.5)]'
                 }`}
               >
                 <span className="whitespace-nowrap">

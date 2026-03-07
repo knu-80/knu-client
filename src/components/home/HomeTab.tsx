@@ -20,6 +20,7 @@ type DayOption = {
 type DayContent = {
   timetablePreview: PerformanceTimelineItem[];
   noticePreview: {
+    noticeId?: number;
     category: '공지' | '분실물';
     title: string;
     date: string;
@@ -36,16 +37,19 @@ const DAY_CONTENT: Record<DayKey, DayContent> = {
     timetablePreview: PERFORMANCE_PREVIEW_BY_DAY.day1,
     noticePreview: [
       {
+        noticeId: undefined,
         category: '공지',
         title: '1일차 운영 시간 및 우천 시 안내',
         date: '03.16',
       },
       {
+        noticeId: undefined,
         category: '공지',
         title: '백양로 일부 구간 동선 안내',
         date: '03.16',
       },
       {
+        noticeId: undefined,
         category: '분실물',
         title: '현장 분실물 접수 위치 안내',
         date: '03.16',
@@ -56,16 +60,19 @@ const DAY_CONTENT: Record<DayKey, DayContent> = {
     timetablePreview: PERFORMANCE_PREVIEW_BY_DAY.day2,
     noticePreview: [
       {
+        noticeId: undefined,
         category: '공지',
         title: '2일차 부스 위치 업데이트 안내',
         date: '03.17',
       },
       {
+        noticeId: undefined,
         category: '공지',
         title: '프로그램 시간 변경 공지',
         date: '03.17',
       },
       {
+        noticeId: undefined,
         category: '분실물',
         title: '분실물 보관 현황 업데이트',
         date: '03.17',
@@ -87,6 +94,7 @@ function toDotDate(value: string): string {
 
 function mapNoticesToPreview(items: NoticeListItem[]): DayContent['noticePreview'] {
   return items.slice(0, 3).map((item) => ({
+    noticeId: item.noticeId,
     category: toNoticeLabel(item.type),
     title: item.title,
     date: toDotDate(item.createdAt),
@@ -129,9 +137,11 @@ function TimeTablePreviewCard({
       <div className="space-y-2">
         {items.length > 0 ? (
           items.map((item) => (
-            <div
+            <Link
               key={`${item.time}-${item.title}`}
-              className="grid grid-cols-[96px_1fr] gap-3 rounded-2xl border border-knu-silver/50 bg-knu-gold/5 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
+              to="/timetable"
+              aria-label={`${item.title} 상세 타임테이블로 이동`}
+              className="grid grid-cols-[96px_1fr] gap-3 rounded-2xl border border-knu-silver/50 bg-knu-gold/5 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition hover:border-knu-gold/60 hover:bg-knu-gold/10"
             >
               <p className="text-sm font-semibold text-knu-gold">{item.time}</p>
               <div className="min-w-0">
@@ -141,7 +151,7 @@ function TimeTablePreviewCard({
                 </p>
                 <p className="mt-1 truncate text-xs text-text-muted">{item.location}</p>
               </div>
-            </div>
+            </Link>
           ))
         ) : (
           <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
@@ -182,9 +192,11 @@ function NoticePreviewCard({
           </div>
         ) : items.length > 0 ? (
           items.map((item) => (
-            <div
+            <Link
               key={`${item.date}-${item.category}-${item.title}`}
-              className="flex items-start justify-between gap-3 rounded-2xl border border-knu-silver/45 bg-knu-silver/10 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
+              to={item.noticeId ? `/notice/${item.noticeId}` : '/notice'}
+              aria-label={`${item.title} 상세 공지로 이동`}
+              className="flex items-start justify-between gap-3 rounded-2xl border border-knu-silver/45 bg-knu-silver/10 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition hover:border-knu-gold/60 hover:bg-knu-silver/20"
             >
               <div className="min-w-0">
                 <span
@@ -199,7 +211,7 @@ function NoticePreviewCard({
                 <p className="mt-2 truncate text-sm font-semibold text-knu-gray">{item.title}</p>
               </div>
               <span className="shrink-0 text-xs font-medium text-gray-500">{item.date}</span>
-            </div>
+            </Link>
           ))
         ) : (
           <div className="rounded-2xl bg-white px-3 py-3 text-sm text-text-muted">

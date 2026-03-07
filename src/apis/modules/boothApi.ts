@@ -20,7 +20,7 @@ export interface BoothSummary {
   division: BoothDivision;
   description: string;
   applyLink: string;
-  imageUrl: string | null;
+  imageUrls: string[];
   isActive: boolean;
 }
 
@@ -35,7 +35,7 @@ export interface BoothMutationInput {
   division: BoothDivision;
   description?: string;
   applyLink?: string;
-  imageUrl?: string | null;
+  imageUrls?: string[];
   isActive?: boolean;
 }
 
@@ -67,7 +67,7 @@ export async function updateBooth(
 ): Promise<BoothSummary> {
   const patchPayload = omitUndefined(payload);
   const { data } = await http.patch<ApiResponse<BoothSummary>>(
-    ENDPOINTS.adminBoothById(boothId),
+    ENDPOINTS.adminUpdateBoothById(boothId),
     patchPayload,
   );
 

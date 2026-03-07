@@ -123,7 +123,10 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
   };
 
   const isFormValid =
-    formData.name.trim() !== '' && formData.description.trim() !== '' && !isSubmitting;
+    formData.name.trim() !== '' &&
+    formData.description.trim() !== '' &&
+    formData.applyUrl.trim() !== '' &&
+    !isSubmitting;
 
   return (
     <div className="pt-5 pb-24 px-1">

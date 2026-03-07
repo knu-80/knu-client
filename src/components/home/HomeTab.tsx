@@ -2,15 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiChevronRight } from 'react-icons/fi';
 import MapSvg from '@/assets/map.svg';
-import {
-  getEventsByType,
-  getNotices,
-  toNoticeLabel,
-  type EventItem,
-  type NoticeListItem,
-} from '@/apis';
-
-type DayKey = 'day1' | 'day2';
+import { getNotices, toNoticeLabel, type NoticeListItem } from '@/apis';
+import { PERFORMANCE_TIMELINE_BY_DAY, type DayKey } from '@/constants/performanceTimetable';
 
 type DayOption = {
   key: DayKey;
@@ -39,23 +32,7 @@ const DAY_OPTIONS: DayOption[] = [
 
 const DAY_CONTENT: Record<DayKey, DayContent> = {
   day1: {
-    timetablePreview: [
-      {
-        time: '11:00',
-        title: '운영 시작 안내',
-        location: '백양로 메인 구간',
-      },
-      {
-        time: '12:00',
-        title: '동아리 공연 1부',
-        location: '백양로 메인 무대',
-      },
-      {
-        time: '14:00',
-        title: '참여형 이벤트',
-        location: '일청담 광장',
-      },
-    ],
+    timetablePreview: PERFORMANCE_TIMELINE_BY_DAY.day1,
     noticePreview: [
       {
         category: '공지',
@@ -75,23 +52,7 @@ const DAY_CONTENT: Record<DayKey, DayContent> = {
     ],
   },
   day2: {
-    timetablePreview: [
-      {
-        time: '11:00',
-        title: '2일차 운영 시작',
-        location: '백양로 메인 구간',
-      },
-      {
-        time: '12:30',
-        title: '동아리 공연 2부',
-        location: '백양로 메인 무대',
-      },
-      {
-        time: '15:00',
-        title: '모집 상담 집중 시간',
-        location: '백양로 · 일정담',
-      },
-    ],
+    timetablePreview: PERFORMANCE_TIMELINE_BY_DAY.day2,
     noticePreview: [
       {
         category: '공지',
@@ -123,26 +84,6 @@ function toDotDate(value: string): string {
   return `${month}.${day}`;
 }
 
-function toTimeRange(startAt: string, endAt: string): string {
-  const startTime = startAt.split('T')[1]?.slice(0, 5) ?? '--:--';
-  const endTime = endAt.split('T')[1]?.slice(0, 5) ?? '--:--';
-  return `${startTime} - ${endTime}`;
-}
-
-function mapEventsToPreview(
-  items: EventItem[],
-  targetDate: string,
-): DayContent['timetablePreview'] {
-  const filtered = items.filter((item) => getDatePart(item.startAt) === targetDate);
-  const source = filtered.length > 0 ? filtered : items;
-
-  return source.slice(0, 3).map((item) => ({
-    time: toTimeRange(item.startAt, item.endAt),
-    title: item.title,
-    location: item.location ?? '행사 장소 안내 준비중',
-  }));
-}
-
 function mapNoticesToPreview(items: NoticeListItem[]): DayContent['noticePreview'] {
   return items.slice(0, 3).map((item) => ({
     category: toNoticeLabel(item.type),
@@ -169,27 +110,21 @@ function SectionHeader({ title, to, label }: { title: string; to: string; label:
 function TimeTablePreviewCard({
   dayLabel,
   items,
-  isLoading,
 }: {
   dayLabel: string;
   items: DayContent['timetablePreview'];
-  isLoading: boolean;
 }) {
   return (
     <div className="rounded-3xl bg-knu-mint/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-knu-gray">{dayLabel} 타임테이블 미리보기</p>
         <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-knu-lavender">
-          일부 항목
+          임시 데이터
         </span>
       </div>
 
       <div className="space-y-2">
-        {isLoading ? (
-          <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
-            타임테이블 데이터를 불러오는 중입니다...
-          </div>
-        ) : items.length > 0 ? (
+        {items.length > 0 ? (
           items.map((item) => (
             <div
               key={`${item.time}-${item.title}`}
@@ -210,7 +145,7 @@ function TimeTablePreviewCard({
       </div>
 
       <p className="mt-3 text-xs text-text-muted">
-        상세 시간표 및 변경 사항은 타임테이블 더보기에서 확인해주세요.
+        공연 타임테이블 확정 전까지 임시 데이터를 표시합니다.
       </p>
     </div>
   );
@@ -310,7 +245,7 @@ function MapPreviewCard() {
 export default function HomeTab() {
   const [activeDay, setActiveDay] = useState<DayKey>('day1');
   const [contentByDay, setContentByDay] = useState<Record<DayKey, DayContent>>(DAY_CONTENT);
-  const [loadingByDay, setLoadingByDay] = useState<Record<DayKey, boolean>>({
+  const [noticeLoadingByDay, setNoticeLoadingByDay] = useState<Record<DayKey, boolean>>({
     day1: false,
     day2: false,
   });
@@ -324,38 +259,25 @@ export default function HomeTab() {
   useEffect(() => {
     let isMounted = true;
 
-    const fetchDayContent = async () => {
-      setLoadingByDay((prev) => ({ ...prev, [activeDay]: true }));
+    const fetchNoticePreview = async () => {
+      setNoticeLoadingByDay((prev) => ({ ...prev, [activeDay]: true }));
 
       try {
-        const [events, notices] = await Promise.all([
-          getEventsByType('RECRUITMENT', {
-            day: activeOption.queryDate,
-            size: 6,
-            sort: 'startAt,asc',
-            active: true,
-          }),
-          getNotices({
-            day: activeOption.queryDate,
-            size: 6,
-            sort: 'createdAt,desc',
-          }),
-        ]);
+        const notices = await getNotices({
+          day: activeOption.queryDate,
+          size: 6,
+          sort: 'createdAt,desc',
+        });
 
         if (!isMounted) {
           return;
         }
 
-        const timetablePreview = mapEventsToPreview(events, activeOption.queryDate);
         const noticePreview = mapNoticesToPreview(notices);
-
         setContentByDay((prev) => ({
           ...prev,
           [activeDay]: {
-            timetablePreview:
-              timetablePreview.length > 0
-                ? timetablePreview
-                : DAY_CONTENT[activeDay].timetablePreview,
+            timetablePreview: PERFORMANCE_TIMELINE_BY_DAY[activeDay],
             noticePreview:
               noticePreview.length > 0 ? noticePreview : DAY_CONTENT[activeDay].noticePreview,
           },
@@ -366,16 +288,19 @@ export default function HomeTab() {
         }
         setContentByDay((prev) => ({
           ...prev,
-          [activeDay]: DAY_CONTENT[activeDay],
+          [activeDay]: {
+            timetablePreview: PERFORMANCE_TIMELINE_BY_DAY[activeDay],
+            noticePreview: DAY_CONTENT[activeDay].noticePreview,
+          },
         }));
       } finally {
         if (isMounted) {
-          setLoadingByDay((prev) => ({ ...prev, [activeDay]: false }));
+          setNoticeLoadingByDay((prev) => ({ ...prev, [activeDay]: false }));
         }
       }
     };
 
-    void fetchDayContent();
+    void fetchNoticePreview();
 
     return () => {
       isMounted = false;
@@ -440,7 +365,6 @@ export default function HomeTab() {
           <TimeTablePreviewCard
             dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
             items={activeContent.timetablePreview}
-            isLoading={loadingByDay[activeDay]}
           />
         </section>
 
@@ -449,7 +373,7 @@ export default function HomeTab() {
           <NoticePreviewCard
             dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
             items={activeContent.noticePreview}
-            isLoading={loadingByDay[activeDay]}
+            isLoading={noticeLoadingByDay[activeDay]}
           />
         </section>
       </div>

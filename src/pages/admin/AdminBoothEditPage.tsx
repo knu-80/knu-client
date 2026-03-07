@@ -108,7 +108,10 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
         isOpen: true,
         title: '수정 완료',
         message: '부스 정보가 성공적으로 수정되었습니다.',
-        onClose: () => navigate('/admin', { replace: true }),
+        onClose: () => {
+          const redirectPath = profile.boothId ? '/admin' : '/map';
+          navigate(redirectPath, { replace: true });
+        },
       });
     } catch (error) {
       console.error(error);

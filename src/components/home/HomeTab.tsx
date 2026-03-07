@@ -118,9 +118,6 @@ function TimeTablePreviewCard({
     <div className="rounded-3xl bg-knu-mint/10 p-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-knu-gray">{dayLabel} 타임테이블 미리보기</p>
-        <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-knu-lavender">
-          임시 데이터
-        </span>
       </div>
 
       <div className="space-y-2">
@@ -308,7 +305,7 @@ export default function HomeTab() {
   }, [activeDay, activeOption.queryDate]);
 
   return (
-    <section aria-labelledby="home-day-toggle-title" className="rounded-t-[28px] bg-white pt-3">
+    <section aria-labelledby="home-day-toggle-title" className="rounded-t-[28px] bg-white pt-2">
       <h2 id="home-day-toggle-title" className="sr-only">
         가두모집 날짜별 홈 안내
       </h2>
@@ -350,7 +347,7 @@ export default function HomeTab() {
         id={`home-day-panel-${activeDay}`}
         role="tabpanel"
         aria-labelledby={`home-day-tab-${activeDay}`}
-        className="space-y-8 pt-6"
+        className="space-y-14 pt-6"
       >
         <section aria-labelledby="home-map-preview-title">
           <SectionHeader title="부스 배치도" to="/map" label="더보기" />

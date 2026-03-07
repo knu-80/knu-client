@@ -57,9 +57,10 @@ export default function NoticePage() {
           </div>
         ) : (
           filteredNotices.map((notice) => (
-            <article
+            <Link
               key={notice.id}
-              className="rounded-2xl border border-knu-silver/55 bg-white px-4 py-3 shadow-[0_2px_8px_rgba(15,23,42,0.04)]"
+              to={`/notice/${notice.id}`}
+              className="block rounded-2xl border border-knu-silver/55 bg-white px-4 py-3 shadow-[0_2px_8px_rgba(15,23,42,0.04)] transition hover:border-knu-gold/60 hover:shadow-[0_6px_16px_rgba(15,23,42,0.08)]"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
@@ -81,15 +82,12 @@ export default function NoticePage() {
 
               <div className="mt-3 flex items-center justify-between gap-3">
                 <span className="truncate text-xs text-text-muted">작성자: {notice.author}</span>
-                <Link
-                  to={`/notice/${notice.id}`}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-knu-gray/70 transition hover:text-knu-red"
-                >
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-knu-gray/70">
                   자세히 보기
                   <FiChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </Link>
+                </span>
               </div>
-            </article>
+            </Link>
           ))
         )}
       </section>

@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import { FiChevronRight } from 'react-icons/fi';
 import MapSvg from '@/assets/map.svg';
 import { getNotices, toNoticeLabel, type NoticeListItem } from '@/apis';
-import { PERFORMANCE_TIMELINE_BY_DAY, type DayKey } from '@/constants/performanceTimetable';
+import {
+  PERFORMANCE_PREVIEW_BY_DAY,
+  PERFORMANCE_TIMELINE_BY_DAY,
+  type DayKey,
+} from '@/constants/performanceTimetable';
 
 type DayOption = {
   key: DayKey;
@@ -32,7 +36,7 @@ const DAY_OPTIONS: DayOption[] = [
 
 const DAY_CONTENT: Record<DayKey, DayContent> = {
   day1: {
-    timetablePreview: PERFORMANCE_TIMELINE_BY_DAY.day1,
+    timetablePreview: PERFORMANCE_PREVIEW_BY_DAY.day1,
     noticePreview: [
       {
         category: '공지',
@@ -52,7 +56,7 @@ const DAY_CONTENT: Record<DayKey, DayContent> = {
     ],
   },
   day2: {
-    timetablePreview: PERFORMANCE_TIMELINE_BY_DAY.day2,
+    timetablePreview: PERFORMANCE_PREVIEW_BY_DAY.day2,
     noticePreview: [
       {
         category: '공지',
@@ -110,14 +114,19 @@ function SectionHeader({ title, to, label }: { title: string; to: string; label:
 function TimeTablePreviewCard({
   dayLabel,
   items,
+  totalCount,
 }: {
   dayLabel: string;
   items: DayContent['timetablePreview'];
+  totalCount: number;
 }) {
   return (
-    <div className="rounded-3xl border border-knu-gold/25 bg-knu-gold/10 p-4 shadow-[0_3px_10px_rgba(15,23,42,0.05)]">
+    <div className="rounded-3xl border border-knu-gold/30 bg-white p-4 shadow-[0_3px_10px_rgba(15,23,42,0.05)]">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-knu-gray">{dayLabel} 타임테이블 미리보기</p>
+        <p className="text-sm font-semibold text-knu-gray">{dayLabel} 공연 미리보기</p>
+        <span className="rounded-full bg-knu-gold/10 px-2.5 py-1 text-xs font-semibold text-knu-gold">
+          총 {totalCount}개
+        </span>
       </div>
 
       <div className="space-y-2">
@@ -125,7 +134,7 @@ function TimeTablePreviewCard({
           items.map((item) => (
             <div
               key={`${item.time}-${item.title}`}
-              className="grid grid-cols-[90px_1fr] gap-3 rounded-2xl bg-white/85 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
+              className="grid grid-cols-[96px_1fr] gap-3 rounded-2xl border border-knu-silver/50 bg-knu-gold/5 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)]"
             >
               <p className="text-sm font-semibold text-knu-gold">{item.time}</p>
               <div className="min-w-0">
@@ -142,7 +151,7 @@ function TimeTablePreviewCard({
       </div>
 
       <p className="mt-3 text-xs text-text-muted">
-        공연 타임테이블 확정 전까지 임시 데이터를 표시합니다.
+        전체 공연 순서와 회차 정보는 타임테이블 더보기에서 확인할 수 있습니다.
       </p>
     </div>
   );
@@ -158,10 +167,10 @@ function NoticePreviewCard({
   isLoading: boolean;
 }) {
   return (
-    <div className="rounded-3xl border border-knu-silver/65  p-4 shadow-[0_3px_10px_rgba(15,23,42,0.05)]">
+    <div className="rounded-3xl border border-knu-silver/65 bg-white p-4 shadow-[0_3px_10px_rgba(15,23,42,0.05)]">
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-knu-gray">{dayLabel} 공지 미리보기</p>
-        <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-knu-gold">
+        <span className="rounded-full bg-knu-silver/20 px-2.5 py-1 text-xs font-medium text-knu-gray">
           최신 순
         </span>
       </div>
@@ -210,10 +219,10 @@ function MapPreviewCard() {
   return (
     <Link
       to="/map"
-      className="group block overflow-hidden rounded-3xl border border-knu-silver/65 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)] transition hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
+      className="group block overflow-hidden rounded-3xl border border-knu-silver/65 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)] transition hover:border-knu-gold/55 hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
       aria-label="부스 배치도 지도 페이지로 이동"
     >
-      <div className="relative h-36 overflow-hidden bg-gray-100]">
+      <div className="relative h-36 overflow-hidden bg-knu-silver/20">
         <img
           src={MapSvg}
           alt=""
@@ -274,7 +283,7 @@ export default function HomeTab() {
         setContentByDay((prev) => ({
           ...prev,
           [activeDay]: {
-            timetablePreview: PERFORMANCE_TIMELINE_BY_DAY[activeDay],
+            timetablePreview: PERFORMANCE_PREVIEW_BY_DAY[activeDay],
             noticePreview:
               noticePreview.length > 0 ? noticePreview : DAY_CONTENT[activeDay].noticePreview,
           },
@@ -286,7 +295,7 @@ export default function HomeTab() {
         setContentByDay((prev) => ({
           ...prev,
           [activeDay]: {
-            timetablePreview: PERFORMANCE_TIMELINE_BY_DAY[activeDay],
+            timetablePreview: PERFORMANCE_PREVIEW_BY_DAY[activeDay],
             noticePreview: DAY_CONTENT[activeDay].noticePreview,
           },
         }));
@@ -305,7 +314,7 @@ export default function HomeTab() {
   }, [activeDay, activeOption.queryDate]);
 
   return (
-    <section aria-labelledby="home-day-toggle-title" className="rounded-t-[28px] pt-2">
+    <section aria-labelledby="home-day-toggle-title" className="rounded-t-[28px] pt-3">
       <h2 id="home-day-toggle-title" className="sr-only">
         가두모집 날짜별 홈 안내
       </h2>
@@ -331,7 +340,7 @@ export default function HomeTab() {
                 className={`rounded-full px-3 py-2.5 text-sm font-semibold transition-all ${
                   isActive
                     ? 'bg-knu-red text-white shadow-[0_6px_14px_rgba(230,0,0,0.28)]'
-                    : 'bg-white text-knu-gray shadow-[inset_0_0_0_1px_rgba(204,204,204,0.9)] hover:shadow-[inset_0_0_0_1px_rgba(191,124,38,0.5)]'
+                    : 'bg-white text-knu-gray shadow-[inset_0_0_0_1px_rgba(204,204,204,0.9)] hover:text-knu-gold hover:shadow-[inset_0_0_0_1px_rgba(191,124,38,0.5)]'
                 }`}
               >
                 <span className="whitespace-nowrap">
@@ -362,6 +371,7 @@ export default function HomeTab() {
           <TimeTablePreviewCard
             dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
             items={activeContent.timetablePreview}
+            totalCount={PERFORMANCE_TIMELINE_BY_DAY[activeDay].length}
           />
         </section>
 

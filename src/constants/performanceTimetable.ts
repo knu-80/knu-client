@@ -81,7 +81,18 @@ export const PERFORMANCE_TIMELINE_BY_DAY: Record<DayKey, PerformanceTimelineItem
   day2: flattenPerformanceSet(PERFORMANCE_SETS_BY_DAY.day2),
 };
 
+function buildPreviewFromSets(sets: PerformanceSet[]): PerformanceTimelineItem[] {
+  return sets.flatMap((set) =>
+    set.items.slice(0, 2).map((item) => ({
+      time: item.time,
+      title: item.title,
+      location: set.location,
+      sessionLabel: set.sessionLabel,
+    })),
+  );
+}
+
 export const PERFORMANCE_PREVIEW_BY_DAY: Record<DayKey, PerformanceTimelineItem[]> = {
-  day1: PERFORMANCE_TIMELINE_BY_DAY.day1.slice(0, 4),
-  day2: PERFORMANCE_TIMELINE_BY_DAY.day2.slice(0, 4),
+  day1: buildPreviewFromSets(PERFORMANCE_SETS_BY_DAY.day1),
+  day2: buildPreviewFromSets(PERFORMANCE_SETS_BY_DAY.day2),
 };

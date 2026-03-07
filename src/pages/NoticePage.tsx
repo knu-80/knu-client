@@ -1,70 +1,98 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { GrAnnounce } from 'react-icons/gr';
-import NoticeCard from '@/components/NoticeCard';
+import { FiChevronRight } from 'react-icons/fi';
 import { NOTICES } from '@/mocks/notices';
 
-export default function NoticePage() {
-  const [activeTab, setActiveTab] = useState('전체');
-  const tabs = ['전체', '공지', '분실물'];
+type NoticeTab = '전체' | '공지' | '분실물';
 
-  const filteredNotices =
-    activeTab === '전체'
-      ? NOTICES
-      : NOTICES.filter((notice) => {
-          return notice.category === activeTab;
-        });
+const TABS: NoticeTab[] = ['전체', '공지', '분실물'];
+
+export default function NoticePage() {
+  const [activeTab, setActiveTab] = useState<NoticeTab>('전체');
+
+  const filteredNotices = useMemo(() => {
+    if (activeTab === '전체') {
+      return NOTICES;
+    }
+    return NOTICES.filter((notice) => notice.category === activeTab);
+  }, [activeTab]);
 
   return (
-    <div className="pt-5 sm:p-5">
-      <div className="flex items-center space-x-2 mb-4 px-2 sm:px-0">
-        <GrAnnounce className="h-6 w-6 text-black" />
-        <h2 className="typo-heading-2 text-black font-bold">공지사항</h2>
-      </div>
-
-      <div className="flex space-x-2 mb-6 px-2 sm:px-0">
-        {tabs.map((tab) => (
-          <button
-            key={tab}
-            type="button"
-            onClick={() => setActiveTab(tab)}
-            className={`cursor-pointer px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-              activeTab === tab
-                ? 'bg-knu-red text-white shadow-md'
-                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-
-      <div className="mt-4">
-        <div className="flex items-center gap-x-4 px-2 sm:px-4 py-3 text-[13px] font-bold text-gray-500 border-y border-gray-100 bg-gray-50/50">
-          <div className="w-8 text-center">번호</div>
-          <div className="flex-1 text-center">제목</div>
-          <div className="w-16 text-center">날짜</div>
+    <div className="flex flex-col gap-5 pt-5">
+      <section className="rounded-3xl border border-knu-silver/70 bg-gradient-to-br from-knu-silver/15 via-white to-knu-gold/10 px-5 py-6">
+        <div className="flex items-center gap-2">
+          <GrAnnounce className="h-5 w-5 text-knu-red" />
+          <h2 className="typo-heading-2 text-knu-gray">공지사항</h2>
         </div>
+        <p className="mt-2 text-sm text-text-muted">
+          공지, 분실물, 행사 운영 관련 최신 안내를 확인할 수 있어요.
+        </p>
+      </section>
 
-        <div className="divide-y divide-gray-100">
-          {filteredNotices.length === 0 ? (
-            <div className="py-20 text-center text-gray-400 typo-body-2">
-              등록된 공지사항이 없습니다.
-            </div>
-          ) : (
-            filteredNotices.map((notice, index) => (
-              <NoticeCard
-                key={notice.id}
-                id={notice.id}
-                index={index}
-                totalCount={filteredNotices.length}
-                title={notice.title}
-                date={notice.date}
-                category={notice.category}
-              />
-            ))
-          )}
-        </div>
-      </div>
+      <section aria-label="공지사항 카테고리" className="grid grid-cols-3 gap-2">
+        {TABS.map((tab) => {
+          const isActive = activeTab === tab;
+          return (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setActiveTab(tab)}
+              className={`rounded-full px-3 py-2.5 text-sm font-semibold transition-all ${
+                isActive
+                  ? 'bg-knu-red text-white shadow-[0_6px_14px_rgba(230,0,0,0.24)]'
+                  : 'bg-white text-knu-gray shadow-[inset_0_0_0_1px_rgba(204,204,204,0.9)] hover:text-knu-gold hover:shadow-[inset_0_0_0_1px_rgba(191,124,38,0.5)]'
+              }`}
+            >
+              {tab}
+            </button>
+          );
+        })}
+      </section>
+
+      <section aria-label="공지사항 목록" className="space-y-2 pb-2">
+        {filteredNotices.length === 0 ? (
+          <div className="rounded-2xl border border-knu-silver/55 bg-white px-4 py-8 text-center text-sm text-text-muted">
+            등록된 공지사항이 없습니다.
+          </div>
+        ) : (
+          filteredNotices.map((notice) => (
+            <article
+              key={notice.id}
+              className="rounded-2xl border border-knu-silver/55 bg-white px-4 py-3 shadow-[0_2px_8px_rgba(15,23,42,0.04)]"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <span
+                    className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
+                      notice.category === '공지'
+                        ? 'bg-knu-red/10 text-knu-red'
+                        : 'bg-knu-gray/15 text-knu-gray'
+                    }`}
+                  >
+                    {notice.category}
+                  </span>
+                  <p className="mt-2 truncate text-sm font-semibold text-knu-gray">
+                    {notice.title}
+                  </p>
+                </div>
+                <span className="shrink-0 text-xs font-medium text-gray-500">{notice.date}</span>
+              </div>
+
+              <div className="mt-3 flex items-center justify-between gap-3">
+                <span className="truncate text-xs text-text-muted">작성자: {notice.author}</span>
+                <Link
+                  to={`/notice/${notice.id}`}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-knu-gray/70 transition hover:text-knu-red"
+                >
+                  자세히 보기
+                  <FiChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+                </Link>
+              </div>
+            </article>
+          ))
+        )}
+      </section>
     </div>
   );
 }

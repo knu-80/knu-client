@@ -18,6 +18,7 @@ export interface BoothSummary {
   boothNumber: number;
   name: string;
   division: BoothDivision;
+  keywords: string;
   description: string;
   applyLink: string;
   imageUrls: string[];

@@ -17,21 +17,9 @@ export default function NoticeDetailPage() {
 
   return (
     <div className="pt-5">
-      <div className="mb-8 rounded-2xl border border-knu-silver/70 bg-white px-4 py-4 shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
-        <div className="flex items-center gap-2">
-          <span
-            className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
-              notice.category === '공지'
-                ? 'bg-knu-red/10 text-knu-red'
-                : 'bg-knu-gray/15 text-knu-gray'
-            }`}
-          >
-            {notice.category}
-          </span>
-          <span className="text-xs font-medium text-text-muted">공지 상세</span>
-        </div>
-        <h2 className="typo-heading-3 mt-2 text-knu-gray">{notice.title}</h2>
-        <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-gray-500">
+      <div className="flex flex-col space-y-1 mb-8 text-black">
+        <h2 className="typo-heading-3">{notice.title}</h2>
+        <div className="flex items-center space-x-4 text-sm text-gray-500 mt-1 pt-1">
           <div className="flex items-center space-x-2">
             <FaRegCalendar />
             <span>작성일: {notice.date}</span>
@@ -51,7 +39,7 @@ export default function NoticeDetailPage() {
         />
       )}
 
-      <div className="mb-10 mt-5 rounded-2xl border border-knu-silver/65 bg-white px-4 py-4 text-knu-gray shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
+      <div className="mb-10 mt-5 text-black">
         <p className="typo-body-1 whitespace-pre-wrap">{notice.content}</p>
       </div>
 
@@ -65,7 +53,7 @@ export default function NoticeDetailPage() {
       )}
 
       {isLostItem && (
-        <div className="mb-10 flex items-center space-x-3 rounded-xl border border-knu-red/25 bg-knu-red/8 p-4 text-red-900 shadow-sm">
+        <div className="flex items-center space-x-3 p-4 bg-red-50/50 border border-red-100 text-red-900 rounded-xl mb-10 shadow-sm">
           <FaInfoCircle className="text-xl text-knu-red" />
           <p className="typo-body-2 font-semibold">분실물은 총동연 부스에서 수령 가능합니다</p>
         </div>

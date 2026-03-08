@@ -1,14 +1,32 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { SearchBar } from '@/components/SearchBar';
 import { MapPageClubCategory } from '@/components/ClubCategory';
 import { Map } from '@/components/map';
 import { DIVISION_LIST } from '@/constants/booth';
 import { BoothPopup } from '@/components/BoothPopup';
+import { getBooths, type BoothSummary } from '@/apis';
 
 export default function MapPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [booths, setBooths] = useState<BoothSummary[]>([]);
+
+  // const [isLoading, setIsLoading] = useState(true);
+  // [seah] status ui 추가 필요
+
+  useEffect(() => {
+    const fetchBooths = async () => {
+      try {
+        const data = await getBooths();
+        setBooths(data);
+      } finally {
+        // setIsLoading(false);
+      }
+    };
+
+    fetchBooths();
+  }, []);
 
   const [value, setValue] = useState('');
   const [selectedBoothId, setSelectedBoothId] = useState<number | null>(() => {
@@ -39,10 +57,14 @@ export default function MapPage() {
         ))}
       </div>
 
-      <Map selectedBoothId={selectedBoothId} onBoothClick={handleBoothClick} />
+      <Map booths={booths} selectedBoothId={selectedBoothId} onBoothClick={handleBoothClick} />
       {selectedBoothId && (
         <div className="absolute bottom-0 left-0 w-full px-6">
-          <BoothPopup boothId={selectedBoothId} onClose={() => setSelectedBoothId(null)} />
+          <BoothPopup
+            booths={booths}
+            boothId={selectedBoothId}
+            onClose={() => setSelectedBoothId(null)}
+          />
         </div>
       )}
     </div>

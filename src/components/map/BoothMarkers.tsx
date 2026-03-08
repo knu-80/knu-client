@@ -1,31 +1,34 @@
 import { memo } from 'react';
 import { BOOTH_COORDINATES } from './world';
-import { DEFAULT_BOOTH, MOCK_BOOTHS } from '@/constants/booth';
 import { BoothMarker } from './BoothMarker';
+import { type BoothSummary } from '@/apis';
 
-export const BoothMarkers = memo(function BoothMarkers({
-  onBoothClick,
-  selectedBoothId,
-}: {
+interface BoothMarkersProps {
+  booths: BoothSummary[];
   onBoothClick: (id: number) => void;
   selectedBoothId: number | null;
-}) {
+}
+
+export const BoothMarkers = memo(function BoothMarkers({
+  booths,
+  onBoothClick,
+  selectedBoothId,
+}: BoothMarkersProps) {
   return (
     <>
-      {Object.entries(BOOTH_COORDINATES).map(([number, coord]) => {
-        const boothNum = Number(number);
-        const boothInfo = MOCK_BOOTHS[boothNum] || DEFAULT_BOOTH;
-        const isSelected = selectedBoothId === boothNum;
+      {booths.map((booth) => {
+        const coord = BOOTH_COORDINATES[booth.boothNumber] || { x: 0, y: 0 };
+        const isSelected = selectedBoothId === booth.id;
 
         return (
           <BoothMarker
-            key={boothNum}
+            key={booth.id}
             {...coord}
-            name={boothInfo.name}
+            name={booth.name}
             bgColorClass={isSelected ? 'bg-knu-red' : 'bg-vanilla'}
             isSelected={isSelected}
-            isOpen={boothInfo.isActive}
-            onClick={() => onBoothClick(boothNum)}
+            isOpen={booth.isActive}
+            onClick={() => onBoothClick(booth.id)}
           />
         );
       })}

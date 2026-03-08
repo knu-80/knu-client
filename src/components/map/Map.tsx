@@ -4,13 +4,15 @@ import { MapBackground } from './MapBackground';
 import { BuildingLabels } from './BuildingLabels';
 import { BoothMarkers } from './BoothMarkers';
 import { useMapCamera } from './useMapCamera';
+import { type BoothSummary } from '@/apis';
 
 interface MapProps {
+  booths: BoothSummary[];
   onBoothClick: (id: number) => void;
   selectedBoothId: number | null;
 }
 
-export function Map({ onBoothClick, selectedBoothId }: MapProps) {
+export function Map({ booths, onBoothClick, selectedBoothId }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { x, y, scale, constraints, moveToBooth, isPinching } = useMapCamera(containerRef);
@@ -34,6 +36,7 @@ export function Map({ onBoothClick, selectedBoothId }: MapProps) {
         <MapBackground />
         <BuildingLabels />
         <BoothMarkers
+          booths={booths}
           onBoothClick={(id) => {
             onBoothClick(id);
           }}

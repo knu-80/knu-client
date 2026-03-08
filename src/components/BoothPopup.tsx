@@ -1,19 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 import { memo } from 'react';
-import { DEFAULT_BOOTH, MOCK_BOOTHS } from '@/constants/booth';
 import { ClubCategory } from './ClubCategory';
+import type { BoothSummary } from '@/apis/modules/boothApi';
 
 interface BoothPopupProps {
+  booths: BoothSummary[];
   boothId: number | null;
   onClose: () => void;
 }
 
-export const BoothPopup = memo(function BoothPopup({ boothId, onClose }: BoothPopupProps) {
+export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }: BoothPopupProps) {
   const navigate = useNavigate();
   if (!boothId) return null;
 
-  const booth = MOCK_BOOTHS[boothId] || DEFAULT_BOOTH;
-  const thumbnail = booth.imgUrls?.[0];
+  const booth = booths.find((b) => b.id === boothId);
+  if (!booth) return null;
+  const thumbnail = booth.imageUrls[0];
   const hasImage = thumbnail && thumbnail.trim() !== '';
 
   const handlePopupClick = (e: React.MouseEvent) => {

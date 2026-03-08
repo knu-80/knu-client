@@ -179,7 +179,7 @@ function NoticePreviewCard({
   return (
     <div className="rounded-3xl border border-knu-silver/65 bg-white p-4 shadow-[0_3px_10px_rgba(15,23,42,0.05)]">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-knu-gray">{dayLabel} 공지 미리보기</p>
+        <p className="text-sm font-semibold text-knu-gray">{dayLabel} 안내 미리보기</p>
         <span className="rounded-full bg-knu-silver/20 px-2.5 py-1 text-xs font-medium text-knu-gray">
           최신 순
         </span>
@@ -188,7 +188,7 @@ function NoticePreviewCard({
       <div className="space-y-2">
         {isLoading ? (
           <div className="rounded-2xl bg-white px-3 py-3 text-sm text-text-muted">
-            공지사항 데이터를 불러오는 중입니다...
+            안내 데이터를 불러오는 중입니다...
           </div>
         ) : items.length > 0 ? (
           items.map((item) => (
@@ -215,13 +215,13 @@ function NoticePreviewCard({
           ))
         ) : (
           <div className="rounded-2xl bg-white px-3 py-3 text-sm text-text-muted">
-            등록된 공지사항이 없습니다.
+            등록된 안내가 없습니다.
           </div>
         )}
       </div>
 
       <p className="mt-3 text-xs text-text-muted">
-        공지 원문, 분실물 상세 내용, 변경 사항은 공지사항 더보기에서 확인해주세요.
+        공지 원문, 분실물 상세 내용, 변경 사항은 안내 더보기에서 확인해주세요.
       </p>
     </div>
   );
@@ -368,14 +368,6 @@ export default function HomeTab() {
         aria-labelledby={`home-day-tab-${activeDay}`}
         className="space-y-14 pt-10"
       >
-        <section aria-labelledby="home-map-preview-title">
-          <SectionHeader title="부스 배치도" to="/map" label="더보기" />
-          <div id="home-map-preview-title" className="sr-only">
-            부스 배치도 미리보기
-          </div>
-          <MapPreviewCard />
-        </section>
-
         <section aria-labelledby="home-timetable-title">
           <SectionHeader title="타임테이블" to="/timetable" label="더보기" />
           <TimeTablePreviewCard
@@ -386,12 +378,20 @@ export default function HomeTab() {
         </section>
 
         <section aria-labelledby="home-notice-title">
-          <SectionHeader title="공지사항" to="/notice" label="더보기" />
+          <SectionHeader title="안내" to="/notice" label="더보기" />
           <NoticePreviewCard
             dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
             items={activeContent.noticePreview}
             isLoading={noticeLoadingByDay[activeDay]}
           />
+        </section>
+
+        <section aria-labelledby="home-map-preview-title">
+          <SectionHeader title="부스 배치도" to="/map" label="더보기" />
+          <div id="home-map-preview-title" className="sr-only">
+            부스 배치도 미리보기
+          </div>
+          <MapPreviewCard />
         </section>
       </div>
     </section>

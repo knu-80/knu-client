@@ -17,13 +17,12 @@ export const ENDPOINTS = {
   adminNoticeById: (noticeId: number | string) => `${ADMIN_API_PREFIX}/notices/${noticeId}`,
   adminNoticeImagesById: (noticeId: number | string) =>
     `${ADMIN_API_PREFIX}/notices/${noticeId}/images`,
-  adminEvents: `${PUBLIC_API_PREFIX}/events`,
-  adminEventById: (eventId: number | string) => `${PUBLIC_API_PREFIX}/events/${eventId}`,
-  adminUpdateEventById: (eventId: number | string) =>
-    `${PUBLIC_API_PREFIX}/events/update/${eventId}`,
+  adminEvents: `${ADMIN_API_PREFIX}/events`,
+  adminEventById: (eventId: number | string) => `${ADMIN_API_PREFIX}/events/${eventId}`,
+  adminEventImagesById: (eventId: number | string) =>
+    `${ADMIN_API_PREFIX}/events/${eventId}/images`,
   adminBooths: `${ADMIN_API_PREFIX}/booths`,
   adminBoothById: (boothId: number | string) => `${ADMIN_API_PREFIX}/booths/${boothId}`,
-  adminUpdateBoothById: (boothId: number | string) => `${PUBLIC_API_PREFIX}/booths/${boothId}`,
   adminBoothImagesById: (boothId: number | string) =>
-    `${PUBLIC_API_PREFIX}/booths/${boothId}/images`,
+    `${ADMIN_API_PREFIX}/booths/${boothId}/images`,
 } as const;

@@ -14,7 +14,7 @@ import { type EventType } from '@/apis/endpoints';
 export default function AdminEventPage() {
   const selectedType: EventType = 'RECRUITMENT';
   const { events, isLoading, refetch } = useEvents(selectedType);
-  const { mutateCreate, mutateUpdate, mutateDelete } = useEventMutation();
+  const { mutateCreate, mutateUpdate, mutateUpdateImage, mutateDelete } = useEventMutation();
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [targetEventId, setTargetEventId] = useState<number | null>(null);
@@ -66,27 +66,43 @@ export default function AdminEventPage() {
         },
       });
     } else if (editingId !== null) {
-      const payload = {
-        title: data.title,
-        description: data.description,
-        eventType: selectedType,
-        isActive: data.isActive,
-        imageUrl: data.imageUrl,
-        startAt: formatAt(data.startAt),
-        endAt: formatAt(data.endAt),
-        location: data.location,
-      };
+      const original = events.find((e) => e.id === editingId);
+      if (!original) return;
 
-      await mutateUpdate(editingId, payload, {
-        onSuccess: () => {
-          setEditingId(null);
-          showAlert('성공', '이벤트 정보가 수정되었습니다.');
-          refetch();
-        },
-        onError: (err) => {
-          showAlert('실패', `수정 중 오류가 발생했습니다: ${err.message}`);
-        },
-      });
+      const isTextChanged =
+        original.title !== data.title ||
+        original.description !== data.description ||
+        original.location !== data.location ||
+        original.startAt !== data.startAt ||
+        original.endAt !== data.endAt ||
+        original.isActive !== data.isActive;
+
+      const isImageChanged = !!data.image;
+
+      try {
+        if (isImageChanged && data.image) {
+          await mutateUpdateImage(editingId, data.image);
+        }
+
+        if (isTextChanged) {
+          const payload = {
+            title: data.title,
+            description: data.description,
+            eventType: selectedType,
+            isActive: data.isActive,
+            startAt: formatAt(data.startAt),
+            endAt: formatAt(data.endAt),
+            location: data.location,
+          };
+          await mutateUpdate(editingId, payload);
+        }
+
+        showAlert('성공', '이벤트 정보가 수정되었습니다.');
+        setEditingId(null);
+        refetch();
+      } catch {
+        showAlert('실패', '수정 중 오류가 발생했습니다.');
+      }
     }
   };
 

@@ -3,6 +3,7 @@ import {
   createEvent,
   deleteEvent,
   updateEvent,
+  updateEventImage,
   type EventCreateInput,
   type EventUpdateInput,
   type EventItem,
@@ -11,6 +12,34 @@ import {
 export function useEventMutation() {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  const mutateUpdateImage = async (
+    eventId: number,
+    image: File,
+    options?: {
+      onSuccess?: (data: EventItem) => void;
+      onError?: (error: Error) => void;
+    },
+  ) => {
+    try {
+      setIsPending(true);
+      setError(null);
+      const response = await updateEventImage(eventId, image);
+      if (options?.onSuccess) {
+        options.onSuccess(response);
+      }
+      return response;
+    } catch (err) {
+      const errorObject =
+        err instanceof Error ? err : new Error('이벤트 이미지 수정 중 오류가 발생했습니다.');
+      setError(errorObject);
+      if (options?.onError) {
+        options.onError(errorObject);
+      }
+    } finally {
+      setIsPending(false);
+    }
+  };
 
   const mutateCreate = async (
     payload: EventCreateInput,
@@ -97,6 +126,7 @@ export function useEventMutation() {
   return {
     mutateCreate,
     mutateUpdate,
+    mutateUpdateImage,
     mutateDelete,
     isPending,
     error,

@@ -68,6 +68,18 @@ export async function updateEvent(eventId: number, payload: EventUpdateInput): P
   return unwrapApiResponse(data);
 }
 
+export async function updateEventImage(eventId: number, image: File): Promise<EventItem> {
+  const formData = new FormData();
+  formData.append('image', image);
+
+  const { data } = await http.post<ApiResponse<EventItem>>(
+    ENDPOINTS.adminEventImagesById(eventId),
+    formData,
+  );
+
+  return unwrapApiResponse(data);
+}
+
 export async function deleteEvent(eventId: number): Promise<void> {
   await http.delete<ApiResponse<unknown>>(ENDPOINTS.adminEventById(eventId));
 }

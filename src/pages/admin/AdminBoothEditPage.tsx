@@ -6,13 +6,9 @@ import AlertModal from '@/components/AlertModal';
 import ClubCategory from '@/components/ClubCategory';
 import ImageCarouselUploader, { type ImageItem } from '@/components/ImageCarouselUploader';
 import { DIVISION_INFO, type BoothDetail } from '@/constants/booth';
-import {
-  getBooth,
-  updateBooth,
-  type BoothDivision,
-  type BoothSummary,
-} from '@/apis/modules/boothApi';
+import { getBooth, type BoothDivision, type BoothSummary } from '@/apis/modules/boothApi';
 import { useAdminSessionStore } from '@/stores/adminSessionStore';
+import { useBoothMutation } from '@/hooks/useBoothMutation';
 
 interface BoothEditForm {
   name: string;
@@ -25,6 +21,7 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { profile } = useAdminSessionStore();
+  const { mutateUpdate, isPending: isSubmitting } = useBoothMutation();
 
   const [formData, setFormData] = useState<BoothEditForm>({
     name: booth.name,
@@ -42,7 +39,6 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
   );
 
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;
     title: string;
@@ -85,46 +81,43 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
       return;
     }
 
-    setIsSubmitting(true);
+    if (isTextChanged) {
+      const payload = {
+        memberId: profile.memberId,
+        boothNumber: booth.boothNumber,
+        name: formData.name,
+        division: formData.divisionKey as BoothDivision,
+        description: formData.description,
+        applyLink: formData.applyUrl,
+      };
 
-    try {
-      if (isTextChanged) {
-        const payload = {
-          memberId: profile.memberId,
-          boothNumber: booth.boothNumber,
-          name: formData.name,
-          division: formData.divisionKey as BoothDivision,
-          description: formData.description,
-          applyLink: formData.applyUrl,
-        };
-        await updateBooth(booth.id, payload);
-      }
-
-      if (isImagesChanged) {
-        console.log(allImages);
-      }
-
-      setAlertConfig({
-        isOpen: true,
-        title: '수정 완료',
-        message: '부스 정보가 성공적으로 수정되었습니다.',
-        onClose: () => {
-          const redirectPath = profile.boothId ? '/admin' : '/map';
-          navigate(redirectPath, { replace: true });
+      await mutateUpdate(booth.id, payload, {
+        onSuccess: () => {
+          if (isImagesChanged) {
+            console.log('이미지 수정 전용 API 연동 예정');
+          }
+          setAlertConfig({
+            isOpen: true,
+            title: '수정 완료',
+            message: '부스 정보가 성공적으로 수정되었습니다.',
+            onClose: () => {
+              const redirectPath = profile.boothId ? '/admin' : '/map';
+              navigate(redirectPath, { replace: true });
+            },
+          });
+        },
+        onError: (err) => {
+          setAlertConfig({
+            isOpen: true,
+            title: '수정 실패',
+            message: `오류가 발생했습니다: ${err.message}`,
+          });
         },
       });
-    } catch (error) {
-      console.error(error);
-      setAlertConfig({
-        isOpen: true,
-        title: '수정 실패',
-        message: '부스 정보 수정 중 오류가 발생했습니다.',
-      });
-    } finally {
-      setIsSubmitting(false);
+    } else if (isImagesChanged) {
+      console.log('이미지 수정 전용 API 연동 예정');
     }
   };
-
   const isFormValid =
     formData.name.trim() !== '' &&
     formData.description.trim() !== '' &&

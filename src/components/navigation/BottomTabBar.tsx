@@ -11,7 +11,7 @@ type TabItem = {
 
 const TAB_ITEMS: TabItem[] = [
   { to: '/', label: '홈', icon: FiHome, end: true },
-  { to: '/notice', label: '공지', icon: FiBell },
+  { to: '/notice', label: '안내', icon: FiBell },
   { to: '/event', label: '이벤트', icon: FiCalendar },
   { to: '/map', label: '지도', icon: FiMap },
 ];

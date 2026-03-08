@@ -24,4 +24,6 @@ export const ENDPOINTS = {
   adminBooths: `${ADMIN_API_PREFIX}/booths`,
   adminBoothById: (boothId: number | string) => `${ADMIN_API_PREFIX}/booths/${boothId}`,
   adminUpdateBoothById: (boothId: number | string) => `${PUBLIC_API_PREFIX}/booths/${boothId}`,
+  adminBoothImagesById: (boothId: number | string) =>
+    `${PUBLIC_API_PREFIX}/booths/${boothId}/images`,
 } as const;

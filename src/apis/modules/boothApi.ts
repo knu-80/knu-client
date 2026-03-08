@@ -74,6 +74,15 @@ export async function updateBooth(
   return unwrapApiResponse(data);
 }
 
+export async function updateBoothImages(boothId: number, images: File[]): Promise<void> {
+  const formData = new FormData();
+  images.forEach((image) => {
+    formData.append('images', image);
+  });
+
+  await http.post(ENDPOINTS.adminBoothImagesById(boothId), formData);
+}
+
 export async function deleteBooth(boothId: number): Promise<void> {
   await http.delete<ApiResponse<unknown>>(ENDPOINTS.adminBoothById(boothId));
 }

@@ -26,7 +26,10 @@ export default function MapPage() {
 
   return (
     <div className="w-full h-full relative bg-gray-50">
-      <div className="px-5 py-3 z-30 sticky top-0 bg-white" onClick={() => navigate('/search')}>
+      <div
+        className="px-5 py-3 z-30 sticky top-0 bg-white"
+        onClick={() => navigate('/search', { state: { booths } })}
+      >
         <div className="pointer-events-none">
           <SearchBar
             value={value}

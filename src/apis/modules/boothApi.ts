@@ -20,7 +20,7 @@ export interface BoothSummary {
   division: BoothDivision;
   description: string;
   applyLink: string;
-  imageUrl: string | null;
+  imageUrls: string[];
   isActive: boolean;
 }
 

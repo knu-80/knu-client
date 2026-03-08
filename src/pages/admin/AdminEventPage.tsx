@@ -3,7 +3,6 @@ import { MdEventNote } from 'react-icons/md';
 import { SlPencil } from 'react-icons/sl';
 import EventCard from '@/components/EventCard';
 import EventCardEdit from '@/components/EventCardEdit';
-import SegmentedControl from '@/components/SegmentedControl';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
 import ConfirmModal from '@/components/ConfirmModal';
@@ -13,7 +12,7 @@ import { type EventItem } from '@/apis/modules/eventApi';
 import { type EventType } from '@/apis/endpoints';
 
 export default function AdminEventPage() {
-  const [selectedType, setSelectedType] = useState<EventType>('RECRUITMENT');
+  const selectedType: EventType = 'RECRUITMENT';
   const { events, isLoading, refetch } = useEvents(selectedType);
   const { mutateCreate, mutateUpdate, mutateDelete } = useEventMutation();
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -122,17 +121,6 @@ export default function AdminEventPage() {
 
   return (
     <div className="pt-5 sm:p-5 relative pb-40">
-      <div className="mb-6 px-2 sm:px-0">
-        <SegmentedControl
-          options={[
-            { label: '가두모집 이벤트', value: 'RECRUITMENT' },
-            { label: '주막 이벤트', value: 'CLUB_FESTIVAL' },
-          ]}
-          selectedValue={selectedType}
-          onChange={(val) => setSelectedType(val as EventType)}
-        />
-      </div>
-
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 px-2 sm:px-0">
         {isLoading ? (
           <div className="col-span-full py-20 text-center text-gray-400 typo-body-2">

@@ -122,11 +122,6 @@ export default function AdminEventPage() {
 
   return (
     <div className="pt-5 sm:p-5 relative pb-40">
-      <div className="flex items-center space-x-2 mb-4 px-2 sm:px-0">
-        <MdEventNote className="h-6 w-6 text-black" />
-        <h2 className="typo-heading-2 text-black font-bold">이벤트 관리</h2>
-      </div>
-
       <div className="mb-6 px-2 sm:px-0">
         <SegmentedControl
           options={[

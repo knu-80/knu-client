@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GrAnnounce } from 'react-icons/gr';
-import { SlPencil } from 'react-icons/sl';
 import { FiTrash2 } from 'react-icons/fi';
+import { SlPencil } from 'react-icons/sl';
 import NoticeCard from '@/components/NoticeCard';
 import AdminActionButton from '@/components/AdminActionButton';
 import ConfirmModal from '@/components/ConfirmModal';
@@ -86,11 +85,6 @@ export default function AdminNoticePage() {
 
   return (
     <div className="pt-5 sm:p-5 relative pb-40">
-      <div className="flex items-center space-x-2 mb-4 px-2 sm:px-0">
-        <GrAnnounce className="h-6 w-6 text-black" />
-        <h2 className="typo-heading-2 text-black font-bold">공지사항 관리</h2>
-      </div>
-
       <div className="flex space-x-2 mb-6 px-2 sm:px-0">
         {tabs.map((tab) => (
           <button

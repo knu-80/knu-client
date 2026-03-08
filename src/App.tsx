@@ -41,9 +41,13 @@ export default function App() {
         <Route element={<AdminSessionGuard />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminHomePage />} />
-            <Route path="notice" element={<AdminNoticePage />} />
-            <Route path="event" element={<AdminEventPage />} />
             <Route path="pub" element={<AdminPubPage />} />
+          </Route>
+          <Route element={<AdminLayout title="공지사항 관리" fallbackPath="/admin" />}>
+            <Route path="/admin/notice" element={<AdminNoticePage />} />
+          </Route>
+          <Route element={<AdminLayout title="이벤트 관리" fallbackPath="/admin" />}>
+            <Route path="/admin/event" element={<AdminEventPage />} />
           </Route>
           <Route element={<AdminLayout title="공지 작성" fallbackPath="/admin/notice" />}>
             <Route path="/admin/notice/write" element={<AdminNoticeCreatePage />} />

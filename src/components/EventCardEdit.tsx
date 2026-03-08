@@ -71,9 +71,9 @@ export default function EventCardEdit({ initialData, onSave, onCancel }: EventCa
       <div className="relative w-full overflow-hidden rounded-lg">
         <ImageUploader
           previewImage={previewImage}
-          onImageChange={(imageUrl) => {
+          onImageChange={(imageUrl, file) => {
             setPreviewImage(imageUrl);
-            setFormData((prev) => ({ ...prev, imageUrl }));
+            setFormData((prev) => ({ ...prev, imageUrl, image: file }));
           }}
           aspectRatio="h-45"
         />

@@ -14,6 +14,7 @@ export function useEventMutation() {
 
   const mutateCreate = async (
     payload: EventCreateInput,
+    image?: File | null,
     options?: {
       onSuccess?: (data: EventItem) => void;
       onError?: (error: Error) => void;
@@ -22,7 +23,7 @@ export function useEventMutation() {
     try {
       setIsPending(true);
       setError(null);
-      const response = await createEvent(payload);
+      const response = await createEvent(payload, image);
       if (options?.onSuccess) {
         options.onSuccess(response);
       }

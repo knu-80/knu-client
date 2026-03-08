@@ -49,14 +49,13 @@ export default function AdminEventPage() {
         title: data.title,
         description: data.description,
         eventType: selectedType,
-        imageUrl: data.imageUrl,
         startAt: formatAt(data.startAt),
         endAt: formatAt(data.endAt),
         location: data.location,
         isActive: true,
       };
 
-      await mutateCreate(payload, {
+      await mutateCreate(payload, data.image, {
         onSuccess: () => {
           showAlert('성공', '새로운 이벤트가 등록되었습니다.');
           refetch();
@@ -70,6 +69,8 @@ export default function AdminEventPage() {
       const payload = {
         title: data.title,
         description: data.description,
+        eventType: selectedType,
+        isActive: data.isActive,
         imageUrl: data.imageUrl,
         startAt: formatAt(data.startAt),
         endAt: formatAt(data.endAt),
@@ -78,9 +79,9 @@ export default function AdminEventPage() {
 
       await mutateUpdate(editingId, payload, {
         onSuccess: () => {
+          setEditingId(null);
           showAlert('성공', '이벤트 정보가 수정되었습니다.');
           refetch();
-          setEditingId(null);
         },
         onError: (err) => {
           showAlert('실패', `수정 중 오류가 발생했습니다: ${err.message}`);

@@ -35,11 +35,13 @@ export interface BoothMutationInput {
   division: BoothDivision;
   description?: string;
   applyLink?: string;
-  imageUrls?: string[];
+  images?: File[];
   isActive?: boolean;
+  contact: string;
+  keywords?: string;
 }
 
-export type BoothUpdateInput = PartialUpdate<Omit<BoothMutationInput, 'memberId'>>;
+export type BoothUpdateInput = PartialUpdate<Omit<BoothMutationInput, 'memberId' | 'images'>>;
 
 export async function getBooths(params: BoothListParams = {}): Promise<BoothSummary[]> {
   const { data } = await http.get<ApiResponse<BoothSummary[]>>(ENDPOINTS.booths, {
@@ -56,18 +58,40 @@ export async function getBooth(boothId: number): Promise<BoothSummary> {
 }
 
 export async function createBooth(payload: BoothMutationInput): Promise<BoothSummary> {
-  const { data } = await http.post<ApiResponse<BoothSummary>>(ENDPOINTS.adminBooths, payload);
+  const formData = new FormData();
+
+  const requestData = {
+    memberId: payload.memberId,
+    boothNumber: payload.boothNumber,
+    name: payload.name,
+    division: payload.division,
+    contact: payload.contact,
+    description: payload.description,
+    applyLink: payload.applyLink,
+    keywords: payload.keywords,
+    isActive: payload.isActive ?? true,
+  };
+
+  formData.append('data', new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
+
+  if (payload.images && payload.images.length > 0) {
+    payload.images.forEach((image) => {
+      formData.append('images', image);
+    });
+  }
+
+  const { data } = await http.post<ApiResponse<BoothSummary>>(ENDPOINTS.adminBooths, formData);
 
   return unwrapApiResponse(data);
 }
 
 export async function updateBooth(
   boothId: number,
-  payload: BoothUpdateInput & { memberId: number },
+  payload: BoothUpdateInput,
 ): Promise<BoothSummary> {
   const patchPayload = omitUndefined(payload);
   const { data } = await http.patch<ApiResponse<BoothSummary>>(
-    ENDPOINTS.adminUpdateBoothById(boothId),
+    ENDPOINTS.adminBoothById(boothId),
     patchPayload,
   );
 

@@ -10,6 +10,7 @@ export interface EventItem {
   description: string;
   eventType: EventType;
   imageUrl: string | null;
+  image?: File | null;
   startAt: string;
   endAt: string;
   isActive: boolean;
@@ -32,7 +33,6 @@ export interface EventCreateInput {
   title: string;
   description: string;
   eventType: EventType;
-  imageUrl?: string | null;
   startAt: string;
   endAt: string;
   location?: string;
@@ -41,8 +41,19 @@ export interface EventCreateInput {
 
 export type EventUpdateInput = PartialUpdate<EventCreateInput>;
 
-export async function createEvent(payload: EventCreateInput): Promise<EventItem> {
-  const { data } = await http.post<ApiResponse<EventItem>>(ENDPOINTS.adminEvents, payload);
+export async function createEvent(
+  payload: EventCreateInput,
+  image?: File | null,
+): Promise<EventItem> {
+  const formData = new FormData();
+
+  formData.append('data', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+
+  if (image) {
+    formData.append('image', image);
+  }
+
+  const { data } = await http.post<ApiResponse<EventItem>>(ENDPOINTS.adminEvents, formData);
 
   return unwrapApiResponse(data);
 }
@@ -50,7 +61,7 @@ export async function createEvent(payload: EventCreateInput): Promise<EventItem>
 export async function updateEvent(eventId: number, payload: EventUpdateInput): Promise<EventItem> {
   const patchPayload = omitUndefined(payload);
   const { data } = await http.patch<ApiResponse<EventItem>>(
-    ENDPOINTS.adminUpdateEventById(eventId),
+    ENDPOINTS.adminEventById(eventId),
     patchPayload,
   );
 

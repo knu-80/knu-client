@@ -1,5 +1,7 @@
-import { Routes, Route } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
+
 import MainLayout from '@/components/layouts/MainLayout';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import DetailLayout from '@/components/layouts/DetailLayout';
@@ -22,8 +24,56 @@ import AdminNoticeEditPage from '@/pages/admin/AdminNoticeEditPage';
 import AdminBoothEditPage from '@/pages/admin/AdminBoothEditPage';
 import LoginPage from '@/pages/admin/LoginPage';
 import AdminSessionGuard from '@/components/guards/AdminSessionGuard';
+import { setUnauthorizedHandler } from '@/apis';
+import { useAdminSessionStore } from '@/stores/adminSessionStore';
+import SplashScreen from '@/components/home/SplashScreen';
+
+const SPLASH_DURATION_MS = 1500;
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const bootstrapSession = useAdminSessionStore((state) => state.bootstrapSession);
+  const setUnauthenticated = useAdminSessionStore((state) => state.setUnauthenticated);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setIsLoading(false);
+    }, SPLASH_DURATION_MS);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, []);
+
+  useEffect(() => {
+    void bootstrapSession();
+  }, [bootstrapSession]);
+
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      setUnauthenticated();
+
+      const isAdminPath = location.pathname.startsWith('/admin');
+      const isLoginPath = location.pathname === '/admin/login';
+      if (!isAdminPath || isLoginPath) {
+        return;
+      }
+
+      const redirect = `${location.pathname}${location.search}${location.hash}`;
+      navigate(`/admin/login?redirect=${encodeURIComponent(redirect)}`, { replace: true });
+    });
+
+    return () => {
+      setUnauthorizedHandler(null);
+    };
+  }, [location.hash, location.pathname, location.search, navigate, setUnauthenticated]);
+
+  if (isLoading) {
+    return <SplashScreen />;
+  }
+
   return (
     <>
       <Routes>

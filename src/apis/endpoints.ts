@@ -4,6 +4,7 @@ const PUBLIC_API_PREFIX = '/api/v1';
 const ADMIN_API_PREFIX = '/admin/v1';
 
 export const ENDPOINTS = {
+  // Public (no token)
   login: `${PUBLIC_API_PREFIX}/login`,
   notices: `${PUBLIC_API_PREFIX}/notices`,
   noticeById: (noticeId: number | string) => `${PUBLIC_API_PREFIX}/notices/${noticeId}`,
@@ -12,6 +13,7 @@ export const ENDPOINTS = {
   booths: `${PUBLIC_API_PREFIX}/booths/list`,
   boothById: (boothId: number | string) => `${PUBLIC_API_PREFIX}/booths/${boothId}`,
 
+  // Admin (token required)
   adminMe: `${ADMIN_API_PREFIX}/me`,
   adminNotices: `${ADMIN_API_PREFIX}/notices`,
   adminNoticeById: (noticeId: number | string) => `${ADMIN_API_PREFIX}/notices/${noticeId}`,

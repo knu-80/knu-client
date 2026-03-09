@@ -11,6 +11,7 @@ export interface EventItem {
   location: string;
   eventType: EventType;
   imageUrl: string | null;
+  image?: File | null;
   startAt: string;
   endAt: string;
   isActive: boolean;

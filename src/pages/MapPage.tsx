@@ -6,6 +6,7 @@ import { Map } from '@/components/map';
 import { DIVISION_LIST } from '@/constants/booth';
 import { BoothPopup } from '@/components/BoothPopup';
 import { useBooths } from '@/hooks/useBooths';
+import type { BoothDivision } from '@/apis';
 
 export default function MapPage() {
   const location = useLocation();
@@ -19,6 +20,8 @@ export default function MapPage() {
     const externalId = location.state?.selectedBoothId;
     return externalId ? Number(externalId) : null;
   });
+
+  const [selectedDivision, setSelectedDivision] = useState<BoothDivision | null>(null);
 
   const handleBoothClick = useCallback((id: number) => {
     setSelectedBoothId(id);
@@ -42,11 +45,18 @@ export default function MapPage() {
 
       <div className="sticky top-[52px] z-20 flex gap-2 overflow-x-auto px-5 py-2 no-scrollbar">
         {DIVISION_LIST.map((d) => (
-          <ClubCategoryChip key={d} division={d} />
+          <div key={d} onClick={() => setSelectedDivision((prev) => (prev === d ? null : d))}>
+            <ClubCategoryChip division={d} active={selectedDivision === d} />
+          </div>
         ))}
       </div>
 
-      <Map booths={booths} selectedBoothId={selectedBoothId} onBoothClick={handleBoothClick} />
+      <Map
+        booths={booths}
+        selectedBoothId={selectedBoothId}
+        selectedDivision={selectedDivision}
+        onBoothClick={handleBoothClick}
+      />
       {selectedBoothId && (
         <div className="absolute bottom-0 left-0 w-full px-6">
           <BoothPopup

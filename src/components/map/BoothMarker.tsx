@@ -6,6 +6,7 @@ interface BoothMarkerProps {
   name: string;
   bgColorClass: string;
   isSelected: boolean;
+  isFiltered?: boolean;
   isManagement?: boolean;
   isOpen: boolean;
   onClick: () => void;
@@ -17,6 +18,7 @@ export const BoothMarker = memo(function BoothMarker({
   name,
   bgColorClass,
   isSelected,
+  isFiltered,
   isManagement,
   // isOpen,
   onClick,
@@ -40,7 +42,7 @@ export const BoothMarker = memo(function BoothMarker({
 
       {name && (
         <span
-          className={`absolute inset-0 flex items-center justify-center pointer-events-none z-10 typo-caption font-medium ${isSelected ? 'text-white' : 'text-black'} whitespace-nowrap`}
+          className={`absolute inset-0 flex items-center justify-center pointer-events-none z-10 typo-caption font-medium ${isSelected || isFiltered ? 'text-white' : 'text-black'} whitespace-nowrap`}
         >
           {name}
         </span>

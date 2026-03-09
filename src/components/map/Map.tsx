@@ -4,15 +4,16 @@ import { MapBackground } from './MapBackground';
 import { BuildingLabels } from './BuildingLabels';
 import { BoothMarkers } from './BoothMarkers';
 import { useMapCamera } from './useMapCamera';
-import { type BoothSummary } from '@/apis';
+import type { BoothSummary, BoothDivision } from '@/apis';
 
 interface MapProps {
   booths: BoothSummary[];
   onBoothClick: (id: number) => void;
   selectedBoothId: number | null;
+  selectedDivision: BoothDivision | null;
 }
 
-export function Map({ booths, onBoothClick, selectedBoothId }: MapProps) {
+export function Map({ booths, onBoothClick, selectedBoothId, selectedDivision }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { x, y, scale, constraints, moveToBooth, isPinching } = useMapCamera(containerRef);
@@ -41,6 +42,7 @@ export function Map({ booths, onBoothClick, selectedBoothId }: MapProps) {
             onBoothClick(id);
           }}
           selectedBoothId={selectedBoothId}
+          selectedDivision={selectedDivision}
         />
       </motion.div>
     </div>

@@ -14,6 +14,8 @@
   --color-gray-300: #d4d4d4;
   --color-gray-400: #a3a3a3;
   --color-gray-500: #737373;
+  --color-gray-600: #4c4c4c;
+  --color-gray-700: #3b3b3b;
 
   --color-text-muted: var(--color-gray-400);
 

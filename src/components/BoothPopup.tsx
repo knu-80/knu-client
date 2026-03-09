@@ -43,10 +43,12 @@ export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }:
           </div>
         )}
 
-        <div className="flex flex-col h-full gap-1 overflow-hidden">
+        <div className="flex flex-col h-full gap-1 overflow-hidden min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="font-medium typo-body-1 truncate">{booth.name}</h3>
-            <ClubCategoryLabel division={booth.division} />
+            <h3 className="font-medium typo-body-1 truncate flex-1">{booth.name}</h3>
+            <div className="shrink-0">
+              <ClubCategoryLabel division={booth.division} />
+            </div>
           </div>
           <p className="typo-caption text-gray-500 line-clamp-2">{booth.description}</p>
         </div>

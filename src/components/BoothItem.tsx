@@ -1,5 +1,5 @@
 import type { BoothDivision, BoothSummary } from '@/apis/modules/boothApi';
-import { ClubCategory } from './ClubCategory';
+import { ClubCategoryLabel } from './ClubCategory';
 
 interface BoothItemProps {
   booth: BoothSummary;
@@ -65,12 +65,14 @@ export function BoothItem({ booth, onClick, onLocationClick }: BoothItemProps) {
       )}
 
       <div className="flex flex-col flex-1 h-[100px] justify-between py-1 overflow-hidden">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-semibold typo-body-1 truncate text-gray-900">{booth.name}</h3>
-            <ClubCategory division={booth.division} />
+        <div className="flex flex-col h-full gap-1 overflow-hidden min-w-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <h3 className="font-medium typo-body-1 truncate text-gray-900">{booth.name}</h3>
+            <div className="shrink-0 text-black">
+              <ClubCategoryLabel division={booth.division} />
+            </div>
           </div>
-          <p className="typo-body-3 text-gray-500 line-clamp-1">{booth.description}</p>
+          <p className="typo-caption text-gray-500 line-clamp-2">{booth.description}</p>
         </div>
         <div className="flex justify-end gap-2">
           <button

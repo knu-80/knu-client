@@ -3,6 +3,7 @@ import ImageCarousel from '@/components/ImageCarousel';
 import ApplyButton from '@/components/ApplyButton';
 import { ClubCategory } from '@/components/ClubCategory';
 import { useBooth } from '@/hooks/useBooth';
+import { ExpandableText } from '@/components/ExpandableText';
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -21,11 +22,7 @@ export default function BoothDetailPage() {
         <ClubCategory division={booth.division} />
       </div>
 
-      <div className="mb-10 text-black">
-        <p className="typo-body-2 whitespace-pre-wrap">
-          {booth.description || '동아리 소개 정보가 없습니다.'}
-        </p>
-      </div>
+      <ExpandableText text={booth.description || '동아리 소개 정보가 없습니다.'} />
 
       <div className="mb-10">
         <h3 className="typo-heading-3 mb-3 text-black">동아리 활동 사진</h3>

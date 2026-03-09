@@ -3,13 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FaInstagram, FaPhoneAlt, FaCheck, FaChevronDown, FaLink } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
-import ClubCategory from '@/components/ClubCategory';
+import { ClubCategory } from '@/components/ClubCategory';
 import ImageCarouselUploader from '@/components/ImageCarouselUploader';
-import { DIVISION_INFO, MOCK_BOOTHS, type BoothDetail } from '@/constants/booth';
+import { DIVISION_INFO, MOCK_BOOTHS } from '@/constants/booth';
+import type { BoothSummary } from '@/apis';
 
 interface BoothEditForm {
   name: string;
-  divisionKey: BoothDetail['division'];
+  divisionKey: BoothSummary['division'];
   grades: number[];
   fee: string;
   description: string;
@@ -48,13 +49,13 @@ export default function AdminBoothEditPage() {
 
   const [formData, setFormData] = useState<BoothEditForm>({
     name: booth?.name || '',
-    divisionKey: (booth?.division || 'ACADEMIC_DIVISION') as BoothDetail['division'],
+    divisionKey: (booth?.division || 'ACADEMIC_DIVISION') as BoothSummary['division'],
     grades: [1, 2, 3, 4],
     fee: '40,000',
     description: '안녕하세요 저희는 경북대 동아리입니다.',
     instagram: 'knu_club',
     phone: '010-1234-5678',
-    imageUrls: booth?.imgUrls || ['https://picsum.photos/600/400'],
+    imageUrls: booth?.imageUrls || ['https://picsum.photos/600/400'],
     applyUrl: 'https://example.com/apply',
   });
 
@@ -156,7 +157,7 @@ export default function AdminBoothEditPage() {
             <div className="absolute top-full right-0 mt-1 w-40 bg-white border border-gray-100 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
               {(
                 Object.entries(DIVISION_INFO) as [
-                  BoothDetail['division'],
+                  BoothSummary['division'],
                   (typeof DIVISION_INFO)['ACADEMIC_DIVISION'],
                 ][]
               ).map(([key, info]) => (

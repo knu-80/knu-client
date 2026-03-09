@@ -1,16 +1,47 @@
-export const DIVISION_INFO = {
-  ACADEMIC_DIVISION: { name: '학술부', shortName: '학술', color: 'bg-[var(--color-knu-sage)]' },
-  CULTURE_ART_DIVISION: { name: '문예부', shortName: '문예', color: 'bg-[var(--color-knu-gold)]' },
-  SPORTS_DIVISION: { name: '체육부', shortName: '체육', color: 'bg-[var(--color-knu-lavender)]' },
-  SOCIAL_DIVISION: { name: '사회부', shortName: '사회', color: 'bg-[var(--color-knu-mint)]' },
-  RELIGIOUS_DIVISION: { name: '종교부', shortName: '종교', color: 'bg-[var(--color-knu-silver)]' },
-  MANAGEMENT: { name: '총동연', shortName: '총동연', color: 'bg-knu-red' },
-  EXTERNAL_SUPPORT: { name: '외부부스', shortName: '외부', color: 'bg-gray-400' },
-} as const;
+import type { BoothDivision, BoothSummary } from '@/apis/modules/boothApi';
 
-export type DivisionType = keyof typeof DIVISION_INFO;
+export const DIVISION_INFO: Record<
+  BoothDivision,
+  { name: string; shortName: string; color: string }
+> = {
+  ACADEMIC_DIVISION: {
+    name: '학술부',
+    shortName: '학술',
+    color: 'bg-[var(--color-knu-sage)]',
+  },
+  CULTURE_ART_DIVISION: {
+    name: '문예부',
+    shortName: '문예',
+    color: 'bg-[var(--color-knu-gold)]',
+  },
+  SPORTS_DIVISION: {
+    name: '체육부',
+    shortName: '체육',
+    color: 'bg-[var(--color-knu-lavender)]',
+  },
+  SOCIAL_DIVISION: {
+    name: '사회부',
+    shortName: '사회',
+    color: 'bg-[var(--color-knu-mint)]',
+  },
+  RELIGIOUS_DIVISION: {
+    name: '종교부',
+    shortName: '종교',
+    color: 'bg-[var(--color-knu-silver)]',
+  },
+  MANAGEMENT: {
+    name: '총동연',
+    shortName: '총동연',
+    color: 'bg-knu-red',
+  },
+  EXTERNAL_SUPPORT: {
+    name: '외부부스',
+    shortName: '외부',
+    color: 'bg-gray-400',
+  },
+};
 
-export const DIVISION_LIST: DivisionType[] = [
+export const DIVISION_LIST: BoothDivision[] = [
   'CULTURE_ART_DIVISION',
   'SOCIAL_DIVISION',
   'ACADEMIC_DIVISION',
@@ -18,46 +49,18 @@ export const DIVISION_LIST: DivisionType[] = [
   'RELIGIOUS_DIVISION',
 ];
 
-export interface BoothDetail {
-  id: number;
-  boothNumber: number;
-  name: string;
-  division: DivisionType;
-  isActive: boolean;
-  recruitmentGrades?: string;
-  fee?: string;
-  description?: string;
-  instagram?: string;
-  phone?: string;
-  imgUrls?: string[];
-  applyLink?: string;
-}
-
-export const DEFAULT_BOOTH: BoothDetail = {
-  id: 0,
-  boothNumber: 0,
-  name: '부스이름',
-  division: 'ACADEMIC_DIVISION',
-  isActive: false,
-  description: '설명',
-  applyLink: '',
-  imgUrls: [],
-};
-
-export const MOCK_BOOTHS: Record<number, BoothDetail> = {
+export const MOCK_BOOTHS: Record<number, BoothSummary> = {
   1: {
     id: 1,
     boothNumber: 1,
     name: '쌩목',
     division: 'CULTURE_ART_DIVISION',
+    keywords: '',
     isActive: false,
     description: '예시!!!!!!!',
+    contact: '예시',
     applyLink: '',
-    recruitmentGrades: '전 학년 모집',
-    fee: '40,000',
-    instagram: 'knu_academic',
-    phone: '010-0000-0000',
-    imgUrls: [
+    imageUrls: [
       'https://picsum.photos/id/101/600/400',
       'https://picsum.photos/id/102/600/400',
       'https://picsum.photos/id/103/600/400',
@@ -71,10 +74,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: false,
     description: '문예부에서 창작의 즐거움을 느껴보세요.',
     applyLink: '',
-    recruitmentGrades: '1, 2학년 모집',
-    fee: '30,000',
-    instagram: 'knu_culture',
-    imgUrls: ['https://picsum.photos/id/201/600/400', 'https://picsum.photos/id/202/600/400'],
+    imageUrls: ['https://picsum.photos/id/201/600/400', 'https://picsum.photos/id/202/600/400'],
+    keywords: '',
+    contact: '',
   },
   3: {
     id: 3,
@@ -84,7 +86,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: false,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   4: {
     id: 4,
@@ -94,7 +98,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: false,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   5: {
     id: 5,
@@ -104,7 +110,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: false,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   6: {
     id: 6,
@@ -114,7 +122,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: true,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   7: {
     id: 7,
@@ -124,7 +134,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: true,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   8: {
     id: 8,
@@ -134,7 +146,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: true,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   9: {
     id: 9,
@@ -144,7 +158,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: true,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   10: {
     id: 10,
@@ -154,7 +170,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: true,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   101: {
     id: 101,
@@ -164,8 +182,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: false,
     description: '경북대학교 제XX대 총동아리연합회입니다.',
     applyLink: '',
-    recruitmentGrades: '모집 마감',
-    imgUrls: ['https://picsum.photos/id/301/600/400'],
+    imageUrls: ['https://picsum.photos/id/301/600/400'],
+    keywords: '',
+    contact: '',
   },
   102: {
     id: 102,
@@ -175,7 +194,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: false,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   103: {
     id: 103,
@@ -185,7 +206,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: false,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   104: {
     id: 104,
@@ -195,7 +218,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: false,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   105: {
     id: 105,
@@ -205,7 +230,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: false,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   106: {
     id: 106,
@@ -215,7 +242,9 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: false,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
   107: {
     id: 107,
@@ -225,6 +254,8 @@ export const MOCK_BOOTHS: Record<number, BoothDetail> = {
     isActive: false,
     description: '',
     applyLink: '',
-    imgUrls: [],
+    imageUrls: [],
+    keywords: '',
+    contact: '',
   },
 };

@@ -1,8 +1,8 @@
-import type { BoothDetail, DivisionType } from '@/constants/booth';
+import type { BoothDivision, BoothSummary } from '@/apis/modules/boothApi';
 import { ClubCategory } from './ClubCategory';
 
 interface BoothItemProps {
-  booth: BoothDetail;
+  booth: BoothSummary;
   onClick: () => void;
   onLocationClick?: (e: React.MouseEvent) => void;
 }
@@ -12,7 +12,7 @@ function ApplyButton({
   isActive,
   onClick,
 }: {
-  division: DivisionType;
+  division: BoothDivision;
   isActive: boolean;
   onClick: () => void;
 }) {
@@ -47,7 +47,7 @@ function ApplyButton({
 }
 
 export function BoothItem({ booth, onClick, onLocationClick }: BoothItemProps) {
-  const thumbnail = booth.imgUrls?.[0];
+  const thumbnail = booth.imageUrls?.[0];
   const hasImage = thumbnail && thumbnail.trim() !== '';
 
   return (

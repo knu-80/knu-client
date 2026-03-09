@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
-import { FaInstagram, FaPhoneAlt } from 'react-icons/fa';
+// import { FaInstagram, FaPhoneAlt } from 'react-icons/fa';
 import ImageCarousel from '@/components/ImageCarousel';
 import ApplyButton from '@/components/ApplyButton';
-import ClubCategory from '@/components/ClubCategory';
 import { MOCK_BOOTHS } from '@/constants/booth';
+import { ClubCategory } from '@/components/ClubCategory';
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -21,8 +21,8 @@ export default function BoothDetailPage() {
       </div>
 
       <div className="flex items-center space-x-2 mb-4 typo-muted text-knu-gray">
-        <p>[{booth.recruitmentGrades || '모집 정보 없음'}]</p>
-        {booth.fee && <p>회비 {booth.fee}원</p>}
+        {/* <p>[{booth.recruitmentGrades || '모집 정보 없음'}]</p>
+        {booth.fee && <p>회비 {booth.fee}원</p>} */}
       </div>
 
       <div className="mb-10 text-black">
@@ -31,16 +31,16 @@ export default function BoothDetailPage() {
         </p>
       </div>
 
-      {booth.imgUrls && booth.imgUrls.length > 0 && (
+      {booth.imageUrls && booth.imageUrls.length > 0 && (
         <ImageCarousel
-          imageUrls={booth.imgUrls}
+          imageUrls={booth.imageUrls}
           altText={`${booth.name} 사진`}
           label="동아리 활동 사진"
           className="mb-10"
         />
       )}
 
-      {(booth.instagram || booth.phone) && (
+      {/* {(booth.instagram || booth.phone) && (
         <div className="mb-10">
           <h3 className="typo-heading-3 mb-3 text-black">문의하기</h3>
           <div className="flex flex-col space-y-3">
@@ -60,7 +60,7 @@ export default function BoothDetailPage() {
             )}
           </div>
         </div>
-      )}
+      )} */}
 
       {booth.applyLink && <ApplyButton url={booth.applyLink} />}
     </div>

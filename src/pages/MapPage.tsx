@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useCallback } from 'react';
 import { SearchBar } from '@/components/SearchBar';
-import { MapPageClubCategory } from '@/components/ClubCategory';
+import { ClubCategoryChip } from '@/components/ClubCategory';
 import { Map } from '@/components/map';
 import { DIVISION_LIST } from '@/constants/booth';
 import { BoothPopup } from '@/components/BoothPopup';
@@ -42,7 +42,7 @@ export default function MapPage() {
 
       <div className="sticky top-[52px] z-20 flex gap-2 overflow-x-auto px-5 py-2 no-scrollbar">
         {DIVISION_LIST.map((d) => (
-          <MapPageClubCategory key={d} division={d} />
+          <ClubCategoryChip key={d} division={d} />
         ))}
       </div>
 

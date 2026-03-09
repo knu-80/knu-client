@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { memo } from 'react';
-import { ClubCategory } from './ClubCategory';
+import { ClubCategoryLabel } from './ClubCategory';
 import type { BoothSummary } from '@/apis/modules/boothApi';
 
 interface BoothPopupProps {
@@ -46,7 +46,7 @@ export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }:
         <div className="flex flex-col h-full gap-1 overflow-hidden">
           <div className="flex items-center gap-2">
             <h3 className="font-medium typo-body-1 truncate">{booth.name}</h3>
-            <ClubCategory division={booth.division} />
+            <ClubCategoryLabel division={booth.division} />
           </div>
           <p className="typo-caption text-gray-500 line-clamp-2">{booth.description}</p>
         </div>

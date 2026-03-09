@@ -18,9 +18,10 @@ export interface BoothSummary {
   boothNumber: number;
   name: string;
   division: BoothDivision;
-  keywords: string;
+  keywords: string | null;
   description: string;
   applyLink: string;
+  contact: string | null;
   imageUrls: string[];
   isActive: boolean;
 }

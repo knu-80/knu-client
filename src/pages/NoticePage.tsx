@@ -28,7 +28,7 @@ export default function NoticePage() {
     <div className="pt-5 sm:p-5">
       <div className="flex items-center space-x-2 mb-4 px-2 sm:px-0">
         <GrAnnounce className="h-6 w-6 text-black" />
-        <h2 className="typo-heading-2 text-black font-bold">공지사항</h2>
+        <h2 className="typo-heading-2 text-black">공지사항</h2>
       </div>
 
       <div className="flex space-x-2 mb-6 px-2 sm:px-0">

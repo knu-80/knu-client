@@ -3,17 +3,13 @@ import { unwrapApiResponse } from '@/apis/error';
 import { http } from '@/apis/http';
 import { buildJsonFormData, omitUndefined } from '@/apis/utils';
 import type { NoticeType } from '@/apis/enumMapper';
-import type { ApiResponse, CursorPaginationParams, PartialUpdate } from '@/apis/types';
+import type { ApiResponse, PartialUpdate } from '@/apis/types';
 
 export interface NoticeListItem {
   noticeId: number;
-  title: string;
-  contentPreview: string;
-  createdAt: string;
-  authorId: number;
-  authorNickname: string;
   type: NoticeType;
-  imageUrls: string[];
+  title: string;
+  createdAt: string;
 }
 
 export interface LostFoundDetail {
@@ -55,10 +51,8 @@ export type NoticeUpdateInput = PartialUpdate<{
   lostFoundDetail: LostFoundDetail;
 }>;
 
-export async function getNotices(params: CursorPaginationParams = {}): Promise<NoticeListItem[]> {
-  const { data } = await http.get<ApiResponse<NoticeListItem[]>>(ENDPOINTS.notices, {
-    params,
-  });
+export async function getNotices(): Promise<NoticeListItem[]> {
+  const { data } = await http.get<ApiResponse<NoticeListItem[]>>(ENDPOINTS.notices);
 
   return unwrapApiResponse(data);
 }

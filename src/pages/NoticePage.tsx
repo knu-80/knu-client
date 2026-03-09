@@ -1,18 +1,28 @@
 import { useState } from 'react';
 import { GrAnnounce } from 'react-icons/gr';
 import NoticeCard from '@/components/NoticeCard';
-import { NOTICES } from '@/mocks/notices';
+import { useNotices } from '@/hooks/useNotices';
+import { toNoticeLabel } from '@/apis/enumMapper';
 
 export default function NoticePage() {
+  const { notices, isLoading } = useNotices();
   const [activeTab, setActiveTab] = useState('전체');
   const tabs = ['전체', '공지', '분실물'];
 
   const filteredNotices =
     activeTab === '전체'
-      ? NOTICES
-      : NOTICES.filter((notice) => {
-          return notice.category === activeTab;
+      ? notices
+      : notices.filter((notice) => {
+          return toNoticeLabel(notice.type) === activeTab;
         });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-knu-red"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-5 sm:p-5">
@@ -53,13 +63,13 @@ export default function NoticePage() {
           ) : (
             filteredNotices.map((notice, index) => (
               <NoticeCard
-                key={notice.id}
-                id={notice.id}
+                key={notice.noticeId}
+                id={notice.noticeId}
                 index={index}
                 totalCount={filteredNotices.length}
                 title={notice.title}
-                date={notice.date}
-                category={notice.category}
+                date={notice.createdAt.split('T')[0]}
+                category={toNoticeLabel(notice.type)}
               />
             ))
           )}

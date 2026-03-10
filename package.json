@@ -1,7 +1,7 @@
 {
-  "name": "web",
+  "name": "knu-client",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.2.0",
   "type": "module",
   "packageManager": "pnpm@9.15.3",
   "scripts": {

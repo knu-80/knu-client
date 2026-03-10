@@ -54,16 +54,16 @@ function SessionTimeline({ set }: { set: PerformanceSet }) {
         </span>
       </div>
 
-      <div className="relative mt-4 pl-5">
+      <div className="relative mt-4">
         <div
           className="absolute bottom-2 left-[8px] top-2 w-px bg-knu-silver/70"
           aria-hidden="true"
         />
         <div className="space-y-3">
           {set.items.map((item) => (
-            <div key={`${set.id}-${item.time}-${item.title}`} className="relative">
+            <div key={`${set.id}-${item.time}-${item.title}`} className="relative pl-6">
               <span
-                className="absolute left-[-15px] top-[9px] h-2.5 w-2.5 rounded-full bg-knu-red shadow-[0_0_0_3px_rgba(230,0,0,0.14)]"
+                className="absolute left-[3.5px] top-[24px] h-2.5 w-2.5 rounded-full bg-knu-red shadow-[0_0_0_3px_rgba(230,0,0,0.14)]"
                 aria-hidden="true"
               />
               <div className="rounded-xl border border-knu-silver/55 bg-[#fdfcf9] px-3 py-2.5">
@@ -116,7 +116,7 @@ export default function TimeTablePage() {
                 aria-selected={isActive}
                 aria-controls={`timetable-panel-${key}`}
                 onClick={() => setActiveDay(key)}
-                className={`rounded-full border px-3 py-2.5 text-sm font-semibold transition-all ${
+                className={`interactive-transition rounded-full border px-3 py-2.5 text-sm font-semibold ${
                   isActive
                     ? 'border-knu-red bg-knu-red text-white shadow-[0_6px_14px_rgba(230,0,0,0.24)]'
                     : 'border-knu-silver bg-white text-knu-gray hover:border-knu-gold/70 hover:text-knu-gold'

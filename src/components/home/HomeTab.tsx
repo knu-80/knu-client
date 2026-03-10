@@ -281,11 +281,7 @@ export default function HomeTab() {
       setNoticeLoadingByDay((prev) => ({ ...prev, [activeDay]: true }));
 
       try {
-        const notices = await getNotices({
-          day: activeOption.queryDate,
-          size: 6,
-          sort: 'createdAt,desc',
-        });
+        const notices = await getNotices();
 
         if (!isMounted) {
           return;

@@ -3,9 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FaCheck, FaChevronDown, FaLink } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
-import ClubCategory from '@/components/ClubCategory';
+import { ClubCategory } from '@/components/ClubCategory';
 import ImageCarouselUploader, { type ImageItem } from '@/components/ImageCarouselUploader';
-import { DIVISION_INFO, type BoothDetail } from '@/constants/booth';
+import { DIVISION_INFO } from '@/constants/booth';
 import { getBooth, type BoothDivision, type BoothSummary } from '@/apis/modules/boothApi';
 import { useAdminSessionStore } from '@/stores/adminSessionStore';
 import { useBoothMutation } from '@/hooks/useBoothMutation';
@@ -13,7 +13,7 @@ import { urlToFile } from '@/apis/modules/noticeApi';
 
 interface BoothEditForm {
   name: string;
-  divisionKey: BoothDetail['division'];
+  divisionKey: BoothSummary['division'];
   description: string;
   applyUrl: string;
 }
@@ -26,7 +26,7 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
 
   const [formData, setFormData] = useState<BoothEditForm>({
     name: booth.name,
-    divisionKey: booth.division as BoothDetail['division'],
+    divisionKey: booth.division as BoothSummary['division'],
     description: booth.description || '',
     applyUrl: booth.applyLink || '',
   });
@@ -192,7 +192,7 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
             <div className="absolute top-full right-0 mt-1 w-40 bg-white border border-gray-100 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
               {(
                 Object.entries(DIVISION_INFO) as [
-                  BoothDetail['division'],
+                  BoothSummary['division'],
                   (typeof DIVISION_INFO)['ACADEMIC_DIVISION'],
                 ][]
               ).map(([key, info]) => (

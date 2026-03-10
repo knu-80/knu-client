@@ -17,8 +17,14 @@ export const ENDPOINTS = {
   adminMe: `${ADMIN_API_PREFIX}/me`,
   adminNotices: `${ADMIN_API_PREFIX}/notices`,
   adminNoticeById: (noticeId: number | string) => `${ADMIN_API_PREFIX}/notices/${noticeId}`,
+  adminNoticeImagesById: (noticeId: number | string) =>
+    `${ADMIN_API_PREFIX}/notices/${noticeId}/images`,
   adminEvents: `${ADMIN_API_PREFIX}/events`,
   adminEventById: (eventId: number | string) => `${ADMIN_API_PREFIX}/events/${eventId}`,
+  adminEventImagesById: (eventId: number | string) =>
+    `${ADMIN_API_PREFIX}/events/${eventId}/images`,
   adminBooths: `${ADMIN_API_PREFIX}/booths`,
   adminBoothById: (boothId: number | string) => `${ADMIN_API_PREFIX}/booths/${boothId}`,
+  adminBoothImagesById: (boothId: number | string) =>
+    `${ADMIN_API_PREFIX}/booths/${boothId}/images`,
 } as const;

@@ -3,7 +3,7 @@ import { FiCamera, FiX } from 'react-icons/fi';
 
 interface ImageUploaderProps {
   previewImage: string | null;
-  onImageChange: (imageUrl: string) => void;
+  onImageChange: (imageUrl: string, file: File) => void;
   onDelete?: () => void;
   aspectRatio?: string;
   label?: string;
@@ -25,7 +25,7 @@ export default function ImageUploader({
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        onImageChange(reader.result as string);
+        onImageChange(reader.result as string, file);
       };
       reader.readAsDataURL(file);
     }
@@ -54,7 +54,6 @@ export default function ImageUploader({
           </div>
         )}
 
-        {/* 마우스 호버 시 나타나는 업로드 오버레이 */}
         <div
           onClick={() => fileInputRef.current?.click()}
           className="absolute inset-0 flex cursor-pointer items-center justify-center bg-black/20 opacity-0 transition-opacity hover:opacity-100"
@@ -64,7 +63,6 @@ export default function ImageUploader({
           </div>
         </div>
 
-        {/* onDelete 프로퍼티가 있을 때만 삭제 버튼 노출 */}
         {onDelete && previewImage && (
           <button
             onClick={(e) => {

@@ -1,34 +1,90 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GrAnnounce } from 'react-icons/gr';
+import { FiTrash2 } from 'react-icons/fi';
 import { SlPencil } from 'react-icons/sl';
 import NoticeCard from '@/components/NoticeCard';
 import AdminActionButton from '@/components/AdminActionButton';
-import { NOTICES } from '@/mocks/notices';
+import ConfirmModal from '@/components/ConfirmModal';
+import AlertModal from '@/components/AlertModal';
+import { useNotices } from '@/hooks/useNotices';
+import { useNoticeMutation } from '@/hooks/useNoticeMutation';
 
 export default function AdminNoticePage() {
   const navigate = useNavigate();
+  const { notices, isLoading, refetch } = useNotices();
+  const { mutateDelete } = useNoticeMutation();
+
   const [activeTab, setActiveTab] = useState('전체');
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [targetNoticeId, setTargetNoticeId] = useState<number | null>(null);
+
+  const [alertConfig, setAlertConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+  });
+
   const tabs = ['전체', '공지', '분실물'];
 
-  const filteredNotices =
-    activeTab === '전체'
-      ? NOTICES
-      : NOTICES.filter((notice) => {
-          return notice.category === activeTab;
-        });
+  const filteredNotices = notices.filter((notice) => {
+    if (activeTab === '전체') return true;
+    const category = notice.type === 'GENERAL' ? '공지' : '분실물';
+    return category === activeTab;
+  });
 
   const handleWrite = () => {
     navigate('/admin/notice/write');
   };
 
-  return (
-    <div className="pt-5 sm:p-5 relative pb-24">
-      <div className="flex items-center space-x-2 mb-4 px-2 sm:px-0">
-        <GrAnnounce className="h-6 w-6 text-black" />
-        <h2 className="typo-heading-2 text-black font-bold">공지사항 관리</h2>
-      </div>
+  const toggleDeleteMode = () => {
+    setIsDeleteMode((prev) => !prev);
+  };
 
+  const openDeleteConfirm = (id: number) => {
+    setTargetNoticeId(id);
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (targetNoticeId !== null) {
+      await mutateDelete(targetNoticeId, {
+        onSuccess: () => {
+          setAlertConfig({
+            isOpen: true,
+            title: '삭제 완료',
+            message: '공지사항이 삭제되었습니다.',
+          });
+          refetch();
+        },
+        onError: (error) => {
+          setAlertConfig({
+            isOpen: true,
+            title: '삭제 실패',
+            message: error.message,
+          });
+        },
+      });
+      setIsConfirmModalOpen(false);
+      setTargetNoticeId(null);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsConfirmModalOpen(false);
+    setTargetNoticeId(null);
+  };
+
+  const closeAlert = () => {
+    setAlertConfig((prev) => ({ ...prev, isOpen: false }));
+  };
+
+  return (
+    <div className="pt-5 sm:p-5 relative pb-40">
       <div className="flex space-x-2 mb-6 px-2 sm:px-0">
         {tabs.map((tab) => (
           <button
@@ -48,41 +104,71 @@ export default function AdminNoticePage() {
 
       <div className="mt-4">
         <div className="flex items-center gap-x-4 px-2 sm:px-4 py-3 text-[13px] font-bold text-gray-500 border-y border-gray-100 bg-gray-50/50">
-          <div className="w-8 text-center">번호</div>
+          <div className="w-8 text-center">{isDeleteMode ? '삭제' : '번호'}</div>
           <div className="flex-1 text-center">제목</div>
           <div className="w-16 text-center">날짜</div>
         </div>
 
         <div className="divide-y divide-gray-100">
-          {filteredNotices.length === 0 ? (
+          {isLoading ? (
+            <div className="py-20 text-center text-gray-400 typo-body-2">
+              데이터를 불러오는 중...
+            </div>
+          ) : filteredNotices.length === 0 ? (
             <div className="py-20 text-center text-gray-400 typo-body-2">
               등록된 공지사항이 없습니다.
             </div>
           ) : (
             filteredNotices.map((notice, index) => (
               <NoticeCard
-                key={notice.id}
-                id={notice.id}
+                key={notice.noticeId}
+                id={notice.noticeId}
                 index={index}
                 totalCount={filteredNotices.length}
                 title={notice.title}
-                date={notice.date}
-                category={notice.category}
-                basePath="/admin/notice"
+                date={notice.createdAt.split('T')[0].replace(/-/g, '.')}
+                category={notice.type === 'GENERAL' ? '공지' : '분실물'}
+                basePath="/admin/notice/edit"
+                isDeleteMode={isDeleteMode}
+                onDeleteClick={openDeleteConfirm}
               />
             ))
           )}
         </div>
       </div>
 
-      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50">
+      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-y-3">
         <AdminActionButton
-          label="공지 추가하기"
-          icon={SlPencil}
-          onClick={handleWrite}
-          className="bg-[#0F172A]"
+          label={isDeleteMode ? '삭제 취소하기' : '공지 삭제하기'}
+          icon={FiTrash2}
+          onClick={toggleDeleteMode}
+          className={isDeleteMode ? 'bg-gray-500' : 'bg-red-600'}
         />
+        {!isDeleteMode && (
+          <AdminActionButton
+            label="공지 추가하기"
+            icon={SlPencil}
+            onClick={handleWrite}
+            className="bg-[#0F172A]"
+          />
+        )}
       </div>
+
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        title="공지사항 삭제"
+        message={`정말로 이 공지사항을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.`}
+        confirmText="삭제"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCloseModal}
+      />
+
+      <AlertModal
+        isOpen={alertConfig.isOpen}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        onClose={closeAlert}
+      />
     </div>
   );
 }

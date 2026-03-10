@@ -4,8 +4,8 @@ import RepresentativeImage from './RepresentativeImage';
 export interface EventCardProps {
   title: string;
   description: string;
-  startDate: string;
-  endDate: string;
+  startAt: string;
+  endAt: string;
   location: string;
   imageUrl: string | null;
   isAdmin?: boolean;
@@ -16,8 +16,8 @@ export interface EventCardProps {
 export default function EventCard({
   title,
   description,
-  startDate,
-  endDate,
+  startAt,
+  endAt,
   location,
   imageUrl,
   isAdmin = false,
@@ -26,7 +26,19 @@ export default function EventCard({
 }: EventCardProps) {
   const formatDateTime = (dateTimeStr: string) => {
     if (!dateTimeStr) return '미지정';
-    return dateTimeStr.replace('T', ' ').replace(/-/g, '.');
+
+    let normalizedStr = dateTimeStr;
+    if (!normalizedStr.includes('Z') && !normalizedStr.includes('+')) {
+      normalizedStr += 'Z';
+    }
+
+    const date = new Date(normalizedStr);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}.${month}.${day} ${hours}:${minutes}`;
   };
 
   return (
@@ -75,7 +87,7 @@ export default function EventCard({
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <FiClock className="h-3.5 w-3.5 shrink-0 text-knu-red" />
             <span className="truncate">
-              {formatDateTime(startDate)} ~ {formatDateTime(endDate)}
+              {formatDateTime(startAt)} ~ {formatDateTime(endAt)}
             </span>
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500">

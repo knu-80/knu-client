@@ -5,17 +5,20 @@ import AdminActionButton from '@/components/AdminActionButton';
 import SegmentedControl from '@/components/SegmentedControl';
 import AlertModal from '@/components/AlertModal';
 import ImageCarouselUploader from '@/components/ImageCarouselUploader';
+import { useNoticeMutation } from '@/hooks/useNoticeMutation';
+import type { NoticeType } from '@/apis/enumMapper';
 
 export default function AdminNoticeCreatePage() {
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { mutateCreate, isPending } = useNoticeMutation();
 
   const [category, setCategory] = useState<'공지' | '분실물'>('공지');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [itemName, setItemName] = useState('');
   const [foundLocation, setFoundLocation] = useState('');
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
 
   const [alertConfig, setAlertConfig] = useState<{
     isOpen: boolean;
@@ -46,7 +49,7 @@ export default function AdminNoticeCreatePage() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (category === '분실물' && (!itemName.trim() || !foundLocation.trim())) {
       showAlert('알림', '물품명과 습득 장소를 모두 입력해주세요.');
       return;
@@ -57,18 +60,29 @@ export default function AdminNoticeCreatePage() {
       return;
     }
 
+    const type: NoticeType = category === '공지' ? 'GENERAL' : 'LOST_FOUND';
+
     const payload = {
       title,
       content,
-      category,
-      itemName: category === '분실물' ? itemName : undefined,
-      foundLocation: category === '분실물' ? foundLocation : undefined,
-      imgUrls: imageUrls,
+      type,
+      ...(category === '분실물' && {
+        lostFoundDetail: {
+          foundPlace: foundLocation,
+          foundItem: itemName,
+        },
+      }),
     };
-    console.log('Create Notice Payload:', payload);
 
-    showAlert('등록 완료', '공지사항이 성공적으로 등록되었습니다.', () => {
-      navigate('/admin/notice');
+    await mutateCreate(payload, imageFiles, {
+      onSuccess: () => {
+        showAlert('등록 완료', '공지사항이 성공적으로 등록되었습니다.', () => {
+          navigate('/admin/notice');
+        });
+      },
+      onError: (err) => {
+        showAlert('등록 실패', `오류가 발생했습니다: ${err.message}`);
+      },
     });
   };
 
@@ -100,6 +114,7 @@ export default function AdminNoticeCreatePage() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="typo-heading-3 w-full border-none focus:ring-0 p-0 placeholder-gray-400 text-black caret-knu-red outline-none"
+          disabled={isPending}
         />
       </div>
 
@@ -113,6 +128,7 @@ export default function AdminNoticeCreatePage() {
               value={itemName}
               onChange={(e) => setItemName(e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-knu-red transition-colors"
+              disabled={isPending}
             />
           </div>
           <div className="flex flex-col space-y-2">
@@ -123,6 +139,7 @@ export default function AdminNoticeCreatePage() {
               value={foundLocation}
               onChange={(e) => setFoundLocation(e.target.value)}
               className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-knu-red transition-colors"
+              disabled={isPending}
             />
           </div>
         </div>
@@ -137,23 +154,24 @@ export default function AdminNoticeCreatePage() {
           value={content}
           onChange={handleTextareaChange}
           className="typo-body-1 w-full border-none focus:ring-0 p-0 placeholder-gray-400 resize-none min-h-37.5 caret-knu-red outline-none leading-relaxed overflow-hidden"
+          disabled={isPending}
         />
       </div>
 
       <ImageCarouselUploader
         label="관련 사진 관리"
-        imageUrls={imageUrls}
-        onImagesChange={(urls) => setImageUrls(urls)}
+        onFilesChange={setImageFiles}
         maxCount={5}
         className="mb-10"
       />
 
       <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50">
         <AdminActionButton
-          label="공지 등록하기"
+          label={isPending ? '등록 중...' : '공지 등록하기'}
           icon={FaCheck}
           onClick={handleSubmit}
-          className={`${isFormValid ? 'bg-knu-red' : 'bg-gray-400 cursor-not-allowed'}`}
+          className={`${isFormValid && !isPending ? 'bg-knu-red' : 'bg-gray-400 cursor-not-allowed'}`}
+          disabled={isPending}
         />
       </div>
 

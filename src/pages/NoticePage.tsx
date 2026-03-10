@@ -38,7 +38,7 @@ export default function NoticePage() {
               key={tab}
               type="button"
               onClick={() => setActiveTab(tab)}
-              className={`rounded-full px-3 py-2.5 text-sm font-semibold transition-all ${
+              className={`interactive-transition rounded-full px-3 py-2.5 text-sm font-semibold ${
                 isActive
                   ? 'bg-knu-red text-white shadow-[0_6px_14px_rgba(230,0,0,0.24)]'
                   : 'bg-white text-knu-gray shadow-[inset_0_0_0_1px_rgba(204,204,204,0.9)] hover:text-knu-gold hover:shadow-[inset_0_0_0_1px_rgba(191,124,38,0.5)]'
@@ -60,7 +60,7 @@ export default function NoticePage() {
             <Link
               key={notice.id}
               to={`/notice/${notice.id}`}
-              className="block rounded-2xl border border-knu-silver/55 bg-white px-4 py-3 shadow-[0_2px_8px_rgba(15,23,42,0.04)] transition hover:border-knu-gold/60 hover:shadow-[0_6px_16px_rgba(15,23,42,0.08)]"
+              className="interactive-transition block rounded-2xl border border-knu-silver/55 bg-white px-4 py-3 shadow-[0_2px_8px_rgba(15,23,42,0.04)] hover:border-knu-gold/60 hover:shadow-[0_6px_16px_rgba(15,23,42,0.08)]"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">

@@ -107,7 +107,7 @@ function SectionHeader({ title, to, label }: { title: string; to: string; label:
       <h3 className="typo-heading-2 text-knu-gray">{title}</h3>
       <Link
         to={to}
-        className="inline-flex items-center gap-1 text-sm font-semibold text-knu-gray/75 transition hover:text-knu-red"
+        className="interactive-transition inline-flex items-center gap-1 text-sm font-semibold text-knu-gray/75 hover:text-knu-red"
       >
         {label}
         <FiChevronRight className="h-4 w-4" aria-hidden="true" />
@@ -141,7 +141,7 @@ function TimeTablePreviewCard({
               key={`${item.time}-${item.title}`}
               to="/timetable"
               aria-label={`${item.title} 상세 타임테이블로 이동`}
-              className="grid grid-cols-[96px_1fr] gap-3 rounded-2xl border border-knu-silver/50 bg-knu-gold/5 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition hover:border-knu-gold/60 hover:bg-knu-gold/10"
+              className="interactive-transition grid grid-cols-[96px_1fr] gap-3 rounded-2xl border border-knu-silver/50 bg-knu-gold/5 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)] hover:border-knu-gold/60 hover:bg-knu-gold/10"
             >
               <p className="text-sm font-semibold text-knu-gold">{item.time}</p>
               <div className="min-w-0">
@@ -196,7 +196,7 @@ function NoticePreviewCard({
               key={`${item.date}-${item.category}-${item.title}`}
               to={item.noticeId ? `/notice/${item.noticeId}` : '/notice'}
               aria-label={`${item.title} 상세 공지로 이동`}
-              className="flex items-start justify-between gap-3 rounded-2xl border border-knu-silver/45 bg-knu-silver/10 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)] transition hover:border-knu-gold/60 hover:bg-knu-silver/20"
+              className="interactive-transition flex items-start justify-between gap-3 rounded-2xl border border-knu-silver/45 bg-knu-silver/10 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)] hover:border-knu-gold/60 hover:bg-knu-silver/20"
             >
               <div className="min-w-0">
                 <span
@@ -231,7 +231,7 @@ function MapPreviewCard() {
   return (
     <Link
       to="/map"
-      className="group block overflow-hidden rounded-3xl border border-knu-silver/65 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)] transition hover:border-knu-gold/55 hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
+      className="interactive-transition group block overflow-hidden rounded-3xl border border-knu-silver/65 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)] hover:border-knu-gold/55 hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
       aria-label="부스 배치도 지도 페이지로 이동"
     >
       <div className="relative h-36 overflow-hidden bg-knu-silver/20">
@@ -348,7 +348,7 @@ export default function HomeTab() {
               aria-selected={isActive}
               aria-controls={`home-day-panel-${day.key}`}
               onClick={() => setActiveDay(day.key)}
-              className={`rounded-full px-3 py-2.5 text-sm font-semibold transition-all ${
+              className={`interactive-transition rounded-full px-3 py-2.5 text-sm font-semibold ${
                 isActive
                   ? 'bg-knu-red text-white shadow-[0_6px_14px_rgba(230,0,0,0.28)]'
                   : 'bg-white text-knu-gray shadow-[inset_0_0_0_1px_rgba(204,204,204,0.9)] hover:text-knu-gold hover:shadow-[inset_0_0_0_1px_rgba(191,124,38,0.5)]'

@@ -1,31 +1,47 @@
 import { memo } from 'react';
 import { BOOTH_COORDINATES } from './world';
-import { DEFAULT_BOOTH, MOCK_BOOTHS } from '@/constants/booth';
 import { BoothMarker } from './BoothMarker';
+import type { BoothSummary, BoothDivision } from '@/apis';
+import { DIVISION_INFO } from '@/constants/booth';
 
-export const BoothMarkers = memo(function BoothMarkers({
-  onBoothClick,
-  selectedBoothId,
-}: {
+interface BoothMarkersProps {
+  booths: BoothSummary[];
   onBoothClick: (id: number) => void;
   selectedBoothId: number | null;
-}) {
+  selectedDivision: BoothDivision | null;
+}
+
+export const BoothMarkers = memo(function BoothMarkers({
+  booths,
+  onBoothClick,
+  selectedBoothId,
+  selectedDivision,
+}: BoothMarkersProps) {
   return (
     <>
-      {Object.entries(BOOTH_COORDINATES).map(([number, coord]) => {
-        const boothNum = Number(number);
-        const boothInfo = MOCK_BOOTHS[boothNum] || DEFAULT_BOOTH;
-        const isSelected = selectedBoothId === boothNum;
+      {booths.map((booth) => {
+        const coord = BOOTH_COORDINATES[booth.boothNumber] || { x: 0, y: 0 };
+
+        const isSelected = selectedBoothId === booth.id;
+        const isDivisionMatch = selectedDivision === booth.division;
+        const divisionColor = DIVISION_INFO[booth.division].color;
+
+        const bgColor = isSelected
+          ? 'bg-knu-red'
+          : selectedDivision && isDivisionMatch
+            ? divisionColor
+            : 'bg-vanilla';
 
         return (
           <BoothMarker
-            key={boothNum}
+            key={booth.id}
             {...coord}
-            name={boothInfo.name}
-            bgColorClass={isSelected ? 'bg-knu-red' : 'bg-vanilla'}
+            name={booth.name}
+            bgColorClass={bgColor}
             isSelected={isSelected}
-            isOpen={boothInfo.isActive}
-            onClick={() => onBoothClick(boothNum)}
+            isFiltered={!!selectedDivision && isDivisionMatch}
+            isOpen={booth.isActive}
+            onClick={() => onBoothClick(booth.id)}
           />
         );
       })}

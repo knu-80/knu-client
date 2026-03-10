@@ -1,24 +1,32 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { SearchBar } from '@/components/SearchBar';
-import { MOCK_BOOTHS } from '@/constants/booth';
 import { BoothItem } from '@/components/BoothItem';
 import { useState } from 'react';
+import { useRecommendedBooths } from '@/hooks/useRecommendedBooths';
+import { useBoothsWithFallback } from '@/hooks/useBooths';
 
 const RECOMMENDATIONS = ['힐링', '취미활동', '공모전', '밴드', '창업'];
 
 export default function SearchPage() {
   const navigate = useNavigate();
   const [, setSearchParams] = useSearchParams();
-
-  const recommendedBooths = Object.values(MOCK_BOOTHS).slice(0, 5);
+  const { booths } = useBoothsWithFallback();
+  const recommendedBooths = useRecommendedBooths(booths, 5);
 
   const [value, setValue] = useState('');
 
   const handleSearch = (keyword: string) => {
-    if (!keyword.trim()) return;
-    navigate(`/search/result?q=${encodeURIComponent(keyword)}`);
+    const trimmed = keyword.trim();
+
+    if (trimmed) {
+      navigate(`/search/result?q=${encodeURIComponent(trimmed)}`);
+      return;
+    }
+
+    navigate('/search/result');
   };
+
   const handleLocationClick = (id: number) => {
     navigate('/map', { state: { selectedBoothId: id } });
   };
@@ -31,7 +39,7 @@ export default function SearchPage() {
     <div className="flex flex-col h-full bg-white">
       <div className="py-3 flex items-center gap-2 border-b border-gray-100 shrink-0">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/map')}
           className="p-1 -ml-2 text-gray-600 active:bg-gray-100 rounded-full transition-colors"
         >
           <FiArrowLeft size={24} />
@@ -66,7 +74,7 @@ export default function SearchPage() {
 
         <div className="mt-5">
           <div className="mb-4 px-1">
-            <h4 className="typo-heading-3 font-semibold text-black">놓치면 아쉬운 동아리</h4>
+            <h4 className="typo-heading-3 font-semibold text-black">여기 방문은 어때요?</h4>
           </div>
           <div className="flex flex-col gap-5 px-1 pb-10">
             {recommendedBooths.map((booth) => (

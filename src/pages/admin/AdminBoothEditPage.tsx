@@ -5,7 +5,7 @@ import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
 import { ClubCategory } from '@/components/ClubCategory';
 import ImageCarouselUploader from '@/components/ImageCarouselUploader';
-import { DIVISION_INFO, MOCK_BOOTHS } from '@/constants/booth';
+import { DIVISION_INFO } from '@/constants/booth';
 import type { BoothSummary } from '@/apis';
 
 interface BoothEditForm {
@@ -37,7 +37,7 @@ export default function AdminBoothEditPage() {
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const booth = MOCK_BOOTHS[Number(id)];
+  const booth = id;
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({ ...formData, description: e.target.value });
@@ -48,14 +48,14 @@ export default function AdminBoothEditPage() {
   };
 
   const [formData, setFormData] = useState<BoothEditForm>({
-    name: booth?.name || '',
-    divisionKey: (booth?.division || 'ACADEMIC_DIVISION') as BoothSummary['division'],
+    name: '',
+    divisionKey: 'ACADEMIC_DIVISION' as BoothSummary['division'],
     grades: [1, 2, 3, 4],
     fee: '40,000',
     description: '안녕하세요 저희는 경북대 동아리입니다.',
     instagram: 'knu_club',
     phone: '010-1234-5678',
-    imageUrls: booth?.imageUrls || ['https://picsum.photos/600/400'],
+    imageUrls: ['https://picsum.photos/600/400'],
     applyUrl: 'https://example.com/apply',
   });
 

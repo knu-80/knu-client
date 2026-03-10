@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://knu-client.vercel.app/sitemap.xml

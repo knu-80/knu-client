@@ -62,7 +62,12 @@ export default function RepresentativeImage({
           }`}
           onClick={handleImageClick}
         >
-          <img src={imageUrl} alt={altText} className="w-full h-full object-cover" />
+          <img
+            src={imageUrl}
+            alt={altText}
+            className="w-full h-full object-cover"
+            draggable="false"
+          />
         </div>
       ) : (
         <div
@@ -74,7 +79,7 @@ export default function RepresentativeImage({
 
       {isModalOpen && imageUrl && (
         <div
-          className="fixed top-0 left-1/2 -translate-x-1/2 z-50
+          className="fixed top-0 left-1/2 -translate-x-1/2 z-100
                      w-full max-w-175 min-h-screen
                      bg-white/50 flex items-center justify-center p-4"
           onClick={handleModalClose}

@@ -41,3 +41,22 @@
 
 - `main` : 최종 배포용 브랜치
 - `develop` : 기능 통합 및 개발용 브랜치
+
+## 5. API 공통 레이어 (axios)
+
+- 공통 API 레이어는 `src/apis`에서 관리합니다.
+- 환경 변수는 `.env.example`을 기준으로 설정합니다.
+  - `VITE_API_BASE_URL`
+  - `VITE_API_TIMEOUT_MS`
+- 공통 응답 포맷은 `ApiResponse<T>`를 사용하며, `result === "FAIL"`은 공통 에러로 처리합니다.
+- 백엔드 에러 포맷(`error.state`, `error.code`, `error.message`)도 공통 파서에서 처리합니다.
+- 수정 API(PATCH)는 변경 필드만 보내는 방식(`Partial`)을 기본 규칙으로 사용합니다.
+- PATCH 규칙: 기본적으로 변경된 필드만 전송합니다. `undefined`는 전송하지 않으며, `null`은 백엔드가 허용한 필드에서만 전송합니다.
+- 엔드포인트 규칙: 일반 조회는 `api/v1`, 토큰 필요 API는 `admin/v1`을 사용합니다.
+- 상세 사용 방식은 `src/apis/README.md`를 참고해주세요.
+
+## 6. 테스트 실행
+
+- 단위/통합 테스트 실행: `pnpm test`
+- 테스트 watch 모드: `pnpm test:watch`
+- 관리자 세션 가드 테스트 가이드: `docs/ADMIN_SESSION_GUARD_TESTING.md`

@@ -1,47 +1,76 @@
-import { FaRegCalendar, FaInfoCircle } from 'react-icons/fa';
-import { FaUser } from 'react-icons/fa';
-import RepresentativeImage from '@/components/RepresentativeImage';
+import { useParams } from 'react-router-dom';
+import { FaRegCalendar, FaInfoCircle, FaUser } from 'react-icons/fa';
+import ImageCarousel from '@/components/ImageCarousel';
 import FoundItemCard from '@/components/FoundItemCard';
+import { useNoticeDetail } from '@/hooks/useNoticeDetail';
+import { toNoticeLabel } from '@/apis/enumMapper';
 
 export default function NoticeDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const noticeId = id ? Number(id) : null;
+  const { notice, isLoading, error } = useNoticeDetail(noticeId);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-knu-red"></div>
+      </div>
+    );
+  }
+
+  if (error || !notice) {
+    return (
+      <div className="py-20 text-center text-gray-500">
+        공지사항을 불러오는 중 오류가 발생했거나 존재하지 않는 공지입니다.
+      </div>
+    );
+  }
+
+  const isLostItem = toNoticeLabel(notice.type) === '분실물';
+
   return (
     <div className="pt-5">
       <div className="flex flex-col space-y-1 mb-8 text-black">
-        <h2 className="typo-heading-3">부스 운영시간 안내</h2>
+        <h2 className="typo-heading-3">{notice.title}</h2>
         <div className="flex items-center space-x-4 text-sm text-gray-500 mt-1 pt-1">
           <div className="flex items-center space-x-2">
             <FaRegCalendar />
-            <span>작성일: 2026.10.26</span>
+            <span>작성일: {notice.createdAt.split('T')[0]}</span>
           </div>
           <span className="h-4 w-px bg-gray-300"></span>
           <div className="flex items-center space-x-2">
             <FaUser />
-            <span>작성자: 운영팀</span>
+            <span>작성자: {notice.authorNickname}</span>
           </div>
         </div>
       </div>
 
-      <FoundItemCard itemName="호반우 인형" foundLocation="일청담" />
+      {isLostItem && notice.lostFoundDetail && (
+        <FoundItemCard
+          itemName={notice.lostFoundDetail.foundItem}
+          foundLocation={notice.lostFoundDetail.foundPlace}
+        />
+      )}
 
       <div className="mb-10 mt-5 text-black">
-        <p className="typo-body-1">
-          안녕하세요, 운영팀입니다. <br />
-          행사 진행 상황에 따라 운영시간이 오후 8시까지로 어쩌구 저쩌구..
-        </p>
+        <p className="typo-body-1 whitespace-pre-wrap">{notice.content}</p>
       </div>
 
-      <div className="mb-5">
-        <h3 className="typo-heading-3 text-black mb-3">관련 사진</h3>
-        <RepresentativeImage
-          imageUrl="https://picsum.photos/600/400"
-          altText="부스 운영시간 안내 관련 사진"
+      {notice.imageUrls && notice.imageUrls.length > 0 && (
+        <ImageCarousel
+          imageUrls={notice.imageUrls}
+          altText={`${notice.title} 관련 사진`}
+          label="관련 사진"
+          className="mb-10"
         />
-      </div>
+      )}
 
-      <div className="flex items-center space-x-2 p-3 bg-blue-50 border border-blue-200 text-blue-800 rounded-md mb-10">
-        <FaInfoCircle className="text-xl" />
-        <p className="typo-body-2">분실물은 총동연 부스에서 수령가능합니다</p>
-      </div>
+      {isLostItem && (
+        <div className="flex items-center space-x-3 p-4 bg-red-50/50 border border-red-100 text-red-900 rounded-xl mb-10 shadow-sm">
+          <FaInfoCircle className="text-xl text-knu-red" />
+          <p className="typo-body-2 font-semibold">분실물은 총동연 부스에서 수령 가능합니다</p>
+        </div>
+      )}
     </div>
   );
 }

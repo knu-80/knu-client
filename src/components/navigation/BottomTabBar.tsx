@@ -33,7 +33,7 @@ export default function BottomTabBar() {
                   to={item.to}
                   end={item.end}
                   className={({ isActive }) =>
-                    `flex flex-col items-center gap-1 rounded-md py-1.5 text-xs font-semibold transition-colors ${
+                    `interactive-transition flex flex-col items-center gap-1 rounded-md py-1.5 text-xs font-semibold ${
                       isActive ? 'text-knu-red' : 'text-gray-500'
                     }`
                   }

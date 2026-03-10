@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { GrAnnounce } from 'react-icons/gr';
 import { FiChevronRight } from 'react-icons/fi';
@@ -10,6 +10,10 @@ const TABS: NoticeTab[] = ['전체', '공지', '분실물'];
 
 export default function NoticePage() {
   const [activeTab, setActiveTab] = useState<NoticeTab>('전체');
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
 
   const filteredNotices = useMemo(() => {
     if (activeTab === '전체') {

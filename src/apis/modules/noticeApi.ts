@@ -3,23 +3,18 @@ import { unwrapApiResponse } from '@/apis/error';
 import { http } from '@/apis/http';
 import { buildJsonFormData, omitUndefined } from '@/apis/utils';
 import type { NoticeType } from '@/apis/enumMapper';
-import type { ApiResponse, CursorPaginationParams, PartialUpdate } from '@/apis/types';
+import type { ApiResponse, PartialUpdate } from '@/apis/types';
 
 export interface NoticeListItem {
   noticeId: number;
-  title: string;
-  contentPreview: string;
-  createdAt: string;
-  authorId: number;
-  authorNickname: string;
   type: NoticeType;
-  imageUrls: string[];
+  title: string;
+  createdAt: string;
 }
 
 export interface LostFoundDetail {
-  foundPlace?: string;
-  keepingPlace?: string;
-  description?: string;
+  foundPlace: string;
+  foundItem: string;
 }
 
 export interface NoticeDetail {
@@ -56,10 +51,8 @@ export type NoticeUpdateInput = PartialUpdate<{
   lostFoundDetail: LostFoundDetail;
 }>;
 
-export async function getNotices(params: CursorPaginationParams = {}): Promise<NoticeListItem[]> {
-  const { data } = await http.get<ApiResponse<NoticeListItem[]>>(ENDPOINTS.notices, {
-    params,
-  });
+export async function getNotices(): Promise<NoticeListItem[]> {
+  const { data } = await http.get<ApiResponse<NoticeListItem[]>>(ENDPOINTS.notices);
 
   return unwrapApiResponse(data);
 }
@@ -98,4 +91,18 @@ export async function updateNotice(
 
 export async function deleteNotice(noticeId: number): Promise<void> {
   await http.delete<ApiResponse<unknown>>(ENDPOINTS.adminNoticeById(noticeId));
+}
+
+export async function updateNoticeImages(noticeId: number, images: File[]): Promise<void> {
+  const formData = new FormData();
+  images.forEach((image) => formData.append('images', image));
+
+  await http.post(ENDPOINTS.adminNoticeImagesById(noticeId), formData);
+}
+
+export async function urlToFile(url: string): Promise<File> {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const filename = url.split('/').pop() || 'image.jpg';
+  return new File([blob], filename, { type: blob.type });
 }

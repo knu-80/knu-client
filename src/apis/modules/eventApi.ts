@@ -8,16 +8,30 @@ export interface EventItem {
   id: number;
   title: string;
   description: string;
+  location: string;
   eventType: EventType;
   imageUrl: string | null;
+  image?: File | null;
   startAt: string;
   endAt: string;
   isActive: boolean;
-  location?: string;
 }
 
-export async function getEventsByType(eventType: EventType): Promise<EventItem[]> {
-  const { data } = await http.get<ApiResponse<EventItem[]>>(ENDPOINTS.eventsByType(eventType));
+export interface EventListParams {
+  day?: string;
+  size?: number;
+  sort?: string;
+  active?: boolean;
+}
+
+export async function getEventsByType(
+  eventType: EventType,
+  params: EventListParams = {},
+): Promise<EventItem[]> {
+  const queryParams = omitUndefined(params as Record<string, unknown>);
+  const { data } = await http.get<ApiResponse<EventItem[]>>(ENDPOINTS.eventsByType(eventType), {
+    params: queryParams,
+  });
 
   return unwrapApiResponse(data);
 }
@@ -32,16 +46,27 @@ export interface EventCreateInput {
   title: string;
   description: string;
   eventType: EventType;
-  imageUrl?: string | null;
   startAt: string;
   endAt: string;
+  location?: string;
   isActive?: boolean;
 }
 
 export type EventUpdateInput = PartialUpdate<EventCreateInput>;
 
-export async function createEvent(payload: EventCreateInput): Promise<EventItem> {
-  const { data } = await http.post<ApiResponse<EventItem>>(ENDPOINTS.adminEvents, payload);
+export async function createEvent(
+  payload: EventCreateInput,
+  image?: File | null,
+): Promise<EventItem> {
+  const formData = new FormData();
+
+  formData.append('data', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+
+  if (image) {
+    formData.append('image', image);
+  }
+
+  const { data } = await http.post<ApiResponse<EventItem>>(ENDPOINTS.adminEvents, formData);
 
   return unwrapApiResponse(data);
 }
@@ -51,6 +76,18 @@ export async function updateEvent(eventId: number, payload: EventUpdateInput): P
   const { data } = await http.patch<ApiResponse<EventItem>>(
     ENDPOINTS.adminEventById(eventId),
     patchPayload,
+  );
+
+  return unwrapApiResponse(data);
+}
+
+export async function updateEventImage(eventId: number, image: File): Promise<EventItem> {
+  const formData = new FormData();
+  formData.append('image', image);
+
+  const { data } = await http.post<ApiResponse<EventItem>>(
+    ENDPOINTS.adminEventImagesById(eventId),
+    formData,
   );
 
   return unwrapApiResponse(data);

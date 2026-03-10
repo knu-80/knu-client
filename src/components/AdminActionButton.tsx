@@ -5,6 +5,7 @@ interface AdminActionButtonProps {
   onClick: () => void;
   icon: IconType;
   className?: string;
+  disabled?: boolean;
 }
 
 export default function AdminActionButton({
@@ -12,10 +13,12 @@ export default function AdminActionButton({
   onClick,
   icon: Icon,
   className = '',
+  disabled = false,
 }: AdminActionButtonProps) {
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className={`flex h-12 items-center justify-center gap-2 rounded-full px-6 text-white shadow-2xl transition-all hover:scale-105 active:scale-95 ${className}`}
     >
       <Icon className="h-4 w-4" />

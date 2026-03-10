@@ -2,9 +2,16 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, type PanInfo } from 'framer-motion';
 import ImageUploader from './ImageUploader';
 
+export interface ImageItem {
+  id: string;
+  previewUrl: string;
+  file: File | null;
+}
+
 interface ImageCarouselUploaderProps {
-  imageUrls: string[];
-  onImagesChange: (urls: string[]) => void;
+  initialUrls?: string[];
+  onFilesChange?: (files: File[]) => void;
+  onImagesChange?: (items: ImageItem[]) => void;
   maxCount?: number;
   label?: string;
   className?: string;
@@ -12,13 +19,24 @@ interface ImageCarouselUploaderProps {
 }
 
 export default function ImageCarouselUploader({
-  imageUrls,
+  initialUrls = [],
+  onFilesChange,
   onImagesChange,
   maxCount = 5,
   label,
   className = '',
   aspectRatio = 'aspect-square',
 }: ImageCarouselUploaderProps) {
+  const idCounter = useRef(0);
+
+  const [items, setItems] = useState<ImageItem[]>(() =>
+    initialUrls.map((url, index) => ({
+      id: `initial-${index}`,
+      previewUrl: url,
+      file: null,
+    })),
+  );
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -53,30 +71,49 @@ export default function ImageCarouselUploader({
     return () => window.removeEventListener('resize', updateWidth);
   }, [currentIndex, getTargetX, x]);
 
-  const handleImageChange = (index: number, newUrl: string) => {
-    const newImages = [...imageUrls];
-    if (index < imageUrls.length) {
-      newImages[index] = newUrl;
+  const handleImageChange = (index: number, newPreviewUrl: string, file: File) => {
+    const newItems = [...items];
+    const newItem: ImageItem = {
+      id: `file-${idCounter.current++}`,
+      previewUrl: newPreviewUrl,
+      file,
+    };
+
+    if (index < items.length) {
+      newItems[index] = newItem;
     } else {
-      newImages.push(newUrl);
-      setCurrentIndex(newImages.length);
+      newItems.push(newItem);
+      setCurrentIndex(newItems.length);
     }
-    onImagesChange(newImages);
+
+    setItems(newItems);
+    if (onFilesChange) {
+      onFilesChange(newItems.map((item) => item.file).filter((f): f is File => f !== null));
+    }
+    if (onImagesChange) {
+      onImagesChange(newItems);
+    }
   };
 
   const handleImageDelete = (index: number) => {
-    const newImages = imageUrls.filter((_, i) => i !== index);
-    onImagesChange(newImages);
+    const newItems = items.filter((_, i) => i !== index);
+    setItems(newItems);
+    if (onFilesChange) {
+      onFilesChange(newItems.map((item) => item.file).filter((f): f is File => f !== null));
+    }
+    if (onImagesChange) {
+      onImagesChange(newItems);
+    }
 
-    if (currentIndex >= newImages.length && currentIndex > 0) {
-      setCurrentIndex(newImages.length);
+    if (currentIndex >= newItems.length && currentIndex > 0) {
+      setCurrentIndex(newItems.length);
     }
   };
 
   const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const swipeThreshold = 50;
     const { offset, velocity } = info;
-    const totalItems = imageUrls.length < maxCount ? imageUrls.length + 1 : imageUrls.length;
+    const totalItems = items.length < maxCount ? items.length + 1 : items.length;
 
     if (offset.x < -swipeThreshold || velocity.x < -500) {
       if (currentIndex < totalItems - 1) {
@@ -90,9 +127,9 @@ export default function ImageCarouselUploader({
     x.set(getTargetX(currentIndex, containerWidth));
   };
 
-  const displayItems = [...imageUrls];
-  if (imageUrls.length < maxCount) {
-    displayItems.push('');
+  const displayItems = [...items];
+  if (items.length < maxCount) {
+    displayItems.push({ id: 'placeholder', previewUrl: '', file: null });
   }
 
   return (
@@ -110,9 +147,9 @@ export default function ImageCarouselUploader({
           onDragEnd={handleDragEnd}
           className="flex cursor-grab active:cursor-grabbing"
         >
-          {displayItems.map((url, index) => (
+          {displayItems.map((item, index) => (
             <div
-              key={index}
+              key={item.id}
               style={{
                 width: `${itemWidthPercent}%`,
                 marginRight: `${gap}px`,
@@ -124,9 +161,9 @@ export default function ImageCarouselUploader({
               }}
             >
               <ImageUploader
-                previewImage={url || null}
-                onImageChange={(newUrl) => handleImageChange(index, newUrl)}
-                onDelete={url ? () => handleImageDelete(index) : undefined}
+                previewImage={item.previewUrl || null}
+                onImageChange={(newUrl, file) => handleImageChange(index, newUrl, file)}
+                onDelete={item.previewUrl ? () => handleImageDelete(index) : undefined}
                 aspectRatio={aspectRatio}
                 className="w-full"
               />
@@ -147,7 +184,7 @@ export default function ImageCarouselUploader({
             ))}
           </div>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
-            {imageUrls.length} / {maxCount} 이미지
+            {items.length} / {maxCount} 이미지
           </p>
         </div>
       </div>

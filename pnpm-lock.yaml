@@ -2717,6 +2717,7 @@ packages:
       }
     engines: { node: '>=8' }
 
+
   tailwindcss@4.2.1:
     resolution:
       {
@@ -3124,6 +3125,7 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
+
 
   '@esbuild/aix-ppc64@0.27.3':
     optional: true

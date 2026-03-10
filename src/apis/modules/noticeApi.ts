@@ -8,12 +8,12 @@ import type { ApiResponse, CursorPaginationParams, PartialUpdate } from '@/apis/
 export interface NoticeListItem {
   noticeId: number;
   title: string;
-  contentPreview: string;
+  contentPreview?: string;
   createdAt: string;
-  authorId: number;
-  authorNickname: string;
+  authorId?: number;
+  authorNickname?: string;
   type: NoticeType;
-  imageUrls: string[];
+  imageUrls?: string[];
 }
 
 export interface LostFoundDetail {
@@ -55,9 +55,16 @@ export type NoticeUpdateInput = PartialUpdate<{
   lostFoundDetail: LostFoundDetail;
 }>;
 
-export async function getNotices(params: CursorPaginationParams = {}): Promise<NoticeListItem[]> {
+export interface NoticeListParams extends CursorPaginationParams {
+  type?: NoticeType;
+  day?: string;
+  sort?: string;
+}
+
+export async function getNotices(params: NoticeListParams = {}): Promise<NoticeListItem[]> {
+  const queryParams = omitUndefined(params as Record<string, unknown>);
   const { data } = await http.get<ApiResponse<NoticeListItem[]>>(ENDPOINTS.notices, {
-    params,
+    params: queryParams,
   });
 
   return unwrapApiResponse(data);

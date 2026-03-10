@@ -8,13 +8,13 @@ export interface EventItem {
   id: number;
   title: string;
   description: string;
+  location: string;
   eventType: EventType;
   imageUrl: string | null;
   image?: File | null;
   startAt: string;
   endAt: string;
   isActive: boolean;
-  location: string;
 }
 
 export interface EventListParams {

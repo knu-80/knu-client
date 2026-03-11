@@ -40,9 +40,10 @@ export default function SearchPage() {
       <div className="py-3 flex items-center gap-2 border-b border-gray-100 shrink-0">
         <button
           onClick={() => navigate('/map')}
+          aria-label="지도로 돌아가기"
           className="p-1 -ml-2 text-gray-600 active:bg-gray-100 rounded-full transition-colors"
         >
-          <FiArrowLeft size={24} />
+          <FiArrowLeft size={24} aria-hidden="true" />
         </button>
 
         <div className="flex-1">

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { BOOTH_COORDINATES } from './world';
 import { BoothMarker } from './BoothMarker';
 import type { BoothSummary, BoothDivision } from '@/apis';
@@ -17,17 +17,37 @@ export const BoothMarkers = memo(function BoothMarkers({
   selectedBoothId,
   selectedDivision,
 }: BoothMarkersProps) {
+  const boothMap = useMemo(() => {
+    return new Map(booths.map((b) => [b.boothNumber, b]));
+  }, [booths]);
+
   return (
     <>
-      {booths.map((booth) => {
-        const coord = BOOTH_COORDINATES[booth.boothNumber] || { x: 0, y: 0 };
+      {Object.entries(BOOTH_COORDINATES).map(([boothNumberStr, coord]) => {
+        const boothNumber = Number(boothNumberStr);
+        const booth = boothMap.get(boothNumber);
+
+        if (!booth) {
+          return (
+            <BoothMarker
+              key={`empty-${boothNumber}`}
+              {...coord}
+              name=""
+              bgColorClass="bg-gray-200"
+              isSelected={false}
+              isFiltered={false}
+              isOpen={false}
+              onClick={() => {}}
+            />
+          );
+        }
 
         const isSelected = selectedBoothId === booth.id;
         const isDivisionMatch = selectedDivision === booth.division;
         const divisionColor = DIVISION_INFO[booth.division].color;
 
         const bgColor = isSelected
-          ? 'bg-knu-red'
+          ? 'bg-primary'
           : selectedDivision && isDivisionMatch
             ? divisionColor
             : 'bg-vanilla';

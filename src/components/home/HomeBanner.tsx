@@ -115,7 +115,7 @@ export default function HomeBanner() {
     <section className="-mx-5 relative overflow-hidden select-none [--banner-gap:12px] md:[--banner-gap:28px]">
       <div className="relative py-6">
         <div
-          className="overflow-hidden touch-pan-y"
+          className="overflow-visible touch-pan-y"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
@@ -127,7 +127,7 @@ export default function HomeBanner() {
             {LOOP_SLIDES.map((slide, index) => (
               <div
                 key={`${slide.src}-${index}`}
-                className="relative aspect-video w-[var(--banner-card-width)] shrink-0 overflow-hidden rounded-[20px] "
+                className="shadow-sm relative aspect-video w-[var(--banner-card-width)] shrink-0 overflow-hidden rounded-2xl"
               >
                 <img
                   src={slide.src}

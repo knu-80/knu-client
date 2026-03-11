@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState, type CSSProperties, type TouchEvent } from 'react';
 
-import banner1 from '@/assets/banner1.png';
-import banner2 from '@/assets/banner2.png';
-import banner3 from '@/assets/banner3.png';
-import banner4 from '@/assets/banner4.png';
+import banner1 from '@/assets/banner1.webp';
+import banner2 from '@/assets/banner2.webp';
+import banner3 from '@/assets/banner3.webp';
+import banner4 from '@/assets/banner4.webp';
+import banner5 from '@/assets/banner5.webp';
 
 type BannerSlide = {
   src: string;
@@ -32,6 +33,11 @@ const BANNER_SLIDES: BannerSlide[] = [
   },
   {
     src: banner4,
+    alt: '가두모집 하이라이트 배너',
+    backgroundPosition: 'center 65%',
+  },
+  {
+    src: banner5,
     alt: '가두모집 하이라이트 배너',
     backgroundPosition: 'center 65%',
   },

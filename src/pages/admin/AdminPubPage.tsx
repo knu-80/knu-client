@@ -1,4 +1,4 @@
-import banner3 from '@/assets/banner3.png';
+import banner3 from '@/assets/banner3.webp';
 
 export default function AdminPubPage() {
   return (

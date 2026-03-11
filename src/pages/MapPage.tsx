@@ -5,13 +5,13 @@ import { ClubCategoryChip } from '@/components/ClubCategory';
 import { Map } from '@/components/map';
 import { DIVISION_LIST } from '@/constants/booth';
 import { BoothPopup } from '@/components/BoothPopup';
-import { useBooths } from '@/hooks/useBooths';
+import { useBoothsWithFallback } from '@/hooks/useBooths';
 import type { BoothDivision } from '@/apis';
 
 export default function MapPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { booths } = useBooths();
+  const { booths } = useBoothsWithFallback();
   // const { booths, loading } = useBooths();
   // [seah] status ui 추가 필요
 

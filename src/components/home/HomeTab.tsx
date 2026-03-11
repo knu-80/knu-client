@@ -195,7 +195,7 @@ function TimeTablePreviewCard({
       </div>
       <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none touch-none">
         <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
-        현장 상황에 따라 공연 시간이 일부 변경될 수 있어요.
+        현장 상황에 따라 공연 시간이 일부 변경될 수 있어요
       </p>
     </>
   );
@@ -251,7 +251,7 @@ function NoticePreviewCard({
       </div>
       <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none touch-none">
         <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
-        공지 원문과 분실물 상세 내용은 더보기에서 확인할 수 있어요.
+        공지 원문과 분실물 상세 내용은 더보기에서 확인할 수 있어요
       </p>
     </>
   );
@@ -283,7 +283,7 @@ function MapPreviewCard() {
       <div className="flex items-start justify-between gap-3 px-4 py-4 select-none touch-none">
         <div className="min-w-0">
           <p className="typo-body-1 font-medium text-base-deep">총 {booths.length}개의 동아리</p>
-          <p className="mt-1 typo-body-2 text-gray-500">지도와 검색으로 쉽게 확인할 수 있어요.</p>
+          <p className="mt-1 typo-body-2 text-gray-500">지도와 검색으로 쉽게 확인할 수 있어요</p>
         </div>
       </div>
     </Link>
@@ -363,7 +363,7 @@ export default function HomeTab() {
         className="space-y-14 pt-10"
       >
         <section aria-labelledby="home-timetable-title">
-          <SectionHeader title="공연시간표" description="일청담 앞 중앙무대에서 만나요." />
+          <SectionHeader title="공연시간표" description="일청담 앞 중앙무대에서 만나요" />
           <TimeTablePreviewCard
             dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
             items={PERFORMANCE_TIMELINE_BY_DAY[activeDay]}
@@ -382,7 +382,7 @@ export default function HomeTab() {
         </section>
 
         <section aria-labelledby="home-map-preview-title">
-          <SectionHeader title="부스 배치도" description="관심있는 동아리를 찾아보세요." />
+          <SectionHeader title="부스 배치도" description="관심있는 동아리를 찾아보세요" />
           <div id="home-map-preview-title" className="sr-only">
             부스 배치도 미리보기
           </div>

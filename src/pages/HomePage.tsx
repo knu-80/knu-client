@@ -15,7 +15,7 @@ export default function HomePage() {
           className="mt-4 w-14 h-14 pointer-events-none select-none"
         />
         <span className="ml-[-2px] mt-2 typo-heading-3 font-semibold text-base-deep">
-          원하는 날짜를 선택하세요.
+          원하는 날짜를 선택하세요
         </span>
       </div>
       <HomeTab />

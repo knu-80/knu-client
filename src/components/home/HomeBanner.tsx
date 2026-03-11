@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState, type CSSProperties, type TouchEvent } from 'react';
 
-import banner1 from '@/assets/banner1.png';
-import banner2 from '@/assets/banner2.png';
-import banner3 from '@/assets/banner3.png';
-import banner4 from '@/assets/banner4.png';
+import banner1 from '@/assets/banner1.webp';
+import banner2 from '@/assets/banner2.webp';
+import banner3 from '@/assets/banner3.webp';
+import banner4 from '@/assets/banner4.webp';
 
 type BannerSlide = {
   src: string;
   alt: string;
-  backgroundPosition: string;
+  objectPosition: string;
 };
 
 const AUTO_SLIDE_MS = 3000;
@@ -18,22 +18,22 @@ const BANNER_SLIDES: BannerSlide[] = [
   {
     src: banner1,
     alt: '가두모집 메인 포스터 배너',
-    backgroundPosition: 'center top',
+    objectPosition: 'center top',
   },
   {
     src: banner2,
     alt: '가두모집 안내 포스터 배너',
-    backgroundPosition: 'center center',
+    objectPosition: 'center center',
   },
   {
     src: banner3,
     alt: '가두모집 하이라이트 배너',
-    backgroundPosition: 'center 65%',
+    objectPosition: 'center 65%',
   },
   {
     src: banner4,
     alt: '가두모집 하이라이트 배너',
-    backgroundPosition: 'center 65%',
+    objectPosition: 'center 65%',
   },
 ];
 
@@ -47,25 +47,33 @@ export default function HomeBanner() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartXRef = useRef<number | null>(null);
   const touchEndXRef = useRef<number | null>(null);
+  const totalSlides = BANNER_SLIDES.length;
+
+  const getCircularDistance = (from: number, to: number) => {
+    const diff = Math.abs(from - to);
+    return Math.min(diff, totalSlides - diff);
+  };
+
+  const shouldLoadSlide = (index: number) => getCircularDistance(currentIndex, index) <= 1;
 
   useEffect(() => {
-    if (BANNER_SLIDES.length < 2) return;
+    if (totalSlides < 2) return;
 
     const timer = window.setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % BANNER_SLIDES.length);
+      setCurrentIndex((prev) => (prev + 1) % totalSlides);
     }, AUTO_SLIDE_MS);
 
     return () => {
       window.clearTimeout(timer);
     };
-  }, [currentIndex]);
+  }, [currentIndex, totalSlides]);
 
   const moveToPrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + BANNER_SLIDES.length) % BANNER_SLIDES.length);
+    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
   const moveToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % BANNER_SLIDES.length);
+    setCurrentIndex((prev) => (prev + 1) % totalSlides);
   };
 
   const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
@@ -130,15 +138,20 @@ export default function HomeBanner() {
                 className="relative aspect-video w-[var(--banner-card-width)] shrink-0 overflow-hidden rounded-3xl bg-knu-lavender/20 shadow-[0_6px_18px_rgba(0,0,0,0.06)]"
                 aria-hidden={index !== currentIndex}
               >
-                <div
-                  className="absolute inset-0 bg-cover bg-no-repeat"
-                  style={{
-                    backgroundImage: `url(${slide.src})`,
-                    backgroundPosition: slide.backgroundPosition,
-                  }}
-                  role="img"
-                  aria-label={slide.alt}
-                />
+                {shouldLoadSlide(index) ? (
+                  <img
+                    src={slide.src}
+                    alt={slide.alt}
+                    loading={index === currentIndex ? 'eager' : 'lazy'}
+                    decoding="async"
+                    fetchPriority={index === currentIndex ? 'high' : 'low'}
+                    sizes="(max-width: 700px) calc(100vw - 56px), 644px"
+                    className="absolute inset-0 h-full w-full object-cover"
+                    style={{ objectPosition: slide.objectPosition }}
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-knu-lavender/25" aria-hidden="true" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-knu-lavender/35 via-knu-lavender/15 to-transparent" />
               </div>
             ))}

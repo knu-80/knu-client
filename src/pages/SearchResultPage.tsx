@@ -69,7 +69,9 @@ export default function SearchResultPage() {
               <NoResults />
               <div className="px-1 py-10">
                 <div className="mb-4">
-                  <h4 className="typo-heading-3 font-semibold text-black">놓치면 아쉬운 동아리</h4>
+                  <h4 className="typo-heading-3 font-semibold text-base-deep">
+                    놓치면 아쉬운 동아리
+                  </h4>
                 </div>
                 <div className="flex-1 overflow-y-auto no-scrollbar">
                   <div className="flex flex-col gap-5 pb-10">

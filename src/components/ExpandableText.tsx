@@ -27,7 +27,7 @@ export function ExpandableText({ text, maxLines = 3 }: ExpandableTextProps) {
   }, [text, maxLines]);
 
   return (
-    <div className="mb-10 text-black relative">
+    <div className="mb-10 text-base-deep relative">
       <p
         ref={pRef}
         className="typo-body-2 whitespace-pre-wrap overflow-hidden"
@@ -43,7 +43,7 @@ export function ExpandableText({ text, maxLines = 3 }: ExpandableTextProps) {
       {isOverflowed && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="absolute bottom-0 right-0 typo-body-2 text-knu-red bg-gradient-to-l from-white via-white/90 via-40% to-transparent pl-20"
+          className="absolute bottom-0 right-0 typo-body-2 text-primary bg-gradient-to-l from-white via-white/90 via-40% to-transparent pl-20"
         >
           {expanded ? '접기' : '더보기'}
         </button>

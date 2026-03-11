@@ -13,7 +13,7 @@ export function ClubCategory({ division }: ClubCategoryProps) {
   return (
     <div className="flex items-center space-x-1">
       <div className={`w-2 h-2 rounded-full ${info.color}`}></div>
-      <p className="typo-body-3">{info.name}</p>
+      <p className="typo-body-2 text-base-deep">{info.name}</p>
     </div>
   );
 }
@@ -25,7 +25,7 @@ export function ClubCategoryLabel({ division }: ClubCategoryProps) {
   return (
     <div className="flex items-center space-x-1">
       <div className={`w-2 h-2 rounded-full ${info.color}`}></div>
-      <p className="typo-body-2">{info.name}</p>
+      <p className="typo-body-3 text-base-deep">{info.name}</p>
     </div>
   );
 }
@@ -37,13 +37,13 @@ export function ClubCategoryChip({ division, active }: ClubCategoryProps) {
   return (
     <div
       className={`
-        h-8 px-2.5 border rounded-full flex items-center shrink-0 border-black/10 cursor-pointer
+        h-8 px-2.5 border rounded-full flex items-center shrink-0 border-gray-200 cursor-pointer
         ${active ? `${info.color} text-white` : 'bg-white'}
       `}
     >
       <div className="flex items-center space-x-1">
         <div className={`w-2 h-2 rounded-full ${active ? 'bg-white' : info.color}`}></div>
-        <p className="typo-body-2">{info.shortName}</p>
+        <p className="typo-body-2 text-base-deep">{info.shortName}</p>
       </div>
     </div>
   );

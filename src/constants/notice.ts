@@ -23,3 +23,20 @@ export const NOTICE_CATEGORY_COLOR_MAP: Record<
     badgeText: 'text-secondary-blue',
   },
 };
+
+export const NOTICE_BUTTON_COLOR_MAP: Record<
+  '공지' | '분실물',
+  {
+    activeBg: string;
+    activeText: string;
+  }
+> = {
+  공지: {
+    activeBg: 'bg-primary border-primary',
+    activeText: 'text-white',
+  },
+  분실물: {
+    activeBg: 'bg-secondary-blue border-secondary-blue',
+    activeText: 'text-white',
+  },
+};

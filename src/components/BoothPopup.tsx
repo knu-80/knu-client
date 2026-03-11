@@ -35,6 +35,9 @@ export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }:
           <img
             src={thumbnail}
             alt={booth.name}
+            loading="lazy"
+            decoding="async"
+            sizes="88px"
             className="w-[88px] h-[88px] object-cover rounded-[4px] shrink-0"
           />
         ) : (

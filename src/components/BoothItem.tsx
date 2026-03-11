@@ -56,6 +56,9 @@ export function BoothItem({ booth, onClick, onLocationClick }: BoothItemProps) {
         <img
           src={thumbnail}
           alt={booth.name}
+          loading="lazy"
+          decoding="async"
+          sizes="100px"
           className="w-[100px] h-[100px] object-cover rounded-[4px] shrink-0"
         />
       ) : (

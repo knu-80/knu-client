@@ -10,6 +10,7 @@ import { getBooth, type BoothDivision, type BoothSummary } from '@/apis/modules/
 import { useAdminSessionStore } from '@/stores/adminSessionStore';
 import { useBoothMutation } from '@/hooks/useBoothMutation';
 import { urlToFile } from '@/apis/modules/noticeApi';
+import { RECOMMENDATIONS } from '@/constants/booth';
 
 interface BoothEditForm {
   name: string;
@@ -17,6 +18,7 @@ interface BoothEditForm {
   description: string;
   applyUrl: string;
   contact: string;
+  keywords: string;
 }
 
 function BoothEditForm({ booth }: { booth: BoothSummary }) {
@@ -31,6 +33,7 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
     description: booth.description || '',
     applyUrl: booth.applyLink || '',
     contact: booth.contact || '',
+    keywords: booth.keywords || '',
   });
 
   const [allImages, setAllImages] = useState<ImageItem[]>(() =>
@@ -60,6 +63,18 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
     }
   }, [formData.description]);
 
+  const currentKeywords = formData.keywords
+    ? formData.keywords.split(',').map((k) => k.trim())
+    : [];
+
+  const toggleKeyword = (keyword: string) => {
+    const newKeywords = currentKeywords.includes(keyword)
+      ? currentKeywords.filter((k) => k !== keyword)
+      : [...currentKeywords, keyword];
+
+    setFormData({ ...formData, keywords: newKeywords.filter(Boolean).join(',') });
+  };
+
   const handleSave = async () => {
     if (!isFormValid || !profile || profile.memberId === null) return;
 
@@ -68,7 +83,8 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
       formData.divisionKey !== booth.division ||
       formData.description !== (booth.description || '') ||
       formData.applyUrl !== (booth.applyLink || '') ||
-      formData.contact !== (booth.contact || '');
+      formData.contact !== (booth.contact || '') ||
+      formData.keywords !== (booth.keywords || '');
 
     const isImagesChanged =
       allImages.length !== (booth.imageUrls?.length || 0) ||
@@ -132,6 +148,7 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
         description: formData.description,
         applyLink: formData.applyUrl,
         contact: formData.contact,
+        keywords: formData.keywords,
       };
 
       await mutateUpdate(booth.id, payload, {
@@ -164,10 +181,7 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
   };
 
   const isFormValid =
-    formData.name.trim() !== '' &&
-    formData.description.trim() !== '' &&
-    formData.applyUrl.trim() !== '' &&
-    !isSubmitting;
+    formData.name.trim() !== '' && formData.description.trim() !== '' && !isSubmitting;
 
   return (
     <div className="pt-5 pb-24 px-1">
@@ -218,6 +232,27 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
       </div>
 
       <div className="h-px w-full bg-gray-200 my-5" />
+
+      <div className="flex flex-wrap gap-2 mb-6 px-1">
+        {RECOMMENDATIONS.map((tag) => {
+          const isSelected = currentKeywords.includes(tag);
+          return (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => toggleKeyword(tag)}
+              disabled={isSubmitting}
+              className={`px-3 py-1.5 rounded-full text-[13px] transition-all border ${
+                isSelected
+                  ? 'bg-gray-800 border-gray-800 text-white font-semibold'
+                  : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'
+              }`}
+            >
+              #{tag}
+            </button>
+          );
+        })}
+      </div>
 
       <div className="mb-10 text-black">
         <textarea

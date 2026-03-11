@@ -5,8 +5,7 @@ import { BoothItem } from '@/components/BoothItem';
 import { useState } from 'react';
 import { useRecommendedBooths } from '@/hooks/useRecommendedBooths';
 import { useBoothsWithFallback } from '@/hooks/useBooths';
-
-const RECOMMENDATIONS = ['힐링', '취미활동', '공모전', '밴드', '창업'];
+import { RECOMMENDATIONS } from '@/constants/booth';
 
 export default function SearchPage() {
   const navigate = useNavigate();

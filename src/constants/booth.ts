@@ -48,3 +48,5 @@ export const DIVISION_LIST: BoothDivision[] = [
   'SPORTS_DIVISION',
   'RELIGIOUS_DIVISION',
 ];
+
+export const RECOMMENDATIONS = ['힐링', '취미활동', '공모전', '밴드', '창업'];

@@ -25,7 +25,7 @@ export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }:
 
   return (
     <>
-      <div className="fixed inset-0 z-30 bg-black/5" onClick={onClose} />
+      <div className="overlay-backdrop" onClick={onClose} />
 
       <div
         onClick={handlePopupClick}

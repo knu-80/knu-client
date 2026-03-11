@@ -116,6 +116,9 @@ body {
   .interactive-transition {
     @apply transition-all duration-200 ease-out;
   }
+  .overlay-backdrop {
+    @apply fixed inset-0 z-30 bg-black/8 transition-opacity;
+  }
 }
 
 @keyframes shimmer {
@@ -128,5 +131,5 @@ body {
 }
 
 .animate-shimmer {
-  animation: shimmer 1.5s infinite;
+  animation: shimmer 2s infinite;
 }

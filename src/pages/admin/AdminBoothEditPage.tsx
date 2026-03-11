@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaCheck, FaChevronDown, FaLink } from 'react-icons/fa';
+import { FaCheck, FaChevronDown, FaLink, FaPhone } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
 import { ClubCategory } from '@/components/ClubCategory';
@@ -16,6 +16,7 @@ interface BoothEditForm {
   divisionKey: BoothSummary['division'];
   description: string;
   applyUrl: string;
+  contact: string;
 }
 
 function BoothEditForm({ booth }: { booth: BoothSummary }) {
@@ -29,6 +30,7 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
     divisionKey: booth.division as BoothSummary['division'],
     description: booth.description || '',
     applyUrl: booth.applyLink || '',
+    contact: booth.contact || '',
   });
 
   const [allImages, setAllImages] = useState<ImageItem[]>(() =>
@@ -65,7 +67,8 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
       formData.name !== booth.name ||
       formData.divisionKey !== booth.division ||
       formData.description !== (booth.description || '') ||
-      formData.applyUrl !== (booth.applyLink || '');
+      formData.applyUrl !== (booth.applyLink || '') ||
+      formData.contact !== (booth.contact || '');
 
     const isImagesChanged =
       allImages.length !== (booth.imageUrls?.length || 0) ||
@@ -128,6 +131,7 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
         division: formData.divisionKey as BoothDivision,
         description: formData.description,
         applyLink: formData.applyUrl,
+        contact: formData.contact,
       };
 
       await mutateUpdate(booth.id, payload, {
@@ -234,6 +238,25 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
         className="mb-10"
       />
 
+      <div className="mb-5">
+        <h3 className="typo-heading-3 mb-5 text-black">문의하기</h3>
+        <div className="flex items-start space-x-4">
+          <div className="bg-gray-800 p-2.5 rounded-2xl text-white shadow-sm">
+            <FaPhone className="h-5 w-5" />
+          </div>
+          <div className="flex-1 bg-gray-50 rounded-2xl px-4 py-3 border border-gray-100 focus-within:border-knu-red transition-colors">
+            <textarea
+              value={formData.contact}
+              onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+              className="bg-transparent border-none outline-none focus:ring-0 p-0 typo-body-2 text-black w-full resize-none"
+              placeholder="카카오톡 ID, 전화번호 등 문의처를 입력해 주세요."
+              rows={2}
+              disabled={isSubmitting}
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="mb-10">
         <h3 className="typo-heading-3 mb-5 text-black">지원하기</h3>
         <div className="flex items-center space-x-4">
@@ -245,7 +268,7 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
               type="text"
               value={formData.applyUrl}
               onChange={(e) => setFormData({ ...formData, applyUrl: e.target.value })}
-              className="bg-transparent border-none outline-none focus:ring-0 p-0 typo-body-1 font-semibold text-black w-full"
+              className="bg-transparent border-none outline-none focus:ring-0 p-0 typo-body-2 text-black w-full"
               placeholder="지원 링크 (구글 폼 등)"
               disabled={isSubmitting}
             />

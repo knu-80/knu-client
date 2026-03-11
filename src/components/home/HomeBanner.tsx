@@ -115,7 +115,7 @@ export default function HomeBanner() {
         메인 배너 캐러셀
       </h2>
 
-      <div className="relative pb-2 pt-4 sm:px-5">
+      <div className="relative">
         <div className="pointer-events-none absolute inset-y-4 left-0 z-10 w-4 to-transparent sm:w-6" />
         <div className="pointer-events-none absolute inset-y-4 right-0 z-10 w-4 to-transparent sm:w-6" />
 

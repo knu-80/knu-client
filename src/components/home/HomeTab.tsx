@@ -266,7 +266,7 @@ function MapPreviewCard() {
       className="interactive-transition group block overflow-hidden rounded-2xl bg-white shadow-sm"
       aria-label="부스 배치도 지도 페이지로 이동"
     >
-      <div className="relative h-56 overflow-hidden bg-knu-silver/20">
+      <div className="relative h-56 overflow-hidden bg-secondary-blue/5">
         <img
           src={MapSvg}
           alt=""

@@ -350,7 +350,7 @@ export default function HomeTab() {
               role="tab"
               id={`home-day-tab-${day.key}`}
             >
-              {day.label} · <span className="ml-1">{day.date}</span>
+              {day.label} ·<span className="ml-1">{day.date}</span>
             </SelectableButton>
           );
         })}

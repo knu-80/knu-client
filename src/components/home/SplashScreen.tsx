@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-import logoImage from '@/assets/logo.png';
+import logoImage from '@/assets/logo.webp';
 
 export default function SplashScreen() {
   return (
@@ -15,6 +15,9 @@ export default function SplashScreen() {
       <motion.img
         src={logoImage}
         alt="가두모집 서비스 로고"
+        loading="eager"
+        decoding="async"
+        fetchPriority="high"
         initial={{ scale: 0.88, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.7, ease: 'easeOut' }}

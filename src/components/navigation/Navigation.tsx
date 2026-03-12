@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import Logo from '@/assets/logo.png';
+import Logo from '@/assets/logo.webp';
 
 const MENU_ITEMS = [
   { label: '부스 배치도', target: 'booth' },
@@ -28,7 +28,14 @@ export default function Navigation() {
               className="flex items-center gap-2"
               aria-label="홈으로 이동"
             >
-              <img src={Logo} alt="경북대학교 로고" className="h-8 w-full" />
+              <img
+                src={Logo}
+                alt="경북대학교 로고"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                className="h-8 w-full"
+              />
             </Link>
 
             <button

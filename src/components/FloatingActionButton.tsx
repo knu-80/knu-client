@@ -17,7 +17,16 @@ export default function FloatingActionButton({
 }: FloatingActionButtonProps) {
   const baseClassName = `inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-knu-red via-[#d10000] to-[#b80000] shadow-[0_12px_24px_rgba(230,0,0,0.35),0_3px_8px_rgba(0,0,0,0.22)] ring-2 ring-white/60 transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[0_16px_28px_rgba(230,0,0,0.4),0_6px_14px_rgba(0,0,0,0.22)] active:translate-y-0 active:scale-95 ${className}`;
 
-  const content = <img src={icon} alt="" className="h-7 w-7" aria-hidden="true" />;
+  const content = (
+    <img
+      src={icon}
+      alt=""
+      loading="eager"
+      decoding="async"
+      className="h-7 w-7"
+      aria-hidden="true"
+    />
+  );
 
   if (external) {
     return (

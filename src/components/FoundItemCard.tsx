@@ -1,5 +1,5 @@
 import { FaMapMarkerAlt } from 'react-icons/fa';
-import noticeIcon from '@/assets/noticeIcon.png';
+import noticeIcon from '@/assets/noticeIcon.webp';
 
 interface FoundItemCardProps {
   itemName: string;
@@ -14,6 +14,8 @@ export default function FoundItemCard({ itemName, foundLocation }: FoundItemCard
           <img
             src={noticeIcon}
             alt="습득 물품 공지 아이콘"
+            loading="lazy"
+            decoding="async"
             className="w-5 h-5 sm:w-8 sm:h-8 object-contain"
           />
         </div>

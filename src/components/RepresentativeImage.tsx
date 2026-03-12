@@ -5,6 +5,8 @@ interface RepresentativeImageProps {
   altText: string;
   height?: string;
   isZoomable?: boolean;
+  loading?: 'lazy' | 'eager';
+  fetchPriority?: 'high' | 'low' | 'auto';
 }
 
 export default function RepresentativeImage({
@@ -12,6 +14,8 @@ export default function RepresentativeImage({
   altText,
   height = 'h-64',
   isZoomable = true,
+  loading = 'lazy',
+  fetchPriority = 'auto',
 }: RepresentativeImageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -65,6 +69,9 @@ export default function RepresentativeImage({
           <img
             src={imageUrl}
             alt={altText}
+            loading={loading}
+            decoding="async"
+            fetchPriority={fetchPriority}
             className="w-full h-full object-cover"
             draggable="false"
           />
@@ -87,6 +94,8 @@ export default function RepresentativeImage({
           <img
             src={imageUrl}
             alt={`확대된 ${altText}`}
+            loading="eager"
+            decoding="async"
             className="max-w-full max-h-full object-contain"
             onClick={(e) => e.stopPropagation()}
           />

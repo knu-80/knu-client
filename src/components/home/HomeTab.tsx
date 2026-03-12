@@ -239,6 +239,8 @@ function MapPreviewCard() {
           src={MapSvg}
           alt=""
           aria-hidden="true"
+          loading="lazy"
+          decoding="async"
           className="h-full w-full object-cover object-top opacity-85 transition duration-200 group-hover:scale-[1.02]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />

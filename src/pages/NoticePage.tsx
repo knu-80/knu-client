@@ -67,7 +67,9 @@ export default function NoticePage() {
             draggable={false}
             className="ml-1 mt-4 w-18 h-18 pointer-events-none select-none"
           />
-          <span className="mt-2 typo-heading-3 font-semibold text-base-deep">공지사항</span>
+          <span className="mt-2 typo-heading-3 font-semibold text-base-deep">
+            최신 공지를 확인해보세요
+          </span>
         </div>
 
         <div

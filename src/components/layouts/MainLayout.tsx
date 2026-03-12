@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-
+import Footer from '../home/Footer';
 import BottomTabBar from '@/components/navigation/BottomTabBar';
 
 export default function MainLayout() {
@@ -9,6 +9,9 @@ export default function MainLayout() {
         <main className="relative flex-1 min-h-0 px-5 pb-[calc(88px+env(safe-area-inset-bottom))]">
           <Outlet />
         </main>
+        <div className="pb-[calc(68px+env(safe-area-inset-bottom))]">
+          <Footer />
+        </div>
         <BottomTabBar />
       </div>
     </div>

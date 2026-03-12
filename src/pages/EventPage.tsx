@@ -1,6 +1,7 @@
 import { MdEventNote } from 'react-icons/md';
 import EventCard from '@/components/EventCard';
 import { useEvents } from '@/hooks/useEvents';
+import EventSvg from '@/assets/event.svg';
 
 export default function EventPage() {
   const { events, isLoading } = useEvents('RECRUITMENT');
@@ -12,16 +13,23 @@ export default function EventPage() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-knu-red"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
     <div className="pt-5 sm:p-5">
-      <div className="flex items-center space-x-2 mb-4 px-2 sm:px-0">
-        <MdEventNote className="h-6 w-6 text-black" />
-        <h2 className="typo-heading-2 text-black">이벤트</h2>
+      <div className="flex items-center h-14">
+        <img
+          src={EventSvg}
+          alt="이벤트"
+          draggable={false}
+          className="ml-1 mt-2 w-18 h-16 pointer-events-none select-none"
+        />
+        <span className="ml-2 mt-2 typo-heading-3 font-semibold text-base-deep">
+          이벤트에 참여해보세요
+        </span>
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">

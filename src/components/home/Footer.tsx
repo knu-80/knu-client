@@ -5,15 +5,15 @@ export default function Footer() {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
   return (
-    <footer className="mt-12 border-t border-gray-200 py-10 text-center text-sm select-none">
+    <footer className="border-t border-gray-100 py-10 text-center text-sm select-none bg-[#f5f5f5]">
       <div className="flex items-center justify-center gap-4 pb-6">
         <a
           href="https://github.com/knu-80"
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center rounded-full transition border border-gray-400 gap-1 px-2 py-1 text-body-3 hover:bg-gray-100"
+          className="flex items-center justify-center rounded-full transition border border-gray-400 gap-1 px-2 py-1 text-body-3 hover:bg-gray-100 bg-white"
         >
-          <FiGithub className="h-4 w-4 text-gray-400" />
+          <FiGithub className="h-4 w-4" strokeWidth={1} />
           만든이들
         </a>
 
@@ -21,9 +21,9 @@ export default function Footer() {
           href="https://www.instagram.com/knu_dongari/"
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center rounded-full transition border border-gray-400 gap-1 px-2 py-1 text-body-3 hover:bg-gray-100"
+          className="flex items-center justify-center rounded-full transition border border-gray-400 gap-1 px-2 py-1 text-body-3 hover:bg-gray-100 bg-white"
         >
-          <FiInstagram className="h-4 w-4 text-gray-400" />
+          <FiInstagram className="h-4 w-4" strokeWidth={1} />
           운영진
         </a>
 
@@ -31,20 +31,20 @@ export default function Footer() {
           href="https://dongari.knu.ac.kr/"
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-center rounded-full transition border border-gray-400 gap-1 px-2 py-1 text-body-3 hover:bg-gray-100"
+          className="flex items-center justify-center rounded-full transition border border-gray-400 gap-1 px-2 py-1 text-body-3 hover:bg-gray-100 bg-white"
         >
-          <FiExternalLink className="h-4 w-4 text-gray-400" />
+          <FiExternalLink className="h-4 w-4" strokeWidth={1} />
           방문하기
         </a>
       </div>
-      <div className="flex flex-wrap items-center justify-center gap-1 text-base font-regular text-body-3 text-gray-500">
+      <div className="flex flex-wrap items-center justify-center gap-1 font-regular text-body-3 text-gray-400">
         <span className="tracking-wide">총동아리연합회</span>
         <FiX />
         <span className="tracking-wide">경북대학교 컴퓨터학부 일부 인원</span>
       </div>
-      <p className="mt-5 text-caption text-knu-gray">© 2026 KNU-80. All Rights Reserved.</p>
+      <p className="mt-5 text-caption text-gray-400">© 2026 KNU-80. All Rights Reserved.</p>
       <p
-        className="mt-3 text-caption text-gray-400 hover:underline cursor-pointer"
+        className="mt-3 text-caption text-gray-300 hover:underline cursor-pointer"
         onClick={() => setIsPrivacyOpen(true)}
       >
         이메일 수집 및 개인정보 처리 안내

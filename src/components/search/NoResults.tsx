@@ -12,7 +12,7 @@ export function NoResults() {
       />
 
       <div className="text-center">
-        <h3 className="typo-heading-3 text-gray-800 font-regular mb-2">검색 결과가 없어요</h3>
+        <h3 className="typo-heading-3 text-base-deep mb-2">검색 결과가 없어요</h3>
         <p className="typo-body-2 font-regular text-gray-500">다른 검색어를 입력해보세요</p>
       </div>
     </div>

@@ -61,7 +61,7 @@ export default function ImageCarousel({
   if (!imageUrls || imageUrls.length === 0) {
     return (
       <div className={`flex flex-col ${className}`}>
-        {label && <h3 className="typo-heading-3 text-black mb-5 px-1">{label}</h3>}
+        {label && <h3 className="typo-heading-3 text-base-deep mb-5 px-1">{label}</h3>}
         <RepresentativeImage imageUrl={null} altText={altText} height={aspectRatio} />
       </div>
     );
@@ -70,7 +70,7 @@ export default function ImageCarousel({
   if (imageUrls.length === 1) {
     return (
       <div className={`flex flex-col ${className}`}>
-        {label && <h3 className="typo-heading-3 text-black mb-5 px-1">{label}</h3>}
+        {label && <h3 className="typo-heading-3 text-base-deep mb-5 px-1">{label}</h3>}
         <RepresentativeImage
           imageUrl={imageUrls[0]}
           altText={altText}
@@ -103,7 +103,7 @@ export default function ImageCarousel({
 
   return (
     <div className={`flex flex-col ${className}`}>
-      {label && <h3 className="typo-heading-3 text-black mb-5 px-1">{label}</h3>}
+      {label && <h3 className="typo-heading-3 text-base-deep mb-5 px-1">{label}</h3>}
 
       <div ref={containerRef} className="relative w-full overflow-hidden select-none touch-pan-y">
         <motion.div
@@ -147,9 +147,7 @@ export default function ImageCarousel({
               key={index}
               onClick={() => setCurrentIndex(index)}
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                index === currentIndex
-                  ? 'w-6 bg-knu-red shadow-[0_0_10px_rgba(230,0,0,0.4)]'
-                  : 'w-1.5 bg-gray-200 hover:bg-gray-300'
+                index === currentIndex ? 'w-6 bg-primary' : 'w-1.5 bg-gray-200 hover:bg-gray-300'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

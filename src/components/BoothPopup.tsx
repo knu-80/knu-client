@@ -38,7 +38,7 @@ export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }:
 
   return (
     <>
-      <div className="fixed inset-0 z-30 bg-black/5" onClick={onClose} />
+      <div className="overlay-backdrop" onClick={onClose} />
 
       <div
         onClick={handlePopupClick}
@@ -62,7 +62,9 @@ export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }:
         <div className="flex flex-col flex-1 h-[88px] justify-between overflow-hidden relative">
           <div className="flex flex-col gap-1 overflow-hidden">
             <div className="flex items-center gap-2">
-              <h3 className="font-medium typo-body-1 truncate flex-1">{booth.name}</h3>
+              <h3 className="font-medium typo-body-1 truncate text-base-deep flex-1">
+                {booth.name}
+              </h3>
               <div className="shrink-0">
                 <ClubCategoryLabel division={booth.division} />
               </div>
@@ -80,7 +82,7 @@ export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }:
                 label="수정하기"
                 icon={FiEdit}
                 onClick={handleEditClick}
-                className="bg-knu-red"
+                className="bg-primary"
               />
             </div>
           )}

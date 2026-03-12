@@ -21,7 +21,7 @@ export default function BottomTabBar() {
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40">
       <nav
         aria-label="하단 탭 메뉴"
-        className="pointer-events-auto mx-auto w-full max-w-[700px] border-t border-gray-200 bg-white shadow-[0_-8px_18px_rgba(15,23,42,0.1)]"
+        className="h-[68px] pointer-events-auto mx-auto w-full max-w-[700px] bg-white shadow-[0_-8px_18px_rgba(0,0,0,0.08)]"
       >
         <ul className="grid grid-cols-4 px-2 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-2">
           {TAB_ITEMS.map((item) => {
@@ -33,8 +33,8 @@ export default function BottomTabBar() {
                   to={item.to}
                   end={item.end}
                   className={({ isActive }) =>
-                    `interactive-transition flex flex-col items-center gap-1 rounded-md py-1.5 text-xs font-semibold ${
-                      isActive ? 'text-knu-red' : 'text-gray-500'
+                    `interactive-transition flex flex-col items-center gap-1 rounded-md py-1.5 text-xs font-medium ${
+                      isActive ? 'text-primary' : 'text-gray-500'
                     }`
                   }
                 >

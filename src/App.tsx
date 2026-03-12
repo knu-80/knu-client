@@ -5,6 +5,7 @@ import { Analytics } from '@vercel/analytics/react';
 import MainLayout from '@/components/layouts/MainLayout';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import DetailLayout from '@/components/layouts/DetailLayout';
+import SearchLayout from './components/layouts/SearchLayout';
 import MapLayout from '@/components/layouts/MapLayout';
 import HomePage from '@/pages/HomePage';
 import NoticePage from '@/pages/NoticePage';
@@ -13,7 +14,6 @@ import SearchPage from '@/pages/SearchPage';
 import SearchResultPage from '@/pages/SearchResultPage';
 import MapPage from '@/pages/MapPage';
 import NoticeDetailPage from '@/pages/NoticeDetailPage';
-import TimeTablePage from '@/pages/TimeTablePage';
 import BoothDetailPage from '@/pages/BoothDetailPage';
 import AdminHomePage from '@/pages/admin/AdminHomePage';
 import AdminNoticePage from '@/pages/admin/AdminNoticePage';
@@ -83,11 +83,13 @@ export default function App() {
           <Route index element={<HomePage />} />
           <Route path="notice" element={<NoticePage />} />
           <Route path="event" element={<EventPage />} />
-          <Route path="search" element={<SearchPage />} />
-          <Route path="search/result" element={<SearchResultPage />} />
         </Route>
         <Route element={<MapLayout />}>
           <Route path="/map" element={<MapPage />} />
+        </Route>
+        <Route element={<SearchLayout />}>
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="search/result" element={<SearchResultPage />} />
         </Route>
         <Route path="/admin/login" element={<LoginPage />} />
         <Route element={<AdminSessionGuard />}>
@@ -117,9 +119,6 @@ export default function App() {
         </Route>
         <Route element={<DetailLayout title="공지사항" fallbackPath="/notice" />}>
           <Route path="/notice/:id" element={<NoticeDetailPage />} />
-        </Route>
-        <Route element={<DetailLayout title="타임테이블" fallbackPath="/" />}>
-          <Route path="/timetable" element={<TimeTablePage />} />
         </Route>
       </Routes>
       <Analytics />

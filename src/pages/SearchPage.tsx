@@ -58,13 +58,13 @@ export default function SearchPage() {
 
       <div className="flex-1 overflow-y-auto no-scrollbar">
         <div className="px-1 py-5">
-          <h4 className="typo-heading-3 font-semibold mb-2 text-black">추천 검색어</h4>
+          <h4 className="typo-heading-3 mb-2 text-base-deep">추천 검색어</h4>
           <div className="flex flex-wrap gap-[10px]">
             {RECOMMENDATIONS.map((tag) => (
               <button
                 key={tag}
                 onClick={() => handleSearch(tag)}
-                className="p-[10px] h-8 flex items-center border border-gray-200 rounded-full typo-body-2 text-gray-700 active:bg-gray-100 transition-colors"
+                className="p-[10px] h-8 flex items-center border border-gray-200 rounded-full typo-body-2 text-base-deep active:bg-gray-100 transition-colors"
               >
                 {tag}
               </button>
@@ -74,7 +74,7 @@ export default function SearchPage() {
 
         <div className="mt-5">
           <div className="mb-4 px-1">
-            <h4 className="typo-heading-3 font-semibold text-black">여기 방문은 어때요?</h4>
+            <h4 className="typo-heading-3 text-base-deep">여기 방문은 어때요?</h4>
           </div>
           <div className="flex flex-col gap-5 px-1 pb-10">
             {recommendedBooths.map((booth) => (

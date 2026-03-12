@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 
 import MainLayout from '@/components/layouts/MainLayout';
@@ -29,6 +29,8 @@ import { useAdminSessionStore } from '@/stores/adminSessionStore';
 import SplashScreen from '@/components/home/SplashScreen';
 
 const SPLASH_DURATION_MS = 1500;
+const isAdminRoutePath = (pathname: string) =>
+  pathname === '/admin' || pathname.startsWith('/admin/');
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +57,7 @@ export default function App() {
     setUnauthorizedHandler(() => {
       setUnauthenticated();
 
-      const isAdminPath = location.pathname.startsWith('/admin');
+      const isAdminPath = isAdminRoutePath(location.pathname);
       const isLoginPath = location.pathname === '/admin/login';
       if (!isAdminPath || isLoginPath) {
         return;
@@ -110,6 +112,7 @@ export default function App() {
           <Route element={<AdminLayout title="부스 수정" fallbackPath="/admin" />}>
             <Route path="/admin/booths/edit/:id" element={<AdminBoothEditPage />} />
           </Route>
+          <Route path="/admin/*" element={<Navigate to="/admin" replace />} />
         </Route>
         <Route element={<DetailLayout title="부스 상세" fallbackPath="/map" />}>
           <Route path="/booths/:id" element={<BoothDetailPage />} />

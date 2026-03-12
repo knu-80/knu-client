@@ -271,6 +271,8 @@ function MapPreviewCard() {
           src={MapSvg}
           alt=""
           aria-hidden="true"
+          loading="lazy"
+          decoding="async"
           className="h-full w-full object-cover transition duration-200 group-hover:scale-[1.02]"
           style={{ objectPosition: 'bottom 20%' }}
         />

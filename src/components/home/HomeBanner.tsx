@@ -132,6 +132,7 @@ export default function HomeBanner() {
                 <img
                   src={slide.src}
                   alt={slide.alt}
+                  decoding="async"
                   loading={index === 1 ? 'eager' : 'lazy'}
                   fetchPriority={index === 1 ? 'high' : 'auto'}
                   className="absolute inset-0 h-full w-full object-cover"

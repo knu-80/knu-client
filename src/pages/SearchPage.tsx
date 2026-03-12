@@ -5,8 +5,7 @@ import { BoothItem } from '@/components/BoothItem';
 import { useState } from 'react';
 import { useRecommendedBooths } from '@/hooks/useRecommendedBooths';
 import { useBoothsWithFallback } from '@/hooks/useBooths';
-
-const RECOMMENDATIONS = ['힐링', '취미활동', '공모전', '밴드', '창업'];
+import { RECOMMENDATIONS } from '@/constants/booth';
 
 export default function SearchPage() {
   const navigate = useNavigate();
@@ -40,9 +39,10 @@ export default function SearchPage() {
       <div className="py-3 flex items-center gap-2 border-b border-gray-100 shrink-0">
         <button
           onClick={() => navigate('/map')}
+          aria-label="지도로 돌아가기"
           className="p-1 -ml-2 text-gray-600 active:bg-gray-100 rounded-full transition-colors"
         >
-          <FiArrowLeft size={24} />
+          <FiArrowLeft size={24} aria-hidden="true" />
         </button>
 
         <div className="flex-1">

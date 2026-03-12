@@ -26,7 +26,7 @@ function ApplyButton({
           e.stopPropagation();
           onClick();
         }}
-        className="h-8 px-4 bg-gray-600 text-white rounded-full typo-body-3 font-semibold cursor-not-allowed"
+        className="h-[30px] px-3 bg-gray-600 text-white rounded-full typo-body-3 font-semibold cursor-not-allowed"
       >
         운영마감
       </button>
@@ -56,6 +56,9 @@ export function BoothItem({ booth, onClick, onLocationClick }: BoothItemProps) {
         <img
           src={thumbnail}
           alt={booth.name}
+          loading="lazy"
+          decoding="async"
+          sizes="100px"
           className="w-[100px] h-[100px] object-cover rounded-[4px] shrink-0"
         />
       ) : (
@@ -63,7 +66,6 @@ export function BoothItem({ booth, onClick, onLocationClick }: BoothItemProps) {
           <div className="absolute inset-0 animate-shimmer bg-gradient-to-r via-white/40 shadow-[0_0_20px_rgba(255,255,255,0.3)]" />
         </div>
       )}
-
       <div className="flex flex-col flex-1 h-[100px] justify-between overflow-hidden">
         <div className="flex flex-col h-full gap-1 overflow-hidden min-w-0">
           <div className="flex items-center gap-2 min-w-0">

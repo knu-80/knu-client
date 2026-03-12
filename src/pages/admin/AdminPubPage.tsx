@@ -8,6 +8,8 @@ export default function AdminPubPage() {
           <img
             src={banner3}
             alt="주막 홍보 배너"
+            loading="eager"
+            decoding="async"
             className="w-full h-full object-contain drop-shadow-md"
           />
         </div>

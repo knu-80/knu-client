@@ -71,7 +71,13 @@ export default function ImageCarousel({
     return (
       <div className={`flex flex-col ${className}`}>
         {label && <h3 className="typo-heading-3 text-base-deep mb-5 px-1">{label}</h3>}
-        <RepresentativeImage imageUrl={imageUrls[0]} altText={altText} height={aspectRatio} />
+        <RepresentativeImage
+          imageUrl={imageUrls[0]}
+          altText={altText}
+          height={aspectRatio}
+          loading="eager"
+          fetchPriority="high"
+        />
       </div>
     );
   }
@@ -128,6 +134,8 @@ export default function ImageCarousel({
                 altText={`${altText} ${index + 1}`}
                 height={aspectRatio}
                 isZoomable={false}
+                loading={index === currentIndex ? 'eager' : 'lazy'}
+                fetchPriority={index === currentIndex ? 'high' : 'low'}
               />
             </div>
           ))}

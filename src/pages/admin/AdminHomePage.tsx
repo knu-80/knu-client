@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { FiBell, FiCalendar, FiHome, FiTool } from 'react-icons/fi';
 import { useAdminSessionStore } from '@/stores/adminSessionStore';
+import logoImage from '@/assets/logo.webp';
 
 export default function AdminHomePage() {
   const navigate = useNavigate();
@@ -25,8 +26,11 @@ export default function AdminHomePage() {
       <div className="mb-12 flex flex-col items-center">
         <div className="relative mb-4">
           <img
-            src="/src/assets/logo.png"
+            src={logoImage}
             alt="가두모집 로고"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             className="h-40 w-40 object-contain drop-shadow-xl"
           />
         </div>

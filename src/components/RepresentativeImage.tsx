@@ -5,6 +5,8 @@ interface RepresentativeImageProps {
   altText: string;
   height?: string;
   isZoomable?: boolean;
+  loading?: 'lazy' | 'eager';
+  fetchPriority?: 'high' | 'low' | 'auto';
 }
 
 export default function RepresentativeImage({
@@ -12,6 +14,8 @@ export default function RepresentativeImage({
   altText,
   height = 'aspect-[4/5]',
   isZoomable = true,
+  loading = 'lazy',
+  fetchPriority = 'auto',
 }: RepresentativeImageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -57,6 +61,9 @@ export default function RepresentativeImage({
           <img
             src={imageUrl}
             alt={altText}
+            loading={loading}
+            decoding="async"
+            fetchPriority={fetchPriority}
             className="w-full h-full object-cover"
             draggable="false"
           />
@@ -79,10 +86,28 @@ export default function RepresentativeImage({
           )}
         </div>
       ) : (
-        <div className={`relative w-full ${height} bg-gray-200 overflow-hidden`}>
+        <div className={`relative w-full ${height} bg-gray-200 overflow-hidden rounded-lg`}>
           <div
             className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent"
             style={{ backgroundSize: '200% 100%' }}
+          />
+        </div>
+      )}
+
+      {isModalOpen && imageUrl && (
+        <div
+          className="fixed top-0 left-1/2 -translate-x-1/2 z-100 
+                     w-full max-w-175 min-h-screen 
+                     bg-black/60 flex items-center justify-center p-4"
+          onClick={handleModalClose}
+        >
+          <img
+            src={imageUrl}
+            alt={`확대된 ${altText}`}
+            loading="eager"
+            decoding="async"
+            className="max-w-full max-h-full object-contain shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
           />
         </div>
       )}

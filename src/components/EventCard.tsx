@@ -1,5 +1,8 @@
-import { FiClock, FiMapPin, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import RepresentativeImage from './RepresentativeImage';
+import { Badge } from './Badge';
+import { formatDateTime } from '@/lib/date';
+import { PiMapPinAreaFill } from 'react-icons/pi';
 
 export interface EventCardProps {
   title: string;
@@ -24,25 +27,8 @@ export default function EventCard({
   onEdit,
   onDelete,
 }: EventCardProps) {
-  const formatDateTime = (dateTimeStr: string) => {
-    if (!dateTimeStr) return '미지정';
-
-    let normalizedStr = dateTimeStr;
-    if (!normalizedStr.includes('Z') && !normalizedStr.includes('+')) {
-      normalizedStr += 'Z';
-    }
-
-    const date = new Date(normalizedStr);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${year}.${month}.${day} ${hours}:${minutes}`;
-  };
-
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <div className="relative overflow-hidden rounded-2xl shadow-sm transition-shadow">
       <div className="relative">
         <RepresentativeImage
           imageUrl={imageUrl}
@@ -77,22 +63,26 @@ export default function EventCard({
         )}
       </div>
 
-      <div className="flex flex-col gap-4 p-5">
-        <div className="flex flex-col gap-1">
-          <h3 className="text-lg font-bold text-gray-900">{title}</h3>
-          <p className="text-sm text-gray-600 line-clamp-4">{description}</p>
+      <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-[2px]">
+          <div className="flex justify-between">
+            <h3 className="text-body-1 font-medium text-base-deep">{title}</h3>
+            <div className="flex items-center gap-[2px] typo-body-2 text-base-deep font-medium">
+              <PiMapPinAreaFill className="h-4 w-4 shrink-0" />
+              <span>{location}</span>
+            </div>
+          </div>
+          <p className="typo-body-2 text-gray-500 line-clamp-4">{description}</p>
         </div>
 
-        <div className="flex flex-col gap-1.5 pt-1">
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <FiClock className="h-3.5 w-3.5 shrink-0 text-knu-red" />
-            <span className="truncate">
-              {formatDateTime(startAt)} ~ {formatDateTime(endAt)}
-            </span>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <Badge className="bg-secondary-green/10 text-secondary-green">시작</Badge>
+            <span className="typo-body-2 text-base-deep">{formatDateTime(startAt)}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <FiMapPin className="h-3.5 w-3.5 shrink-0 text-knu-red" />
-            <span>{location}</span>
+          <div className="flex items-center gap-2">
+            <Badge className="bg-primary/10 text-primary">종료</Badge>
+            <span className="typo-body-2 text-base-deep">{formatDateTime(endAt)}</span>
           </div>
         </div>
       </div>

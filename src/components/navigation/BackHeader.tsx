@@ -1,4 +1,4 @@
-import { FiChevronLeft } from 'react-icons/fi';
+import { FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
 type BackHeaderProps = {
@@ -25,9 +25,9 @@ export default function BackHeader({ title, fallbackPath }: BackHeaderProps) {
           type="button"
           onClick={handleBack}
           aria-label="뒤로가기"
-          className="rounded-md p-2 text-gray-700 transition-colors hover:bg-gray-100"
+          className="p-1 -ml-2 text-gray-600 active:bg-gray-100 rounded-full transition-colors"
         >
-          <FiChevronLeft className="h-6 w-6" aria-hidden="true" />
+          <FiArrowLeft size={24} aria-hidden="true" />
         </button>
         <h1 className="typo-heading-2 text-[#0f172a]">{title}</h1>
       </div>

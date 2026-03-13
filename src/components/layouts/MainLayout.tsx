@@ -11,7 +11,7 @@ export default function MainLayout() {
             <Outlet />
           </div>
           <Footer />
-          <div className="h-[calc(68px+env(safe-area-inset-bottom))]" />
+          <div className="h-[calc(60px+env(safe-area-inset-bottom))]" />
         </main>
         <BottomTabBar />
       </div>

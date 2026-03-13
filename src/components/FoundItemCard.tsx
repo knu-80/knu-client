@@ -1,5 +1,4 @@
-import { FaMapMarkerAlt } from 'react-icons/fa';
-import noticeIcon from '@/assets/noticeIcon.webp';
+import { FaMapMarkerAlt, FaInbox } from 'react-icons/fa';
 
 interface FoundItemCardProps {
   itemName: string;
@@ -8,40 +7,21 @@ interface FoundItemCardProps {
 
 export default function FoundItemCard({ itemName, foundLocation }: FoundItemCardProps) {
   return (
-    <div className="flex items-center justify-between p-3 sm:p-5 border border-gray-100 rounded-xl shadow-sm mb-4 bg-white">
-      <div className="flex items-center space-x-2 sm:space-x-4 w-[48%]">
-        <div className="shrink-0 w-8 h-8 sm:w-12 sm:h-12 bg-amber-50 rounded-full flex items-center justify-center">
-          <img
-            src={noticeIcon}
-            alt="습득 물품 공지 아이콘"
-            loading="lazy"
-            decoding="async"
-            className="w-5 h-5 sm:w-8 sm:h-8 object-contain"
-          />
+    <div className="flex flex-col p-3 border border-gray-200 rounded-xl bg-white space-y-2">
+      <div className="flex items-center space-x-1.5">
+        <div className="shrink-0 p-1.5 gap-1 bg-base-deep/10 rounded-full flex items-center justify-center">
+          <FaInbox className="text-base-deep" />
         </div>
-        <div className="flex flex-col min-w-0">
-          <span className="text-[12px] sm:typo-body-3 sm:text-sm text-gray-400 uppercase tracking-wider">
-            습득 물품
-          </span>
-          <span className="text-sm sm:typo-body-1 sm:text-base text-gray-800 font-bold truncate leading-tight">
-            {itemName}
-          </span>
+        <div className="flex flex-row min-w-0">
+          <span className="typo-body-2 text-base-deep font-medium truncate">{itemName}</span>
         </div>
       </div>
-
-      <div className="w-px h-8 sm:h-10 bg-gray-300" />
-
-      <div className="flex items-center space-x-2 sm:space-x-4 w-[48%] pl-2">
-        <div className="shrink-0 w-8 h-8 sm:w-12 sm:h-12 bg-red-50 rounded-full flex items-center justify-center">
-          <FaMapMarkerAlt className="text-knu-red text-sm sm:text-xl" />
+      <div className="flex items-center space-x-1.5">
+        <div className="shrink-0 p-1.5 gap-1 bg-base-deep/10 rounded-full flex items-center justify-center">
+          <FaMapMarkerAlt className="text-base-deep" />
         </div>
-        <div className="flex flex-col min-w-0">
-          <span className="text-[12px] sm:typo-body-3 sm:text-sm text-gray-400 uppercase tracking-wider">
-            습득 장소
-          </span>
-          <span className="text-sm sm:typo-body-1 sm:text-base text-gray-800 font-bold truncate leading-tight">
-            {foundLocation}
-          </span>
+        <div className="flex flex-row min-w-0">
+          <span className="typo-body-2 text-base-deep font-medium truncate">{foundLocation}</span>
         </div>
       </div>
     </div>

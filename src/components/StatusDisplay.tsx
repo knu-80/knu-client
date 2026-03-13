@@ -33,7 +33,7 @@ export function StatusDisplay({ variant = 'recruitment', title, description }: S
         className="w-40 h-40 object-contain"
       />
       <div className="text-center mt-5">
-        <h3 className="typo-heading-3 text-base-deep mb-1 whitespace-pre-line">{title}</h3>
+        <h3 className="typo-heading-4 text-base-deep mb-1 whitespace-pre-line">{title}</h3>
         {description && (
           <p className="typo-body-2 font-regular text-gray-500 whitespace-pre-line">
             {description}

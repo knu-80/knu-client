@@ -278,7 +278,7 @@ function MapPreviewCard() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent select-none" />
         <div className="absolute bottom-3 right-3 flex items-center justify-center rounded-full bg-white/95 px-3 h-8 shadow-sm transition-all active:scale-95">
-          <span className="typo-body-2 font-medium text-primary leading-none -translate-y-[0.5px]">
+          <span className="typo-body-2 font-medium text-primary leading-none">
             탭하여 지도 보기
           </span>
         </div>

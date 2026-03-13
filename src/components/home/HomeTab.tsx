@@ -12,7 +12,7 @@ import {
 } from '@/constants/performanceTimetable';
 import { SelectableButton } from '../SelectableButton';
 import { useBooths } from '@/hooks/useBooths';
-import { toDotDate } from '@/lib/date';
+import { toMonthDayDot } from '@/lib/date';
 import { NOTICE_CATEGORY_COLOR_MAP } from '@/constants/notice';
 import { Badge } from '../Badge';
 
@@ -92,7 +92,7 @@ function mapNoticesToPreview(items: NoticeListItem[]): DayContent['noticePreview
     noticeId: item.noticeId,
     category: toNoticeLabel(item.type),
     title: item.title,
-    date: toDotDate(item.createdAt),
+    date: toMonthDayDot(item.createdAt),
   }));
 }
 
@@ -227,7 +227,7 @@ function NoticePreviewCard({
                   className={`interactive-transition flex items-center justify-between gap-3 rounded-2xl px-5 py-4 ${color.bg} ${color.hoverBg} hover:border-knu-gold/60`}
                 >
                   <div
-                    className={`interactive-transition grid grid-cols-[52px_1fr] rounded-2xl py-4}`}
+                    className={`interactive-transition grid grid-cols-[50px_1fr] rounded-2xl py-4}`}
                   >
                     <p className={`typo-body-2 font-semibold ${color.text}`}>{item.date}</p>
                     <div className="flex items-center gap-[6px]">

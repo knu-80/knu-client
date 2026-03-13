@@ -30,9 +30,8 @@ export const BoothMarker = memo(function BoothMarker({
     <button
       className={`absolute ${width} ${height} cursor-pointer hover:brightness-95`}
       style={{
-        left: `${x}px`,
-        top: `${y}px`,
-        transformOrigin: 'center center',
+        transform: `translate3d(${x}px, ${y}px, 0)`,
+        willChange: 'transform',
       }}
       onClick={onClick}
     >

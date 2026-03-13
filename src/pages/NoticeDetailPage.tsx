@@ -1,9 +1,13 @@
 import { useParams } from 'react-router-dom';
-import { FaRegCalendar, FaInfoCircle, FaUser } from 'react-icons/fa';
 import ImageCarousel from '@/components/ImageCarousel';
 import FoundItemCard from '@/components/FoundItemCard';
 import { useNoticeDetail } from '@/hooks/useNoticeDetail';
 import { toNoticeLabel } from '@/apis/enumMapper';
+import { StatusDisplay } from '@/components/StatusDisplay';
+import { PiSpinnerGapThin } from 'react-icons/pi';
+import { Badge } from '@/components/Badge';
+import { NOTICE_CATEGORY_COLOR_MAP } from '@/constants/notice';
+import { FaInfoCircle } from 'react-icons/fa';
 
 export default function NoticeDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -12,37 +16,49 @@ export default function NoticeDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-knu-red"></div>
+      <div className="flex flex-col items-center justify-center min-h-[80vh]">
+        <PiSpinnerGapThin className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
 
-  if (error || !notice) {
+  if (error) {
     return (
-      <div className="py-20 text-center text-gray-500">
-        공지사항을 불러오는 중 오류가 발생했거나 존재하지 않는 공지입니다.
+      <div className="flex flex-col items-center justify-center min-h-[80vh] px-5">
+        <StatusDisplay variant="error" title="인터넷 연결을 확인해주세요" />
+      </div>
+    );
+  }
+
+  if (!notice) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[80vh] px-5">
+        <StatusDisplay variant="error" title="해당 공지를 찾을 수 없습니다" />
       </div>
     );
   }
 
   const isLostItem = toNoticeLabel(notice.type) === '분실물';
+  const label = toNoticeLabel(notice.type);
+  const color = NOTICE_CATEGORY_COLOR_MAP[label as '공지' | '분실물'];
 
   return (
     <div className="pt-5">
-      <div className="flex flex-col space-y-1 mb-8 text-black">
-        <h2 className="typo-heading-3">{notice.title}</h2>
-        <div className="flex items-center space-x-4 text-sm text-gray-500 mt-1 pt-1">
-          <div className="flex items-center space-x-2">
-            <FaRegCalendar />
-            <span>작성일: {notice.createdAt.split('T')[0]}</span>
-          </div>
-          <span className="h-4 w-px bg-gray-300"></span>
-          <div className="flex items-center space-x-2">
-            <FaUser />
-            <span>작성자: {notice.authorNickname}</span>
-          </div>
+      <div className="flex flex-col space-y-1 mb-4 text-base-deep">
+        <div className="flex items-center gap-[8px] min-w-0">
+          <Badge className={`${color.badgeBg} ${color.badgeText} typo-body-2 font-medium`}>
+            {label}
+          </Badge>
+          <h2 className="typo-heading-3">{notice.title}</h2>
         </div>
+        <div className="flex items-center space-x-1 typo-body-3 text-gray-500 mt-1">
+          <span>{notice.authorNickname} ·</span>
+          <span>{notice.createdAt.split('T')[0]} 작성됨</span>
+        </div>
+      </div>
+
+      <div className="mb-10 mt-4 text-base-deep">
+        <p className="typo-body-2 whitespace-pre-wrap">{notice.content}</p>
       </div>
 
       {isLostItem && notice.lostFoundDetail && (
@@ -52,23 +68,23 @@ export default function NoticeDetailPage() {
         />
       )}
 
-      <div className="mb-10 mt-5 text-black">
-        <p className="typo-body-1 whitespace-pre-wrap">{notice.content}</p>
-      </div>
-
-      {notice.imageUrls && notice.imageUrls.length > 0 && (
-        <ImageCarousel
-          imageUrls={notice.imageUrls}
-          altText={`${notice.title} 관련 사진`}
-          label="관련 사진"
-          className="mb-10"
-        />
+      {isLostItem && (
+        <div className="mt-3 mb-10 flex p-3 items-center bg-primary/10 rounded-xl gap-2">
+          <FaInfoCircle className="text-primary shrink-0 w-4 h-4" />
+          <p className="typo-body-3 font-medium text-primary leading-tight">
+            분실물은 총동연 부스에서 수령할 수 있어요.
+          </p>
+        </div>
       )}
 
-      {isLostItem && (
-        <div className="flex items-center space-x-3 p-4 bg-red-50/50 border border-red-100 text-red-900 rounded-xl mb-10 shadow-sm">
-          <FaInfoCircle className="text-xl text-knu-red" />
-          <p className="typo-body-2 font-semibold">분실물은 총동연 부스에서 수령 가능합니다</p>
+      {notice.imageUrls && notice.imageUrls.length > 0 && (
+        <div className="mb-10">
+          <h3 className="typo-heading-4 mb-2 text-base-deep">관련 사진</h3>
+          <ImageCarousel
+            imageUrls={notice.imageUrls}
+            altText={`${notice.title} 사진`}
+            className="mb-10"
+          />
         </div>
       )}
     </div>

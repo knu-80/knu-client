@@ -61,8 +61,8 @@ export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }:
 
         <div className="flex flex-col flex-1 h-[88px] justify-between overflow-hidden relative">
           <div className="flex flex-col gap-1 overflow-hidden">
-            <div className="flex items-center gap-2">
-              <h3 className="font-medium typo-body-1 truncate text-base-deep flex-1">
+            <div className="flex items-center gap-1.5 overflow-hidden">
+              <h3 className="font-medium typo-body-1 truncate text-base-deep max-w-fit">
                 {booth.name}
               </h3>
               <div className="shrink-0">

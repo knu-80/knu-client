@@ -26,7 +26,7 @@ function ApplyButton({
           e.stopPropagation();
           onClick();
         }}
-        className="h-[30px] px-3 bg-gray-600 text-white rounded-full typo-body-3 font-semibold cursor-not-allowed"
+        className="h-[30px] px-3 bg-gray-600 text-white rounded-full typo-caption font-medium cursor-not-allowed"
       >
         운영마감
       </button>
@@ -39,7 +39,7 @@ function ApplyButton({
         e.stopPropagation();
         onClick();
       }}
-      className="h-8 px-4 bg-primary text-white rounded-full typo-body-3 font-medium active:brightness-95 transition-colors"
+      className="h-8 px-4 bg-primary text-white rounded-full typo-caption font-medium active:brightness-95 transition-colors"
     >
       지원하기
     </button>

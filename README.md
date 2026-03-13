@@ -60,3 +60,8 @@
 - 단위/통합 테스트 실행: `pnpm test`
 - 테스트 watch 모드: `pnpm test:watch`
 - 관리자 세션 가드 테스트 가이드: `docs/ADMIN_SESSION_GUARD_TESTING.md`
+- E2E 브라우저 설치: `pnpm test:e2e:install`
+- E2E 실행: `pnpm test:e2e`
+- E2E UI 모드: `pnpm test:e2e:ui`
+- E2E 리포트 확인: `pnpm test:e2e:report`
+- E2E 가이드: `docs/E2E_TESTING.md`

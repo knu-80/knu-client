@@ -20,9 +20,17 @@ interface StatusDisplayProps {
   variant?: StatusVariant;
   title: string;
   description?: string;
+  onAction?: () => void;
 }
 
-export function StatusDisplay({ variant = 'recruitment', title, description }: StatusDisplayProps) {
+export function StatusDisplay({
+  variant = 'recruitment',
+  title,
+  description,
+  onAction,
+}: StatusDisplayProps) {
+  const isError = variant === 'error';
+
   return (
     <div className="flex flex-col items-center justify-center py-4 px-10 min-h-[300px]">
       <img
@@ -40,6 +48,18 @@ export function StatusDisplay({ variant = 'recruitment', title, description }: S
           </p>
         )}
       </div>
+      {isError && onAction && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onAction();
+          }}
+          className="my-3 rounded-full bg-primary px-8 py-3 typo-body-2 font-medium text-white transition-all active:scale-95"
+        >
+          새로고침
+        </button>
+      )}
     </div>
   );
 }

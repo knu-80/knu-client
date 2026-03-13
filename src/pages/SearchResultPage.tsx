@@ -2,7 +2,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { SearchBar } from '@/components/SearchBar';
 import { BoothItem } from '@/components/BoothItem';
-import { NoResults } from '@/components/search/NoResults';
+import { StatusDisplay } from '@/components/StatusDisplay';
 import { useBooths, useBoothsWithFallback } from '@/hooks/useBooths';
 import { useRecommendedClubBooths } from '@/hooks/useRecommendedBooths';
 import { useMemo, useState } from 'react';
@@ -66,7 +66,11 @@ export default function SearchResultPage() {
         ) : (
           isSearching && (
             <>
-              <NoResults />
+              <StatusDisplay
+                variant="search"
+                title="검색 결과가 없어요"
+                description="다른 검색어를 입력해보세요"
+              />
               <div className="px-1 py-10">
                 <div className="mb-4">
                   <h4 className="typo-heading-3 font-semibold text-base-deep">

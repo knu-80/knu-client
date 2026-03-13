@@ -1,8 +1,10 @@
 import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { FiChevronRight } from 'react-icons/fi';
 import { PiSpinnerGapThin } from 'react-icons/pi';
 import { FaStar } from 'react-icons/fa';
+import RankingSvg from '@/assets/ranking.svg';
+import FaceFillSvg from '@/assets/face-fill.svg';
+import RankingHeaderSvg from '@/assets/ranking-header.svg';
 
 const DUMMY_RANKING = [
   { id: 1, name: 'name1', pickCount: 1250 },
@@ -25,10 +27,8 @@ export default function RankingPage() {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, []);
 
-  const { topThree, rest } = useMemo(() => {
-    const sorted = [...booths].slice(0, 10);
-    const podium = [sorted[1], sorted[0], sorted[2]].filter(Boolean);
-    return { topThree: podium, rest: sorted.slice(3) };
+  const rankedBooths = useMemo(() => {
+    return [...booths].slice(0, 10);
   }, [booths]);
 
   if (loading) {
@@ -40,68 +40,55 @@ export default function RankingPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 pt-5">
-      <div className="flex items-center gap-2 px-1">
-        <span className="typo-heading-3 font-semibold text-base-deep">지금 뜨고있는 동아리</span>
-      </div>
+    <div className="flex flex-col pt-5">
+      <img
+        src={RankingHeaderSvg}
+        alt="지금 뜨는 동아리"
+        draggable={false}
+        className="mt-4 mb-2 mx-auto h-14 pointer-events-none select-none"
+      />
 
-      <div className="grid grid-cols-3 items-end gap-2 px-1 pt-4">
-        {topThree.map((booth) => {
-          const rank = booth === topThree[1] ? 1 : booth === topThree[0] ? 2 : 3;
-          const isFirst = rank === 1;
+      <img
+        src={RankingSvg}
+        alt="랭킹 일러스트"
+        draggable={false}
+        className="mx-auto w-50 pointer-events-none select-none mb-6"
+      />
+
+      <section className="space-y-3 pb-24 mt-[-40px]">
+        {rankedBooths.map((booth, index) => {
+          const rank = index + 1;
 
           return (
             <Link
               key={booth.id}
               to={`/booths/${booth.id}`}
-              className={`relative flex flex-col items-center justify-center gap-2 rounded-2xl p-3 shadow-sm transition-all active:scale-95 ${
-                isFirst
-                  ? 'bg-white text-base-deep h-[150px] z-10'
-                  : 'bg-white border border-gray-100 h-[120px]'
-              }`}
+              className={`interactive-transition flex items-center justify-between rounded-2xl px-5 py-4 bg-white`}
             >
-              <div
-                className={`absolute -top-3 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white font-bold text-xs ${
-                  isFirst ? 'bg-secondary-yellow text-base-deep' : 'bg-gray-200 text-gray-500'
-                }`}
-              >
-                {rank}
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="relative flex h-10 w-10 shrink-0 items-center justify-center">
+                  <img
+                    src={FaceFillSvg}
+                    alt="얼굴 아이콘"
+                    draggable={false}
+                    className="absolute inset-0 h-full w-full pointer-events-none select-none"
+                  />
+                  <span className="relative z-10 top-0.5 text-center font-medium text-gray-500 typo-caption leading-none">
+                    {rank}
+                  </span>
+                </div>
+                <p className="truncate typo-body-1 font-medium text-base-deep">{booth.name}</p>
               </div>
-              <p
-                className={`text-center font-bold text-sm line-clamp-2 ${isFirst ? 'text-base-deep' : 'text-base-deep'}`}
-              >
-                {booth.name}
-              </p>
-              <span className={`text-[11px] font-medium text-primary`}>
-                {booth.pickCount.toLocaleString()} PICK
-              </span>
+
+              <div className="flex items-center gap-1 shrink-0">
+                <FaStar className="text-secondary-yellow" />
+                <span className="typo-body-3 font-semibold text-base-deep">
+                  {booth.pickCount.toLocaleString()}
+                </span>
+              </div>
             </Link>
           );
         })}
-      </div>
-
-      <section className="space-y-3 pb-20">
-        {rest.map((booth, index) => (
-          <Link
-            key={booth.id}
-            to={`/booths/${booth.id}`}
-            className="interactive-transition flex items-center justify-between rounded-2xl border border-gray-100 bg-white px-5 py-4 shadow-sm"
-          >
-            <div className="flex items-center gap-4 min-w-0">
-              <span className="typo-body-2 font-bold text-gray-400 w-4 text-center">
-                {index + 4}
-              </span>
-              <p className="truncate typo-body-2 font-medium text-base-deep">{booth.name}</p>
-            </div>
-            <div className="flex items-center gap-1 shrink-0">
-              <FaStar className="text-secondary-yellow" />
-              <span className="typo-caption font-semibold text-base-deep">
-                {booth.pickCount.toLocaleString()}
-              </span>
-              <FiChevronRight className="ml-1 h-4 w-4 text-gray-300" />
-            </div>
-          </Link>
-        ))}
       </section>
     </div>
   );

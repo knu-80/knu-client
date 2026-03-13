@@ -1,4 +1,4 @@
-import { FiBell, FiCalendar, FiHome, FiMap } from 'react-icons/fi';
+import { FiBell, FiCalendar, FiHome, FiMap, FiStar } from 'react-icons/fi';
 import type { IconType } from 'react-icons';
 import { NavLink } from 'react-router-dom';
 
@@ -10,10 +10,11 @@ type TabItem = {
 };
 
 const TAB_ITEMS: TabItem[] = [
-  { to: '/', label: '홈', icon: FiHome, end: true },
-  { to: '/notice', label: '공지', icon: FiBell },
   { to: '/event', label: '이벤트', icon: FiCalendar },
+  { to: '/notice', label: '공지', icon: FiBell },
+  { to: '/', label: '홈', icon: FiHome, end: true },
   { to: '/map', label: '지도', icon: FiMap },
+  { to: '/ranking', label: '랭킹', icon: FiStar },
 ];
 
 export default function BottomTabBar() {
@@ -23,7 +24,7 @@ export default function BottomTabBar() {
         aria-label="하단 탭 메뉴"
         className="h-[68px] pointer-events-auto mx-auto w-full max-w-[700px] bg-white shadow-[0_-8px_18px_rgba(0,0,0,0.08)]"
       >
-        <ul className="grid grid-cols-4 px-2 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-2">
+        <ul className="grid grid-cols-5 px-2 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-2">
           {TAB_ITEMS.map((item) => {
             const Icon = item.icon;
 

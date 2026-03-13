@@ -105,7 +105,7 @@ type SectionHeaderProps = {
 
 function SectionHeader({ title, text, description, to }: SectionHeaderProps) {
   return (
-    <div className="mb-3 mx-1 select-none touch-none">
+    <div className="mb-3 mx-1 select-none">
       <div className="flex items-baseline justify-between gap-6">
         <div className="flex items-center gap-2">
           <h3 className="typo-heading-3 text-base-deep shrink-0">{title}</h3>
@@ -142,7 +142,7 @@ function TimeTablePreviewCard({
 
   return (
     <>
-      <div className="rounded-2xl shadow-sm bg-white p-4 select-none touch-none">
+      <div className="rounded-2xl shadow-sm bg-white p-4 select-none">
         <div className="mb-4 mx-1 flex items-center justify-between">
           <p className="typo-body-1 font-medium text-base-deep">총 {totalCount}개의 공연</p>
           <div className="flex items-center gap-2">
@@ -193,7 +193,7 @@ function TimeTablePreviewCard({
           </div>
         )}
       </div>
-      <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none touch-none">
+      <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none">
         <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
         현장 상황에 따라 공연 시간이 일부 변경될 수 있어요
       </p>
@@ -210,7 +210,7 @@ function NoticePreviewCard({
 }) {
   return (
     <>
-      <div className="rounded-2xl shadow-sm bg-white p-4 select-none touch-none">
+      <div className="rounded-2xl shadow-sm bg-white p-4 select-none">
         <div className="mb-4 ml-1 flex items-center justify-between">
           <p className="typo-body-1 font-medium text-base-deep">최근 공지 3건</p>
         </div>
@@ -249,7 +249,7 @@ function NoticePreviewCard({
           )}
         </div>
       </div>
-      <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none touch-none">
+      <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none">
         <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
         공지 원문과 분실물 상세 내용은 더보기에서 확인할 수 있어요
       </p>
@@ -276,13 +276,15 @@ function MapPreviewCard() {
           className="h-full w-full object-cover transition duration-200 group-hover:scale-[1.02]"
           style={{ objectPosition: 'bottom 20%' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent select-none touch-none" />
-        <div className="absolute bottom-3 right-3 rounded-full bg-white/95 px-3 py-1 typo-body-2 font-medium text-primary">
-          탭하여 지도 보기
+        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent select-none" />
+        <div className="absolute bottom-3 right-3 flex items-center justify-center rounded-full bg-white/95 px-3 h-8 shadow-sm transition-all active:scale-95">
+          <span className="typo-body-2 font-medium text-primary leading-none -translate-y-[0.5px]">
+            탭하여 지도 보기
+          </span>
         </div>
       </div>
 
-      <div className="flex items-start justify-between gap-3 px-4 py-4 select-none touch-none">
+      <div className="flex items-start justify-between gap-3 px-4 py-4 select-none">
         <div className="min-w-0">
           <p className="typo-body-1 font-medium text-base-deep">총 {booths.length}개의 동아리</p>
           <p className="mt-1 typo-body-2 text-gray-500">지도와 검색으로 쉽게 확인할 수 있어요</p>

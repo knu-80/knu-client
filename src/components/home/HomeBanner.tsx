@@ -49,6 +49,7 @@ const LOOP_SLIDES = [BANNER_SLIDES[BANNER_SLIDES.length - 1], ...BANNER_SLIDES, 
 export default function HomeBanner() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(true);
+  const [isLoaded, setIsLoaded] = useState<Record<number, boolean>>({});
   const touchStartXRef = useRef<number | null>(null);
   const isSwiping = useRef(false);
 
@@ -129,12 +130,21 @@ export default function HomeBanner() {
                 key={`${slide.src}-${index}`}
                 className="shadow-sm relative aspect-video w-[var(--banner-card-width)] shrink-0 overflow-hidden rounded-2xl"
               >
+                {!isLoaded[index] && (
+                  <div className="absolute inset-0 z-10 bg-gray-200">
+                    <div
+                      className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                      style={{ transform: 'translateX(-100%)' }}
+                    />
+                  </div>
+                )}
                 <img
                   src={slide.src}
                   alt={slide.alt}
                   decoding="async"
                   loading={index === 1 ? 'eager' : 'lazy'}
                   fetchPriority={index === 1 ? 'high' : 'auto'}
+                  onLoad={() => setIsLoaded((prev) => ({ ...prev, [index]: true }))}
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               </div>

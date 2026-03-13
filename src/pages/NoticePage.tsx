@@ -8,12 +8,13 @@ import { SelectableButton } from '@/components/SelectableButton';
 import { NOTICE_CATEGORY_COLOR_MAP, NOTICE_BUTTON_COLOR_MAP } from '@/constants/notice';
 import { toDotDate } from '@/lib/date';
 import { Badge } from '@/components/Badge';
+import { StatusDisplay } from '@/components/StatusDisplay';
+import { PiSpinnerGapThin } from 'react-icons/pi';
 
 const CATEGORIES: NoticeLabel[] = ['공지', '분실물'];
 
 export default function NoticePage() {
   const { notices, isLoading, error, refetch } = useNotices();
-
   const [selectedCategories, setSelectedCategories] = useState<NoticeLabel[]>(CATEGORIES);
 
   useEffect(() => {
@@ -34,29 +35,6 @@ export default function NoticePage() {
     return notices.filter((notice) => selectedCategories.includes(toNoticeLabel(notice.type)));
   }, [selectedCategories, notices]);
 
-  if (isLoading) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-knu-red" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-3 py-20 text-center">
-        <p className="text-sm text-gray-500">안내 목록을 불러오는 중 오류가 발생했습니다.</p>
-        <button
-          type="button"
-          onClick={() => void refetch()}
-          className="rounded-full bg-knu-red px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
-        >
-          다시 시도
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col gap-5 pt-5">
       <div>
@@ -72,37 +50,47 @@ export default function NoticePage() {
           </span>
         </div>
 
-        <div
-          role="filter"
-          aria-label="공지사항 카테고리 필터"
-          className="grid grid-cols-2 gap-2 sm:gap-3"
-        >
-          {CATEGORIES.map((category) => {
-            const isActive = selectedCategories.includes(category);
-            const btnColor = NOTICE_BUTTON_COLOR_MAP[category];
+        {!(isLoading || error) && (
+          <div
+            role="filter"
+            aria-label="공지사항 카테고리 필터"
+            className="grid grid-cols-2 gap-2 sm:gap-3"
+          >
+            {CATEGORIES.map((category) => {
+              const isActive = selectedCategories.includes(category);
+              const btnColor = NOTICE_BUTTON_COLOR_MAP[category];
 
-            return (
-              <SelectableButton
-                key={category}
-                selected={isActive}
-                onClick={() => toggleCategory(category)}
-                className={`whitespace-nowrap ${
-                  isActive ? `${btnColor.activeBg} ${btnColor.activeText}` : ''
-                }`}
-                role="checkbox"
-                aria-checked={isActive}
-              >
-                {category}
-              </SelectableButton>
-            );
-          })}
-        </div>
+              return (
+                <SelectableButton
+                  key={category}
+                  selected={isActive}
+                  onClick={() => toggleCategory(category)}
+                  className={`whitespace-nowrap ${
+                    isActive ? `${btnColor.activeBg} ${btnColor.activeText}` : ''
+                  }`}
+                  role="checkbox"
+                  aria-checked={isActive}
+                >
+                  {category}
+                </SelectableButton>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <section aria-label="공지사항 목록" className="space-y-3 pb-6">
-        {filteredNotices.length === 0 ? (
-          <div className="rounded-2xl border border-knu-silver/55 bg-white px-4 py-12 text-center text-sm text-text-muted">
-            선택된 카테고리의 공지사항이 없습니다.
+        {isLoading ? (
+          <div className="mt-[-20px] flex items-center justify-center rounded-2xl w-full min-h-80 border border-white bg-white">
+            <PiSpinnerGapThin className="h-10 w-10 animate-spin text-primary" />
+          </div>
+        ) : error ? (
+          <div className="mt-[-20px] flex flex-col items-center justify-center rounded-2xl w-full min-h-80 border border-gray-200 bg-white">
+            <StatusDisplay variant="error" title="인터넷 연결을 확인해주세요" onAction={refetch} />
+          </div>
+        ) : filteredNotices.length === 0 ? (
+          <div className="flex flex-1 items-center justify-center rounded-2xl w-full min-h-45 border border-gray-200 bg-white">
+            <StatusDisplay variant="event" title="현재 등록된 공지사항이 없어요" />
           </div>
         ) : (
           filteredNotices.map((notice) => {

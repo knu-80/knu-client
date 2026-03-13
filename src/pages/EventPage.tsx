@@ -1,22 +1,15 @@
-import { MdEventNote } from 'react-icons/md';
 import EventCard from '@/components/EventCard';
 import { useEvents } from '@/hooks/useEvents';
 import EventSvg from '@/assets/event.svg';
+import { StatusDisplay } from '@/components/StatusDisplay';
+import { PiSpinnerGapThin } from 'react-icons/pi';
 
 export default function EventPage() {
-  const { events, isLoading } = useEvents('RECRUITMENT');
+  const { events, isLoading, error, refetch } = useEvents('RECRUITMENT');
 
   const sortedEvents = [...events].sort(
     (a, b) => new Date(b.startAt).getTime() - new Date(a.startAt).getTime(),
   );
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
 
   return (
     <div className="pt-5 sm:p-5">
@@ -32,9 +25,17 @@ export default function EventPage() {
         </span>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        {sortedEvents.length > 0 ? (
-          sortedEvents.map((event) => (
+      {isLoading ? (
+        <div className="mt-[-20px] flex items-center justify-center rounded-2xl w-full min-h-80 border border-white bg-white">
+          <PiSpinnerGapThin className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      ) : error ? (
+        <div className="flex items-center justify-center rounded-2xl w-full min-h-80 border border-gray-200 bg-white">
+          <StatusDisplay variant="error" title="이벤트를 불러오지 못했어요" onAction={refetch} />
+        </div>
+      ) : sortedEvents.length > 0 ? (
+        sortedEvents.map((event) => (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <EventCard
               key={event.id}
               title={event.title}
@@ -44,14 +45,13 @@ export default function EventPage() {
               location={event.location}
               imageUrl={event.imageUrl}
             />
-          ))
-        ) : (
-          <div className="col-span-full flex flex-col items-center justify-center py-20 text-gray-500">
-            <MdEventNote className="h-12 w-12 mb-4 opacity-20" />
-            <p className="typo-body-1">진행 중인 이벤트가 없습니다.</p>
           </div>
-        )}
-      </div>
+        ))
+      ) : (
+        <div className="flex flex-1 items-center justify-center rounded-2xl shadow-sm w-full min-h-45 border border-gray-200 bg-white ">
+          <StatusDisplay variant="event" title="아직 예정된 이벤트가 없어요" />
+        </div>
+      )}
     </div>
   );
 }

@@ -4,13 +4,13 @@ import { SearchBar } from '@/components/SearchBar';
 import { BoothItem } from '@/components/BoothItem';
 import { useState } from 'react';
 import { useRecommendedBooths } from '@/hooks/useRecommendedBooths';
-import { useBoothsWithFallback } from '@/hooks/useBooths';
+import { useBooths } from '@/hooks/useBooths';
 import { RECOMMENDATIONS } from '@/constants/booth';
 
 export default function SearchPage() {
   const navigate = useNavigate();
   const [, setSearchParams] = useSearchParams();
-  const { booths } = useBoothsWithFallback();
+  const { booths } = useBooths();
   const recommendedBooths = useRecommendedBooths(booths, 5);
 
   const [value, setValue] = useState('');

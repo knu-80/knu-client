@@ -18,7 +18,7 @@ export default function EventPage() {
           src={EventSvg}
           alt="이벤트"
           draggable={false}
-          className="ml-1 mt-2 w-18 h-16 pointer-events-none select-none"
+          className="ml-1 mt-1 w-18 h-16 pointer-events-none select-none"
         />
         <span className="ml-2 mt-2 typo-heading-3 font-semibold text-base-deep">
           이벤트에 참여해보세요

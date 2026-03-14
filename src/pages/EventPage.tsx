@@ -18,7 +18,7 @@ export default function EventPage() {
           src={EventSvg}
           alt="이벤트"
           draggable={false}
-          className="ml-1 mt-2 w-18 h-16 pointer-events-none select-none"
+          className="ml-1 mt-1 w-18 h-16 pointer-events-none select-none"
         />
         <span className="ml-2 mt-2 typo-heading-3 font-semibold text-base-deep">
           이벤트에 참여해보세요
@@ -31,7 +31,7 @@ export default function EventPage() {
         </div>
       ) : error ? (
         <div className="flex items-center justify-center rounded-2xl w-full min-h-80 border border-gray-200 bg-white">
-          <StatusDisplay variant="error" title="이벤트를 불러오지 못했어요" onAction={refetch} />
+          <StatusDisplay variant="error" title="인터넷 연결을 확인해주세요" onAction={refetch} />
         </div>
       ) : sortedEvents.length > 0 ? (
         sortedEvents.map((event) => (

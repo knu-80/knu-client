@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
+import { usePostHog } from '@posthog/react';
 
 import MainLayout from '@/components/layouts/MainLayout';
 import AdminLayout from '@/components/layouts/AdminLayout';
@@ -36,8 +37,15 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const posthog = usePostHog();
   const bootstrapSession = useAdminSessionStore((state) => state.bootstrapSession);
   const setUnauthenticated = useAdminSessionStore((state) => state.setUnauthenticated);
+
+  useEffect(() => {
+    if (posthog) {
+      posthog.capture('$pageview');
+    }
+  }, [location, posthog]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {

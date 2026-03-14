@@ -11,6 +11,8 @@ const isProd = import.meta.env.MODE === 'production';
 
 const posthogOptions = {
   api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+  capture_pageview: false,
+  autocapture: true,
 };
 
 const container = document.getElementById('root');

@@ -145,6 +145,6 @@ body {
   }
 }
 
-.animate-shimmer {
+.custom-shimmer {
   animation: shimmer 2s infinite;
 }

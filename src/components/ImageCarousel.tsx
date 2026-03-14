@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, type PanInfo } from 'framer-motion';
+import { ImageWithFallback } from './Skeleton';
+import { NoImage } from './NoImage';
 import RepresentativeImage from './RepresentativeImage';
 
 interface ImageCarouselProps {
@@ -62,7 +64,7 @@ export default function ImageCarousel({
     return (
       <div className={`flex flex-col ${className}`}>
         {label && <h3 className="typo-heading-3 text-base-deep mb-5 px-1">{label}</h3>}
-        <RepresentativeImage imageUrl={null} altText={altText} height={aspectRatio} />
+        <NoImage className={`w-full ${aspectRatio} rounded-[8px]`} />
       </div>
     );
   }
@@ -71,12 +73,10 @@ export default function ImageCarousel({
     return (
       <div className={`flex flex-col ${className}`}>
         {label && <h3 className="typo-heading-3 text-base-deep mb-5 px-1">{label}</h3>}
-        <RepresentativeImage
-          imageUrl={imageUrls[0]}
-          altText={altText}
-          height={aspectRatio}
-          loading="eager"
-          fetchPriority="high"
+        <ImageWithFallback
+          src={imageUrls[0]}
+          alt={altText}
+          className={`w-full ${aspectRatio} object-cover rounded-[8px]`}
         />
       </div>
     );

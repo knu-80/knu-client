@@ -20,7 +20,8 @@ src/apis
 │  ├─ adminAuthApi.ts
 │  ├─ noticeApi.ts
 │  ├─ eventApi.ts
-│  └─ boothApi.ts
+│  ├─ boothApi.ts
+│  └─ performanceApi.ts
 └─ index.ts             # 외부 export 진입점
 ```
 
@@ -54,9 +55,11 @@ src/apis
 ## Usage Example
 
 ```ts
-import { getNotices, login, updateNotice } from '@/apis';
+import { getBoothCount, getNotices, getRecentNotices, login, updateNotice } from '@/apis';
 
-const notices = await getNotices({ size: 10 });
+const notices = await getNotices();
+const recentNotices = await getRecentNotices();
+const boothCount = await getBoothCount();
 await login({ boothNumber: 12, password: 'pw' });
 await updateNotice(1, { title: '수정 제목' });
 ```

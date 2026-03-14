@@ -3,7 +3,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { SearchBar } from '@/components/SearchBar';
 import { BoothItem } from '@/components/BoothItem';
 import { StatusDisplay } from '@/components/StatusDisplay';
-import { useBooths, useBoothsWithFallback } from '@/hooks/useBooths';
+import { useBooths } from '@/hooks/useBooths';
 import { useRecommendedClubBooths } from '@/hooks/useRecommendedBooths';
 import { useMemo, useState } from 'react';
 
@@ -14,9 +14,8 @@ export default function SearchResultPage() {
   const navigate = useNavigate();
   const paramsMemo = useMemo(() => ({ keyword: query }), [query]);
   const { booths } = useBooths(paramsMemo);
-
-  const { booths: fallbackBooths } = useBoothsWithFallback();
-  const recommendedBooths = useRecommendedClubBooths(fallbackBooths, 5);
+  const { booths: allBooths } = useBooths();
+  const recommendedBooths = useRecommendedClubBooths(allBooths, 5);
 
   const results = Object.values(booths);
   const hasResults = results.length > 0;

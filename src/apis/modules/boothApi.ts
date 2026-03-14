@@ -30,6 +30,14 @@ export interface BoothListParams {
   keyword?: string;
 }
 
+type BoothCountPayload =
+  | number
+  | {
+      count?: number;
+      totalCount?: number;
+      boothCount?: number;
+    };
+
 export interface BoothMutationInput {
   memberId: number;
   boothNumber: number;
@@ -51,6 +59,32 @@ export async function getBooths(params: BoothListParams = {}): Promise<BoothSumm
   });
 
   return unwrapApiResponse(data);
+}
+
+function resolveBoothCount(payload: BoothCountPayload): number {
+  if (typeof payload === 'number') {
+    return payload;
+  }
+
+  if (typeof payload.count === 'number') {
+    return payload.count;
+  }
+
+  if (typeof payload.totalCount === 'number') {
+    return payload.totalCount;
+  }
+
+  if (typeof payload.boothCount === 'number') {
+    return payload.boothCount;
+  }
+
+  throw new Error('booth count 응답 형식을 확인해주세요.');
+}
+
+export async function getBoothCount(): Promise<number> {
+  const { data } = await http.get<ApiResponse<BoothCountPayload>>(ENDPOINTS.boothCount);
+
+  return resolveBoothCount(unwrapApiResponse(data));
 }
 
 export async function getBooth(boothId: number): Promise<BoothSummary> {

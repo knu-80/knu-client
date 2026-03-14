@@ -228,7 +228,7 @@ function NoticePreviewCard({ items }: { items: DayContent['noticePreview'] }) {
                   key={`${item.date}-${item.category}-${item.title}`}
                   to={item.noticeId ? `/notice/${item.noticeId}` : '/notice'}
                   aria-label={`${item.title} 상세 공지로 이동`}
-                  className={`interactive-transition flex items-center justify-between gap-3 rounded-2xl px-5 py-4 ${color.bg} ${color.hoverBg} hover:border-knu-gold/60`}
+                  className={`interactive-transition flex items-center justify-between rounded-2xl px-5 ${color.bg} ${color.hoverBg} hover:border-knu-gold/60`}
                 >
                   <div className="grid grid-cols-[90px_1fr] rounded-2xl py-4">
                     <p className={`typo-body-2 font-semibold ${color.text}`}>{item.date}</p>

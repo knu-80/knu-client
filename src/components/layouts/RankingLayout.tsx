@@ -9,7 +9,7 @@ export default function RankingLayout() {
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,#f8e8e7_0%,#ffffff_80%)]" />
           <div
-            className="absolute left-1/2 top-[15%] h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2 opacity-[0.15] animate-[spin_20s_linear_infinite]"
+            className="absolute left-1/2 top-[140px] h-[1300px] w-[1000px] -translate-x-1/2 -translate-y-1/2 opacity-[0.2]"
             style={{
               background: `conic-gradient(
                 from 0deg,
@@ -40,7 +40,6 @@ export default function RankingLayout() {
               )`,
             }}
           />
-          <div className="absolute inset-x-0 bottom-0 h-[100%] bg-gradient-to-t from-white via-white/80 to-transparent" />
         </div>
 
         <main className="relative z-10 flex-1 min-h-0 px-5 pb-[calc(88px+env(safe-area-inset-bottom))]">

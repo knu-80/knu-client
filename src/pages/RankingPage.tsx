@@ -1,29 +1,16 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { PiSpinnerGapThin } from 'react-icons/pi';
 import { FaStar } from 'react-icons/fa';
+import { useRanking } from '@/hooks/useRanking';
 import FaceFillSvg from '@/assets/face-fill.svg';
 import RankingHeaderSvg from '@/assets/ranking-header.svg';
 import FaceGoldSvg from '@/assets/face-gold.svg';
 import FaceSilverSvg from '@/assets/face-silver.svg';
 import FaceBronzeSvg from '@/assets/face-bronze.svg';
 
-const DUMMY_RANKING = [
-  { id: 1, name: 'name1', pickCount: 1250 },
-  { id: 2, name: 'name2', pickCount: 1100 },
-  { id: 3, name: 'name3', pickCount: 980 },
-  { id: 4, name: 'name4', pickCount: 850 },
-  { id: 5, name: 'name5', pickCount: 720 },
-  { id: 6, name: 'name6', pickCount: 650 },
-  { id: 7, name: 'name7', pickCount: 540 },
-  { id: 8, name: 'name8', pickCount: 420 },
-  { id: 9, name: 'name9', pickCount: 310 },
-  { id: 10, name: 'name10', pickCount: 150 },
-];
-
 export default function RankingPage() {
-  const loading = false;
-  const booths = DUMMY_RANKING;
+  const { topThree, rest, isLoading } = useRanking();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -42,13 +29,7 @@ export default function RankingPage() {
     }
   };
 
-  const { topThree, rest } = useMemo(() => {
-    const sorted = [...booths].slice(0, 10);
-    const podium = [sorted[1], sorted[0], sorted[2]].filter(Boolean);
-    return { topThree: podium, rest: sorted.slice(3) };
-  }, [booths]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[80vh]">
         <PiSpinnerGapThin className="h-12 w-12 animate-spin text-primary" />
@@ -71,8 +52,8 @@ export default function RankingPage() {
 
           return (
             <Link
-              key={booth.id}
-              to={`/booths/${booth.id}`}
+              key={booth.boothId}
+              to={`/booths/${booth.boothId}`}
               className={`relative flex flex-col items-center justify-center gap-1 rounded-lg py-2 bg-white border ${
                 isFirst
                   ? 'border-secondary-yellow z-10 w-[120px] h-[140px]'
@@ -105,7 +86,7 @@ export default function RankingPage() {
               <div className="flex items-center gap-1 shrink-0 mb-1">
                 <FaStar className="text-secondary-yellow" />
                 <span className="typo-body-3 font-semibold text-base-deep">
-                  {booth.pickCount.toLocaleString()}
+                  {booth.likeCount.toLocaleString()}
                 </span>
               </div>
             </Link>
@@ -118,8 +99,8 @@ export default function RankingPage() {
           const rank = index + 4;
           return (
             <Link
-              key={booth.id}
-              to={`/booths/${booth.id}`}
+              key={booth.boothId}
+              to={`/booths/${booth.boothId}`}
               className="interactive-transition flex items-center justify-between rounded-2xl px-5 py-4 bg-white border border-primary/10"
             >
               <div className="flex items-center gap-3 min-w-0">
@@ -135,7 +116,7 @@ export default function RankingPage() {
               <div className="flex items-center gap-1 shrink-0">
                 <FaStar className="text-secondary-yellow" />
                 <span className="typo-body-3 font-semibold text-base-deep">
-                  {booth.pickCount.toLocaleString()}
+                  {booth.likeCount.toLocaleString()}
                 </span>
               </div>
             </Link>

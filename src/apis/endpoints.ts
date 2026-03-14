@@ -12,6 +12,8 @@ export const ENDPOINTS = {
   eventById: (eventId: number | string) => `${PUBLIC_API_PREFIX}/events/${eventId}`,
   booths: `${PUBLIC_API_PREFIX}/booths/list`,
   boothById: (boothId: number | string) => `${PUBLIC_API_PREFIX}/booths/${boothId}`,
+  boothLikes: (boothId: number | string) => `${PUBLIC_API_PREFIX}/booths/${boothId}/likes`,
+  boothRanking: `${PUBLIC_API_PREFIX}/booths/ranking`,
 
   // Admin (token required)
   adminMe: `${ADMIN_API_PREFIX}/me`,

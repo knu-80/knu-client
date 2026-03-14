@@ -57,6 +57,12 @@ export async function getNotices(): Promise<NoticeListItem[]> {
   return unwrapApiResponse(data);
 }
 
+export async function getRecentNotices(): Promise<NoticeListItem[]> {
+  const { data } = await http.get<ApiResponse<NoticeListItem[]>>(ENDPOINTS.noticesRecent);
+
+  return unwrapApiResponse(data);
+}
+
 export async function getNotice(noticeId: number): Promise<NoticeDetail> {
   const { data } = await http.get<ApiResponse<NoticeDetail>>(ENDPOINTS.noticeById(noticeId));
 

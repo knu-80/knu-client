@@ -31,7 +31,7 @@ export default function EventPage() {
         </div>
       ) : error ? (
         <div className="flex items-center justify-center rounded-2xl w-full min-h-80 border border-gray-200 bg-white">
-          <StatusDisplay variant="error" title="이벤트를 불러오지 못했어요" onAction={refetch} />
+          <StatusDisplay variant="error" title="인터넷 연결을 확인해주세요" onAction={refetch} />
         </div>
       ) : sortedEvents.length > 0 ? (
         sortedEvents.map((event) => (

@@ -7,6 +7,7 @@ interface RepresentativeImageProps {
   isZoomable?: boolean;
   loading?: 'lazy' | 'eager';
   fetchPriority?: 'high' | 'low' | 'auto';
+  className?: string;
 }
 
 export default function RepresentativeImage({
@@ -16,6 +17,7 @@ export default function RepresentativeImage({
   isZoomable = true,
   loading = 'lazy',
   fetchPriority = 'auto',
+  className = '',
 }: RepresentativeImageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -52,7 +54,7 @@ export default function RepresentativeImage({
   }, [isModalOpen]);
 
   return (
-    <div className="relative w-full overflow-hidden rounded-lg">
+    <div className={`relative w-full overflow-hidden ${className}`}>
       {imageUrl ? (
         <div
           className={`relative w-full ${height} bg-gray-200 ${isZoomable ? 'cursor-pointer' : ''}`}

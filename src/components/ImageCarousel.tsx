@@ -136,6 +136,7 @@ export default function ImageCarousel({
                 isZoomable={false}
                 loading={index === currentIndex ? 'eager' : 'lazy'}
                 fetchPriority={index === currentIndex ? 'high' : 'low'}
+                className="rounded-[8px] overflow-hidden"
               />
             </div>
           ))}

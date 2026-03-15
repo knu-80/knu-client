@@ -47,7 +47,7 @@ export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }:
         <ImageWithFallback
           src={thumbnail}
           alt={booth.name}
-          className="w-[88px] h-[88px] object-cover rounded-[4px] shrink-0"
+          className="w-[88px] h-[88px] object-cover rounded-[4px] shrink-0 border border-gray-100"
         />
 
         <div className="flex flex-col flex-1 h-[88px] justify-between overflow-hidden relative">

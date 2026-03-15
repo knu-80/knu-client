@@ -31,18 +31,16 @@ export default function ImageCarousel({
   const x = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 300, damping: 30 });
 
-  const itemWidthPercent = 70;
-  const gap = 16;
-  const centerPaddingPercent = (100 - itemWidthPercent) / 2;
+  const itemWidthPercent = 90;
+  const gap = 12;
 
   const getTargetX = useCallback(
     (index: number, width: number) => {
       if (width === 0) return 0;
       const itemFullWidth = (width * itemWidthPercent) / 100 + gap;
-      const initialOffset = (width * centerPaddingPercent) / 100;
-      return -(index * itemFullWidth) + initialOffset;
+      return -(index * itemFullWidth);
     },
-    [itemWidthPercent, centerPaddingPercent, gap],
+    [itemWidthPercent, gap],
   );
 
   useEffect(() => {
@@ -111,7 +109,7 @@ export default function ImageCarousel({
 
   return (
     <div className={`flex flex-col ${className}`}>
-      {label && <h3 className="typo-heading-3 text-base-deep mb-5 px-1">{label}</h3>}
+      {label && <h3 className="typo-heading-3 text-base-deep px-1">{label}</h3>}
 
       <div ref={containerRef} className="relative w-full overflow-hidden select-none touch-pan-y">
         <motion.div
@@ -137,8 +135,8 @@ export default function ImageCarousel({
                 width: `${itemWidthPercent}%`,
                 marginRight: `${gap}px`,
                 flexShrink: 0,
-                opacity: currentIndex === index ? 1 : 0.3,
-                scale: currentIndex === index ? 1 : 0.85,
+                opacity: 1,
+                scale: 1,
                 transition:
                   'opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), scale 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
@@ -150,19 +148,19 @@ export default function ImageCarousel({
                 isZoomable={true}
                 loading={index === currentIndex ? 'eager' : 'lazy'}
                 fetchPriority={index === currentIndex ? 'high' : 'low'}
-                className="rounded-[8px] overflow-hidden"
+                className="rounded-[8px] overflow-hidden border border-gray-100"
               />
             </div>
           ))}
         </motion.div>
 
-        <div className="mt-6 flex justify-center gap-2">
+        <div className="mt-2 flex justify-center gap-2">
           {displayItems.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                index === currentIndex ? 'w-6 bg-primary' : 'w-1.5 bg-gray-200 hover:bg-gray-300'
+              className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
+                index === currentIndex ? 'bg-primary' : 'bg-gray-200 hover:bg-gray-300'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

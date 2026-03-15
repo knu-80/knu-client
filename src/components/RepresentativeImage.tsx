@@ -13,7 +13,7 @@ interface RepresentativeImageProps {
 export default function RepresentativeImage({
   imageUrl,
   altText,
-  height = 'aspect-[4/5]',
+  height = 'aspect-square',
   isZoomable = true,
   loading = 'lazy',
   fetchPriority = 'auto',

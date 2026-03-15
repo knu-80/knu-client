@@ -60,7 +60,7 @@ export function BoothItem({ booth, onClick, onLocationClick }: BoothItemProps) {
           loading="lazy"
           decoding="async"
           sizes="100px"
-          className="w-[100px] h-[100px] object-cover rounded-[4px] shrink-0"
+          className="w-[100px] h-[100px] object-cover rounded-[4px] shrink-0 border border-gray-100"
         />
       ) : (
         <div className="w-[100px] h-[100px] bg-gray-200 rounded-[4px] relative overflow-hidden shrink-0">

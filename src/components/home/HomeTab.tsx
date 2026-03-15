@@ -397,7 +397,11 @@ export default function HomeTab() {
         <section aria-labelledby="home-timetable-title">
           <SectionHeader title="공연시간표" description="일청담 앞 중앙무대에서 만나요" />
           <TimeTablePreviewCard
-            previewItems={activeContent.timetablePreview}
+            previewItems={
+              activeDay === 'day2'
+                ? activeContent.timetableTimeline
+                : activeContent.timetablePreview
+            }
             items={activeContent.timetableTimeline}
             totalCount={activeContent.timetableTimeline.length}
             previewCount={4}

@@ -1,4 +1,5 @@
-import axios, { AxiosHeaders } from 'axios';
+import axios, { AxiosHeaders, type InternalAxiosRequestConfig } from 'axios';
+import posthog from 'posthog-js';
 
 import { clearAccessToken, getAccessToken } from './auth';
 import { toApiClientError } from './error';
@@ -23,6 +24,76 @@ export function setUnauthorizedHandler(handler: ((status: number) => void) | nul
   unauthorizedHandler = handler;
 }
 
+type RequestMetricMeta = {
+  startedAt: number;
+  method: string;
+  apiPath: string;
+};
+
+function toApiPath(config: InternalAxiosRequestConfig): string {
+  const url = config.url ?? '';
+  const baseURL = config.baseURL ?? http.defaults.baseURL ?? '';
+
+  try {
+    const parsed = new URL(url, baseURL);
+    return parsed.pathname;
+  } catch {
+    return url.split('?')[0] ?? url;
+  }
+}
+
+function normalizeApiPath(pathname: string): string {
+  return pathname
+    .replace(
+      /\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}(?=\/|$)/g,
+      '/:id',
+    )
+    .replace(/\/\d+(?=\/|$)/g, '/:id');
+}
+
+function setMetricMeta(config: InternalAxiosRequestConfig, meta: RequestMetricMeta): void {
+  (config as InternalAxiosRequestConfig & { metricMeta?: RequestMetricMeta }).metricMeta = meta;
+}
+
+function getMetricMeta(config?: InternalAxiosRequestConfig): RequestMetricMeta | undefined {
+  return (config as (InternalAxiosRequestConfig & { metricMeta?: RequestMetricMeta }) | undefined)
+    ?.metricMeta;
+}
+
+function trackApiRequestMetric(meta: RequestMetricMeta, status: number, success: boolean): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const durationMs = Math.max(0, Math.round(performance.now() - meta.startedAt));
+  const payload = {
+    api_path: meta.apiPath,
+    method: meta.method,
+    status,
+    success,
+    duration_ms: durationMs,
+  };
+
+  posthog.capture('api_request', payload);
+
+  const gtag = (
+    window as Window & {
+      gtag?: (
+        command: 'event',
+        eventName: string,
+        params?: Record<string, string | number>,
+      ) => void;
+    }
+  ).gtag;
+
+  if (typeof gtag === 'function') {
+    gtag('event', 'api_request', {
+      ...payload,
+      success: success ? 1 : 0,
+    });
+  }
+}
+
 http.interceptors.request.use((config) => {
   const headers = AxiosHeaders.from(config.headers);
 
@@ -32,12 +103,33 @@ http.interceptors.request.use((config) => {
   }
 
   config.headers = headers;
+  const apiPath = normalizeApiPath(toApiPath(config));
+  setMetricMeta(config, {
+    startedAt: performance.now(),
+    method: (config.method ?? 'GET').toUpperCase(),
+    apiPath,
+  });
+
   return config;
 });
 
 http.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const meta = getMetricMeta(response.config);
+    if (meta) {
+      trackApiRequestMetric(meta, response.status, true);
+    }
+
+    return response;
+  },
   (error: unknown) => {
+    if (axios.isAxiosError(error)) {
+      const meta = getMetricMeta(error.config);
+      if (meta) {
+        trackApiRequestMetric(meta, error.response?.status ?? 0, false);
+      }
+    }
+
     const parsedError = toApiClientError(error);
 
     if (parsedError.status === 401) {

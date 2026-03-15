@@ -217,9 +217,10 @@ function TimeTablePreviewCard({
                     return (
                       <Link
                         key={`${item.session}-${item.time}-${item.boothId}`}
-                        to={`/booths/${item.boothId}`}
+                        to="/map"
+                        state={{ selectedBoothId: item.boothId }}
                         className={rowClassName}
-                        aria-label={`${item.title} 부스 상세로 이동`}
+                        aria-label={`${item.title} 부스 위치로 이동`}
                       >
                         {rowContent}
                       </Link>
@@ -259,7 +260,7 @@ function TimeTablePreviewCard({
       </div>
       <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none">
         <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
-        공연 카드를 누르면 해당 동아리 부스로 이동할 수 있어요
+        공연 카드를 누르면 해당 동아리의 지도 위치로 이동할 수 있어요
       </p>
     </>
   );

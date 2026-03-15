@@ -20,8 +20,13 @@ export default function ImageCarousel({
   aspectRatio = 'aspect-square',
 }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const isDragging = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+
+  const handleDragStart = () => {
+    isDragging.current = true;
+  };
 
   const x = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 300, damping: 30 });
@@ -97,6 +102,9 @@ export default function ImageCarousel({
     }
 
     x.set(getTargetX(currentIndex, containerWidth));
+    setTimeout(() => {
+      isDragging.current = false;
+    }, 50);
   };
 
   const displayItems = imageUrls;
@@ -108,6 +116,7 @@ export default function ImageCarousel({
       <div ref={containerRef} className="relative w-full overflow-hidden select-none touch-pan-y">
         <motion.div
           drag="x"
+          onDragStart={handleDragStart}
           dragConstraints={{
             left: getTargetX(displayItems.length - 1, containerWidth),
             right: getTargetX(0, containerWidth),
@@ -119,6 +128,11 @@ export default function ImageCarousel({
           {displayItems.map((url, index) => (
             <div
               key={index}
+              onClickCapture={(e) => {
+                if (isDragging.current) {
+                  e.stopPropagation();
+                }
+              }}
               style={{
                 width: `${itemWidthPercent}%`,
                 marginRight: `${gap}px`,
@@ -133,7 +147,7 @@ export default function ImageCarousel({
                 imageUrl={url}
                 altText={`${altText} ${index + 1}`}
                 height={aspectRatio}
-                isZoomable={false}
+                isZoomable={true}
                 loading={index === currentIndex ? 'eager' : 'lazy'}
                 fetchPriority={index === currentIndex ? 'high' : 'low'}
                 className="rounded-[8px] overflow-hidden"

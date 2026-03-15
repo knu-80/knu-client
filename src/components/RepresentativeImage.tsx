@@ -54,63 +54,42 @@ export default function RepresentativeImage({
   }, [isModalOpen]);
 
   return (
-    <div className={`relative w-full overflow-hidden ${className}`}>
+    <div className={`relative w-full ${className}`}>
       {imageUrl ? (
-        <div
-          className={`relative w-full ${height} bg-gray-200 ${isZoomable ? 'cursor-pointer' : ''}`}
-          onClick={() => isZoomable && setIsModalOpen(true)}
-        >
-          <img
-            src={imageUrl}
-            alt={altText}
-            loading={loading}
-            decoding="async"
-            fetchPriority={fetchPriority}
-            className="w-full h-full object-cover"
-            draggable="false"
-          />
-
+        <>
+          <div
+            className={`relative w-full ${height} bg-gray-200 overflow-hidden ${
+              isZoomable ? 'cursor-pointer' : ''
+            }`}
+            onClick={() => isZoomable && setIsModalOpen(true)}
+          >
+            <img
+              src={imageUrl}
+              alt={altText}
+              loading={loading}
+              decoding="async"
+              fetchPriority={fetchPriority}
+              className="w-full h-full object-cover"
+              draggable="false"
+            />
+          </div>
           {isModalOpen && (
             <div
-              className="overlay-backdrop absolute inset-0 z-50 flex items-center justify-center p-2"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsModalOpen(false);
-              }}
+              className="fixed inset-0 z-[9999] bg-black/80 rounded-[8px] flex items-center justify-center p-4"
+              onClick={handleModalClose}
             >
               <img
                 src={imageUrl}
                 alt={`확대된 ${altText}`}
-                className="max-w-full max-h-full object-contain shadow-2xl rounded-sm"
-                onClick={(e) => e.stopPropagation()}
+                fetchPriority="high"
+                className="max-w-full max-h-full object-contain shadow-2xl"
               />
             </div>
           )}
-        </div>
+        </>
       ) : (
         <div className={`relative w-full ${height} bg-gray-200 overflow-hidden rounded-lg`}>
-          <div
-            className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent"
-            style={{ backgroundSize: '200% 100%' }}
-          />
-        </div>
-      )}
-
-      {isModalOpen && imageUrl && (
-        <div
-          className="fixed top-0 left-1/2 -translate-x-1/2 z-100 
-                     w-full max-w-175 min-h-screen 
-                     bg-black/60 flex items-center justify-center p-4"
-          onClick={handleModalClose}
-        >
-          <img
-            src={imageUrl}
-            alt={`확대된 ${altText}`}
-            loading="eager"
-            decoding="async"
-            className="max-w-full max-h-full object-contain shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          />
+          <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent" />
         </div>
       )}
     </div>

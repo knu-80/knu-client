@@ -8,6 +8,7 @@ import RankingHeaderSvg from '@/assets/ranking-header.svg';
 import FaceGoldSvg from '@/assets/face-gold.svg';
 import FaceSilverSvg from '@/assets/face-silver.svg';
 import FaceBronzeSvg from '@/assets/face-bronze.svg';
+import { formatLikeCount } from '@/lib/count';
 
 export default function RankingPage() {
   const { topThree, rest, isLoading } = useRanking();
@@ -86,7 +87,7 @@ export default function RankingPage() {
               <div className="flex items-center gap-1 shrink-0 mb-1">
                 <FaStar className="text-secondary-yellow" />
                 <span className="typo-body-3 font-semibold text-base-deep">
-                  {booth.likeCount.toLocaleString()}
+                  {formatLikeCount(booth.likeCount)}
                 </span>
               </div>
             </Link>

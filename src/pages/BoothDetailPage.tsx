@@ -10,6 +10,7 @@ import { PiSpinnerGapThin } from 'react-icons/pi';
 import { StarBurstOverlay } from '@/components/StarBurstOverlay';
 import { PiShootingStarFill } from 'react-icons/pi';
 import { useLikeBooth } from '@/hooks/useLikeBooth';
+import { formatLikeCount } from '@/lib/count';
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -81,7 +82,9 @@ export default function BoothDetailPage() {
           className="flex cursor-pointer items-center justify-center rounded-full gap-[2px] bg-white transition-all hover:brightness-95 active:scale-[0.98]"
         >
           <PiShootingStarFill size={28} className="text-secondary-yellow" />
-          <span className="typo-body-3 text-base-deep font-">{displayLikeCount}</span>
+          <span className="typo-body-1 text-secondary-yellow font-medium">
+            {formatLikeCount(displayLikeCount)}
+          </span>
         </button>
       </div>
 

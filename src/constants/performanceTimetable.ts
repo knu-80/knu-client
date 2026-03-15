@@ -19,6 +19,7 @@ export type PerformanceTimelineItem = {
   session: number;
   location: string;
   sessionLabel: string;
+  boothId?: number;
 };
 
 export const PERFORMANCE_SETS_BY_DAY: Record<DayKey, PerformanceSet[]> = {

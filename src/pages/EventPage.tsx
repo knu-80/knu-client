@@ -14,6 +14,7 @@ export default function EventPage() {
   return (
     <div className="flex flex-col flex-1 pt-5 sm:p-5">
       <div className="flex items-center h-14">
+        {' '}
         <img
           src={EventSvg}
           alt="이벤트"
@@ -34,8 +35,8 @@ export default function EventPage() {
           <StatusDisplay variant="error" title="인터넷 연결을 확인해주세요" onAction={refetch} />
         </div>
       ) : sortedEvents.length > 0 ? (
-        sortedEvents.map((event) => (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {sortedEvents.map((event) => (
             <EventCard
               key={event.id}
               title={event.title}
@@ -45,8 +46,8 @@ export default function EventPage() {
               location={event.location}
               imageUrl={event.imageUrl}
             />
-          </div>
-        ))
+          ))}
+        </div>
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-2xl shadow-sm w-full min-h-45 border border-gray-200 bg-white ">
           <StatusDisplay variant="event" title="아직 예정된 이벤트가 없어요" />

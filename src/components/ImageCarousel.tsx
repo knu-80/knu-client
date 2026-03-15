@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useSpring, type PanInfo } from 'framer-motion';
+import { ImageWithFallback } from './Skeleton';
+import { NoImage } from './NoImage';
 import RepresentativeImage from './RepresentativeImage';
 
 interface ImageCarouselProps {
@@ -18,24 +20,27 @@ export default function ImageCarousel({
   aspectRatio = 'aspect-square',
 }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const isDragging = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+
+  const handleDragStart = () => {
+    isDragging.current = true;
+  };
 
   const x = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 300, damping: 30 });
 
-  const itemWidthPercent = 70;
-  const gap = 16;
-  const centerPaddingPercent = (100 - itemWidthPercent) / 2;
+  const itemWidthPercent = 90;
+  const gap = 12;
 
   const getTargetX = useCallback(
     (index: number, width: number) => {
       if (width === 0) return 0;
       const itemFullWidth = (width * itemWidthPercent) / 100 + gap;
-      const initialOffset = (width * centerPaddingPercent) / 100;
-      return -(index * itemFullWidth) + initialOffset;
+      return -(index * itemFullWidth);
     },
-    [itemWidthPercent, centerPaddingPercent, gap],
+    [itemWidthPercent, gap],
   );
 
   useEffect(() => {
@@ -62,7 +67,7 @@ export default function ImageCarousel({
     return (
       <div className={`flex flex-col ${className}`}>
         {label && <h3 className="typo-heading-3 text-base-deep mb-5 px-1">{label}</h3>}
-        <RepresentativeImage imageUrl={null} altText={altText} height={aspectRatio} />
+        <NoImage className={`w-full ${aspectRatio} rounded-[8px]`} />
       </div>
     );
   }
@@ -71,12 +76,10 @@ export default function ImageCarousel({
     return (
       <div className={`flex flex-col ${className}`}>
         {label && <h3 className="typo-heading-3 text-base-deep mb-5 px-1">{label}</h3>}
-        <RepresentativeImage
-          imageUrl={imageUrls[0]}
-          altText={altText}
-          height={aspectRatio}
-          loading="eager"
-          fetchPriority="high"
+        <ImageWithFallback
+          src={imageUrls[0]}
+          alt={altText}
+          className={`w-full ${aspectRatio} object-cover rounded-[8px]`}
         />
       </div>
     );
@@ -97,17 +100,21 @@ export default function ImageCarousel({
     }
 
     x.set(getTargetX(currentIndex, containerWidth));
+    setTimeout(() => {
+      isDragging.current = false;
+    }, 50);
   };
 
   const displayItems = imageUrls;
 
   return (
     <div className={`flex flex-col ${className}`}>
-      {label && <h3 className="typo-heading-3 text-base-deep mb-5 px-1">{label}</h3>}
+      {label && <h3 className="typo-heading-3 text-base-deep px-1">{label}</h3>}
 
       <div ref={containerRef} className="relative w-full overflow-hidden select-none touch-pan-y">
         <motion.div
           drag="x"
+          onDragStart={handleDragStart}
           dragConstraints={{
             left: getTargetX(displayItems.length - 1, containerWidth),
             right: getTargetX(0, containerWidth),
@@ -119,12 +126,17 @@ export default function ImageCarousel({
           {displayItems.map((url, index) => (
             <div
               key={index}
+              onClickCapture={(e) => {
+                if (isDragging.current) {
+                  e.stopPropagation();
+                }
+              }}
               style={{
                 width: `${itemWidthPercent}%`,
                 marginRight: `${gap}px`,
                 flexShrink: 0,
-                opacity: currentIndex === index ? 1 : 0.3,
-                scale: currentIndex === index ? 1 : 0.85,
+                opacity: 1,
+                scale: 1,
                 transition:
                   'opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), scale 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
@@ -133,21 +145,22 @@ export default function ImageCarousel({
                 imageUrl={url}
                 altText={`${altText} ${index + 1}`}
                 height={aspectRatio}
-                isZoomable={false}
+                isZoomable={true}
                 loading={index === currentIndex ? 'eager' : 'lazy'}
                 fetchPriority={index === currentIndex ? 'high' : 'low'}
+                className="rounded-[8px] overflow-hidden border border-gray-100"
               />
             </div>
           ))}
         </motion.div>
 
-        <div className="mt-6 flex justify-center gap-2">
+        <div className="mt-2 flex justify-center gap-2">
           {displayItems.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                index === currentIndex ? 'w-6 bg-primary' : 'w-1.5 bg-gray-200 hover:bg-gray-300'
+              className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
+                index === currentIndex ? 'bg-primary' : 'bg-gray-200 hover:bg-gray-300'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

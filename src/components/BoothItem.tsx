@@ -1,5 +1,6 @@
 import type { BoothDivision, BoothSummary } from '@/apis/modules/boothApi';
 import { ClubCategoryLabel } from './ClubCategory';
+import { ImageWithFallback } from './Skeleton';
 
 interface BoothItemProps {
   booth: BoothSummary;
@@ -59,11 +60,15 @@ export function BoothItem({ booth, onClick, onLocationClick }: BoothItemProps) {
           loading="lazy"
           decoding="async"
           sizes="100px"
-          className="w-[100px] h-[100px] object-cover rounded-[4px] shrink-0"
+          className="w-[100px] h-[100px] object-cover rounded-[4px] shrink-0 border border-gray-100"
         />
       ) : (
         <div className="w-[100px] h-[100px] bg-gray-200 rounded-[4px] relative overflow-hidden shrink-0">
-          <div className="absolute inset-0 animate-shimmer bg-gradient-to-r via-white/40 shadow-[0_0_20px_rgba(255,255,255,0.3)]" />
+          <ImageWithFallback
+            src={thumbnail}
+            alt={booth.name}
+            className="w-[100px] h-[100px] object-cover rounded-[4px] shrink-0"
+          />
         </div>
       )}
       <div className="flex flex-col flex-1 h-[100px] justify-between overflow-hidden">

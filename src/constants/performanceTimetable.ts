@@ -109,6 +109,17 @@ export const PERFORMANCE_TIMELINE_BY_DAY: Record<DayKey, PerformanceTimelineItem
 };
 
 function buildPreviewFromSets(sets: PerformanceSet[]): PerformanceTimelineItem[] {
+  if (sets.length === 1) {
+    const [set] = sets;
+    return set.items.slice(0, 4).map((item) => ({
+      time: item.time,
+      title: item.title,
+      session: set.session,
+      location: set.location,
+      sessionLabel: set.sessionLabel,
+    }));
+  }
+
   return sets.flatMap((set) =>
     set.items.slice(0, 2).map((item) => ({
       time: item.time,

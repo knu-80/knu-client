@@ -56,6 +56,10 @@ function buildSessionPreview(items: PerformanceTimelineItem[]): PerformanceTimel
     bySession.set(item.session, list);
   });
 
+  if (bySession.size === 1) {
+    return items.slice(0, 4);
+  }
+
   return Array.from(bySession.values()).flatMap((sessionItems) => sessionItems.slice(0, 2));
 }
 

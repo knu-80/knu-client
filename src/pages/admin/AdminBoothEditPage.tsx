@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaCheck, FaChevronDown, FaLink } from 'react-icons/fa';
+import { FaCheck, FaChevronDown, FaLink, FaPhone } from 'react-icons/fa';
 import AdminActionButton from '@/components/AdminActionButton';
 import AlertModal from '@/components/AlertModal';
 import { ClubCategory } from '@/components/ClubCategory';
@@ -10,12 +10,15 @@ import { getBooth, type BoothDivision, type BoothSummary } from '@/apis/modules/
 import { useAdminSessionStore } from '@/stores/adminSessionStore';
 import { useBoothMutation } from '@/hooks/useBoothMutation';
 import { urlToFile } from '@/apis/modules/noticeApi';
+import { RECOMMENDATIONS } from '@/constants/booth';
 
 interface BoothEditForm {
   name: string;
   divisionKey: BoothSummary['division'];
   description: string;
   applyUrl: string;
+  contact: string;
+  keywords: string;
 }
 
 function BoothEditForm({ booth }: { booth: BoothSummary }) {
@@ -29,6 +32,8 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
     divisionKey: booth.division as BoothSummary['division'],
     description: booth.description || '',
     applyUrl: booth.applyLink || '',
+    contact: booth.contact || '',
+    keywords: booth.keywords || '',
   });
 
   const [allImages, setAllImages] = useState<ImageItem[]>(() =>
@@ -58,6 +63,18 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
     }
   }, [formData.description]);
 
+  const currentKeywords = formData.keywords
+    ? formData.keywords.split(',').map((k) => k.trim())
+    : [];
+
+  const toggleKeyword = (keyword: string) => {
+    const newKeywords = currentKeywords.includes(keyword)
+      ? currentKeywords.filter((k) => k !== keyword)
+      : [...currentKeywords, keyword];
+
+    setFormData({ ...formData, keywords: newKeywords.filter(Boolean).join(',') });
+  };
+
   const handleSave = async () => {
     if (!isFormValid || !profile || profile.memberId === null) return;
 
@@ -65,7 +82,9 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
       formData.name !== booth.name ||
       formData.divisionKey !== booth.division ||
       formData.description !== (booth.description || '') ||
-      formData.applyUrl !== (booth.applyLink || '');
+      formData.applyUrl !== (booth.applyLink || '') ||
+      formData.contact !== (booth.contact || '') ||
+      formData.keywords !== (booth.keywords || '');
 
     const isImagesChanged =
       allImages.length !== (booth.imageUrls?.length || 0) ||
@@ -128,6 +147,8 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
         division: formData.divisionKey as BoothDivision,
         description: formData.description,
         applyLink: formData.applyUrl,
+        contact: formData.contact,
+        keywords: formData.keywords,
       };
 
       await mutateUpdate(booth.id, payload, {
@@ -160,10 +181,7 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
   };
 
   const isFormValid =
-    formData.name.trim() !== '' &&
-    formData.description.trim() !== '' &&
-    formData.applyUrl.trim() !== '' &&
-    !isSubmitting;
+    formData.name.trim() !== '' && formData.description.trim() !== '' && !isSubmitting;
 
   return (
     <div className="pt-5 pb-24 px-1">
@@ -215,6 +233,27 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
 
       <div className="h-px w-full bg-gray-200 my-5" />
 
+      <div className="flex flex-wrap gap-2 mb-6 px-1">
+        {RECOMMENDATIONS.map((tag) => {
+          const isSelected = currentKeywords.includes(tag);
+          return (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => toggleKeyword(tag)}
+              disabled={isSubmitting}
+              className={`px-3 py-1.5 rounded-full text-[13px] transition-all border ${
+                isSelected
+                  ? 'bg-gray-800 border-gray-800 text-white font-semibold'
+                  : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'
+              }`}
+            >
+              #{tag}
+            </button>
+          );
+        })}
+      </div>
+
       <div className="mb-10 text-black">
         <textarea
           ref={textareaRef}
@@ -234,6 +273,25 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
         className="mb-10"
       />
 
+      <div className="mb-5">
+        <h3 className="typo-heading-3 mb-5 text-black">문의하기</h3>
+        <div className="flex items-start space-x-4">
+          <div className="bg-gray-800 p-2.5 rounded-2xl text-white shadow-sm">
+            <FaPhone className="h-5 w-5" />
+          </div>
+          <div className="flex-1 bg-gray-50 rounded-2xl px-4 py-3 border border-gray-100 focus-within:border-knu-red transition-colors">
+            <textarea
+              value={formData.contact}
+              onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+              className="bg-transparent border-none outline-none focus:ring-0 p-0 typo-body-2 text-black w-full resize-none"
+              placeholder="카카오톡 ID, 전화번호 등 문의처를 입력해 주세요."
+              rows={2}
+              disabled={isSubmitting}
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="mb-10">
         <h3 className="typo-heading-3 mb-5 text-black">지원하기</h3>
         <div className="flex items-center space-x-4">
@@ -245,7 +303,7 @@ function BoothEditForm({ booth }: { booth: BoothSummary }) {
               type="text"
               value={formData.applyUrl}
               onChange={(e) => setFormData({ ...formData, applyUrl: e.target.value })}
-              className="bg-transparent border-none outline-none focus:ring-0 p-0 typo-body-1 font-semibold text-black w-full"
+              className="bg-transparent border-none outline-none focus:ring-0 p-0 typo-body-2 text-black w-full"
               placeholder="지원 링크 (구글 폼 등)"
               disabled={isSubmitting}
             />

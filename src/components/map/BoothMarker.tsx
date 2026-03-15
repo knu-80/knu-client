@@ -30,9 +30,8 @@ export const BoothMarker = memo(function BoothMarker({
     <button
       className={`absolute ${width} ${height} cursor-pointer hover:brightness-95`}
       style={{
-        left: `${x}px`,
-        top: `${y}px`,
-        transformOrigin: 'center center',
+        transform: `translate3d(${x}px, ${y}px, 0)`,
+        willChange: 'transform',
       }}
       onClick={onClick}
     >
@@ -42,7 +41,7 @@ export const BoothMarker = memo(function BoothMarker({
 
       {name && (
         <span
-          className={`absolute inset-0 flex items-center justify-center pointer-events-none z-10 typo-caption font-medium ${isSelected || isFiltered ? 'text-white' : 'text-black'} whitespace-nowrap`}
+          className={`absolute inset-0 flex items-center justify-center pointer-events-none z-10 typo-caption font-medium ${isSelected || isFiltered ? 'text-white' : 'text-base-deep'} whitespace-nowrap`}
         >
           {name}
         </span>

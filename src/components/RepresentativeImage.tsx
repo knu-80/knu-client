@@ -5,21 +5,21 @@ interface RepresentativeImageProps {
   altText: string;
   height?: string;
   isZoomable?: boolean;
+  loading?: 'lazy' | 'eager';
+  fetchPriority?: 'high' | 'low' | 'auto';
+  className?: string;
 }
 
 export default function RepresentativeImage({
   imageUrl,
   altText,
-  height = 'h-64',
+  height = 'aspect-square',
   isZoomable = true,
+  loading = 'lazy',
+  fetchPriority = 'auto',
+  className = '',
 }: RepresentativeImageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleImageClick = () => {
-    if (imageUrl && isZoomable) {
-      setIsModalOpen(true);
-    }
-  };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -54,42 +54,42 @@ export default function RepresentativeImage({
   }, [isModalOpen]);
 
   return (
-    <div>
+    <div className={`relative w-full ${className}`}>
       {imageUrl ? (
-        <div
-          className={`relative w-full ${height} bg-gray-200 rounded-lg overflow-hidden ${
-            isZoomable ? 'cursor-pointer' : ''
-          }`}
-          onClick={handleImageClick}
-        >
-          <img
-            src={imageUrl}
-            alt={altText}
-            className="w-full h-full object-cover"
-            draggable="false"
-          />
-        </div>
+        <>
+          <div
+            className={`relative w-full ${height} bg-gray-200 overflow-hidden ${
+              isZoomable ? 'cursor-pointer' : ''
+            }`}
+            onClick={() => isZoomable && setIsModalOpen(true)}
+          >
+            <img
+              src={imageUrl}
+              alt={altText}
+              loading={loading}
+              decoding="async"
+              fetchPriority={fetchPriority}
+              className="w-full h-full object-cover"
+              draggable="false"
+            />
+          </div>
+          {isModalOpen && (
+            <div
+              className="fixed inset-0 z-[9999] bg-black/80 rounded-[8px] flex items-center justify-center p-4"
+              onClick={handleModalClose}
+            >
+              <img
+                src={imageUrl}
+                alt={`확대된 ${altText}`}
+                fetchPriority="high"
+                className="max-w-full max-h-full object-contain shadow-2xl"
+              />
+            </div>
+          )}
+        </>
       ) : (
-        <div
-          className={`w-full ${height} bg-gray-200 rounded-lg flex items-center justify-center typo-muted`}
-        >
-          표시할 이미지가 없습니다.
-        </div>
-      )}
-
-      {isModalOpen && imageUrl && (
-        <div
-          className="fixed top-0 left-1/2 -translate-x-1/2 z-100
-                     w-full max-w-175 min-h-screen
-                     bg-white/50 flex items-center justify-center p-4"
-          onClick={handleModalClose}
-        >
-          <img
-            src={imageUrl}
-            alt={`확대된 ${altText}`}
-            className="max-w-full max-h-full object-contain"
-            onClick={(e) => e.stopPropagation()}
-          />
+        <div className={`relative w-full ${height} bg-gray-200 overflow-hidden rounded-lg`}>
+          <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/40 to-transparent" />
         </div>
       )}
     </div>

@@ -134,7 +134,7 @@ export default function ImageCarouselUploader({
 
   return (
     <div className={`flex flex-col ${className}`}>
-      {label && <h3 className="typo-heading-3 text-black mb-5 px-1">{label}</h3>}
+      {label && <h3 className="typo-heading-3 text-black mb-5">{label}</h3>}
 
       <div ref={containerRef} className="relative w-full overflow-hidden select-none touch-pan-y">
         <motion.div

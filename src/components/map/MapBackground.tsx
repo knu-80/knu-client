@@ -19,6 +19,9 @@ export const MapBackground = memo(function MapBackground() {
       <img
         src={MapSvg}
         alt="지도"
+        loading="eager"
+        decoding="async"
+        fetchPriority="high"
         draggable={false}
         style={{
           width: '100%',

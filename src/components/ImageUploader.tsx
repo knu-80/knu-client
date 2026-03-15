@@ -46,7 +46,13 @@ export default function ImageUploader({
         className={`relative w-full ${aspectRatio} bg-gray-50 overflow-hidden rounded-2xl border-2 ${previewImage ? 'border-gray-200' : 'border-dashed border-gray-300'} shadow-sm transition-colors hover:border-gray-400`}
       >
         {previewImage ? (
-          <img src={previewImage} alt="미리보기" className="h-full w-full object-cover" />
+          <img
+            src={previewImage}
+            alt="미리보기"
+            loading="eager"
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-center text-gray-400">
             <FiCamera className="mb-2 h-8 w-8" />

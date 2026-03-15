@@ -1,14 +1,26 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiChevronRight } from 'react-icons/fi';
+import { FiChevronRight, FiAlertCircle, FiChevronDown } from 'react-icons/fi';
 import MapSvg from '@/assets/map.svg';
-import { getNotices, toNoticeLabel, type NoticeListItem } from '@/apis';
+import {
+  getPerformancePreviewByDay,
+  getPerformanceTimelineByDay,
+  getRecentNotices,
+  toNoticeLabel,
+  type NoticeListItem,
+} from '@/apis';
 import {
   PERFORMANCE_PREVIEW_BY_DAY,
   PERFORMANCE_TIMELINE_BY_DAY,
   type DayKey,
   type PerformanceTimelineItem,
+  SESSION_COLOR_MAP,
 } from '@/constants/performanceTimetable';
+import { SelectableButton } from '../SelectableButton';
+import { useBoothCount } from '@/hooks/useBoothCount';
+import { toMonthDayDot } from '@/lib/date';
+import { NOTICE_CATEGORY_COLOR_MAP } from '@/constants/notice';
+import { Badge } from '../Badge';
 
 type DayOption = {
   key: DayKey;
@@ -19,6 +31,7 @@ type DayOption = {
 
 type DayContent = {
   timetablePreview: PerformanceTimelineItem[];
+  timetableTimeline: PerformanceTimelineItem[];
   noticePreview: {
     noticeId?: number;
     category: '공지' | '분실물';
@@ -35,6 +48,7 @@ const DAY_OPTIONS: DayOption[] = [
 const DAY_CONTENT: Record<DayKey, DayContent> = {
   day1: {
     timetablePreview: PERFORMANCE_PREVIEW_BY_DAY.day1,
+    timetableTimeline: PERFORMANCE_TIMELINE_BY_DAY.day1,
     noticePreview: [
       {
         noticeId: undefined,
@@ -58,6 +72,7 @@ const DAY_CONTENT: Record<DayKey, DayContent> = {
   },
   day2: {
     timetablePreview: PERFORMANCE_PREVIEW_BY_DAY.day2,
+    timetableTimeline: PERFORMANCE_TIMELINE_BY_DAY.day2,
     noticePreview: [
       {
         noticeId: undefined,
@@ -81,180 +96,209 @@ const DAY_CONTENT: Record<DayKey, DayContent> = {
   },
 };
 
-function getDatePart(value: string): string {
-  const [datePart] = value.split('T');
-  return datePart ?? '';
-}
-
-function toDotDate(value: string): string {
-  const datePart = getDatePart(value);
-  const [, month = '00', day = '00'] = datePart.split('-');
-  return `${month}.${day}`;
-}
-
 function mapNoticesToPreview(items: NoticeListItem[]): DayContent['noticePreview'] {
   return items.slice(0, 3).map((item) => ({
     noticeId: item.noticeId,
     category: toNoticeLabel(item.type),
     title: item.title,
-    date: toDotDate(item.createdAt),
+    date: toMonthDayDot(item.createdAt),
   }));
 }
 
-function SectionHeader({ title, to, label }: { title: string; to: string; label: string }) {
+type SectionHeaderProps = {
+  title: string;
+  text?: string;
+  description?: React.ReactNode;
+  to?: string;
+};
+
+function SectionHeader({ title, text, description, to }: SectionHeaderProps) {
   return (
-    <div className="mb-3 flex items-center justify-between">
-      <h3 className="typo-heading-2 text-knu-gray">{title}</h3>
-      <Link
-        to={to}
-        className="interactive-transition inline-flex items-center gap-1 text-sm font-semibold text-knu-gray/75 hover:text-knu-red"
-      >
-        {label}
-        <FiChevronRight className="h-4 w-4" aria-hidden="true" />
-      </Link>
+    <div className="mb-3 mx-1 select-none">
+      <div className="flex items-baseline justify-between gap-6">
+        <div className="flex items-center gap-2">
+          <h3 className="typo-heading-3 text-base-deep shrink-0">{title}</h3>
+          {description && (
+            <span className="typo-body-2 text-gray-500 leading-none">{description}</span>
+          )}
+        </div>
+        {text && to && (
+          <Link
+            to={to}
+            className="interactive-transition inline-flex items-center gap-1 typo-body-2 text-gray-500 hover:text-base-deep shrink-0"
+          >
+            {text}
+            <FiChevronRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+          </Link>
+        )}
+      </div>
     </div>
   );
 }
 
 function TimeTablePreviewCard({
-  dayLabel,
-  items,
+  previewItems,
   totalCount,
+  items,
+  previewCount = 4,
 }: {
-  dayLabel: string;
+  previewItems: DayContent['timetablePreview'];
   items: DayContent['timetablePreview'];
   totalCount: number;
+  previewCount: number;
 }) {
-  return (
-    <div className="rounded-3xl border border-knu-gold/30 bg-white p-4 shadow-[0_3px_10px_rgba(15,23,42,0.05)]">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-knu-gray">{dayLabel} 공연 미리보기</p>
-        <span className="rounded-full bg-knu-gold/10 px-2.5 py-1 text-xs font-semibold text-knu-gold">
-          총 {totalCount}개
-        </span>
-      </div>
+  const [showAll, setShowAll] = useState(false);
+  const displayItems = showAll ? items : previewItems.slice(0, previewCount);
 
-      <div className="space-y-2">
-        {items.length > 0 ? (
-          items.map((item) => (
-            <Link
-              key={`${item.time}-${item.title}`}
-              to="/timetable"
-              aria-label={`${item.title} 상세 타임테이블로 이동`}
-              className="interactive-transition grid grid-cols-[96px_1fr] gap-3 rounded-2xl border border-knu-silver/50 bg-knu-gold/5 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)] hover:border-knu-gold/60 hover:bg-knu-gold/10"
-            >
-              <p className="text-sm font-semibold text-knu-gold">{item.time}</p>
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-knu-gray">{item.title}</p>
-                <p className="mt-1 truncate text-xs font-medium text-knu-gray/70">
-                  {item.sessionLabel}
-                </p>
-                <p className="mt-1 truncate text-xs text-text-muted">{item.location}</p>
-              </div>
-            </Link>
-          ))
-        ) : (
-          <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
-            등록된 타임테이블이 없습니다.
+  return (
+    <>
+      <div className="rounded-2xl shadow-sm bg-white p-4 select-none">
+        <div className="mb-4 mx-1 flex items-center justify-between">
+          <p className="typo-body-1 font-medium text-base-deep">총 {totalCount}개의 공연</p>
+          <div className="flex items-center gap-2">
+            {Array.from(new Set(items.map((i) => i.session))).map((session) => {
+              const color = SESSION_COLOR_MAP[session];
+              const sessionLabel = items.find((i) => i.session === session)?.sessionLabel;
+              return (
+                <Badge key={session} className={`${color.text} ${color.badgeBg}`}>
+                  {sessionLabel}
+                </Badge>
+              );
+            })}
+          </div>
+        </div>
+        <div className="space-y-2">
+          {displayItems.length > 0 ? (
+            displayItems.map((item) => {
+              const color = SESSION_COLOR_MAP[item.session];
+              return (
+                <div
+                  key={`${item.time}-${item.title}`}
+                  className={`interactive-transition grid grid-cols-[90px_1fr] rounded-2xl px-5 py-4 ${color.bg} ${color.hoverBg}`}
+                >
+                  <p className={`typo-body-2 font-semibold ${color.text}`}>{item.time}</p>
+                  <div className="min-w-0">
+                    <p className="truncate typo-body-2 font-medium text-base-deep">{item.title}</p>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
+              등록된 타임테이블이 없습니다.
+            </div>
+          )}
+        </div>
+        {items.length > previewCount && (
+          <div
+            onClick={() => setShowAll((prev) => !prev)}
+            className="mt-4 interactive-transition flex cursor-pointer items-center justify-center gap-1 typo-body-2 text-gray-500 hover:text-base-deep select-none"
+          >
+            <FiChevronDown
+              className={`h-5 w-5 transition-transform duration-300 ease-in-out ${showAll ? 'rotate-180' : ''}`}
+              strokeWidth={2}
+              aria-hidden="true"
+            />
+            {showAll ? '간략히 보기' : '전체보기'}
           </div>
         )}
       </div>
-
-      <p className="mt-3 text-xs text-text-muted">
-        전체 공연 순서와 회차 정보는 더보기에서 확인할 수 있습니다.
+      <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none">
+        <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
+        현장 상황에 따라 공연 시간이 일부 변경될 수 있어요
       </p>
-    </div>
+    </>
   );
 }
 
-function NoticePreviewCard({
-  dayLabel,
-  items,
-  isLoading,
-}: {
-  dayLabel: string;
-  items: DayContent['noticePreview'];
-  isLoading: boolean;
-}) {
+function NoticePreviewCard({ items }: { items: DayContent['noticePreview'] }) {
   return (
-    <div className="rounded-3xl border border-knu-silver/65 bg-white p-4 shadow-[0_3px_10px_rgba(15,23,42,0.05)]">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-knu-gray">{dayLabel} 공지 미리보기</p>
-        <span className="rounded-full bg-knu-silver/20 px-2.5 py-1 text-xs font-medium text-knu-gray">
-          최신 순
-        </span>
-      </div>
+    <>
+      <div className="rounded-2xl shadow-sm bg-white p-4 select-none">
+        <div className="mb-4 ml-1 flex items-center justify-between">
+          <p className="typo-body-1 font-medium text-base-deep">최근 공지 3건</p>
+        </div>
 
-      <div className="space-y-2">
-        {isLoading ? (
-          <div className="rounded-2xl bg-white px-3 py-3 text-sm text-text-muted">
-            데이터를 불러오는 중입니다...
-          </div>
-        ) : items.length > 0 ? (
-          items.map((item) => (
-            <Link
-              key={`${item.date}-${item.category}-${item.title}`}
-              to={item.noticeId ? `/notice/${item.noticeId}` : '/notice'}
-              aria-label={`${item.title} 상세 공지로 이동`}
-              className="interactive-transition flex items-start justify-between gap-3 rounded-2xl border border-knu-silver/45 bg-knu-silver/10 px-3 py-3 shadow-[0_1px_3px_rgba(15,23,42,0.04)] hover:border-knu-gold/60 hover:bg-knu-silver/20"
-            >
-              <div className="min-w-0">
-                <span
-                  className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${
-                    item.category === '공지'
-                      ? 'bg-knu-red/10 text-knu-red'
-                      : 'bg-knu-gray/15 text-knu-gray'
-                  }`}
+        <div className="space-y-2">
+          {items.length > 0 ? (
+            items.map((item) => {
+              const color = NOTICE_CATEGORY_COLOR_MAP[item.category];
+              return (
+                <Link
+                  key={`${item.date}-${item.category}-${item.title}`}
+                  to={item.noticeId ? `/notice/${item.noticeId}` : '/notice'}
+                  aria-label={`${item.title} 상세 공지로 이동`}
+                  className={`interactive-transition flex items-center justify-between rounded-2xl px-5 ${color.bg} ${color.hoverBg} hover:border-knu-gold/60`}
                 >
-                  {item.category}
-                </span>
-                <p className="mt-2 truncate text-sm font-semibold text-knu-gray">{item.title}</p>
-              </div>
-              <span className="shrink-0 text-xs font-medium text-gray-500">{item.date}</span>
-            </Link>
-          ))
-        ) : (
-          <div className="rounded-2xl bg-white px-3 py-3 text-sm text-text-muted">
-            등록된 공지가 없습니다.
-          </div>
-        )}
+                  <div
+                    className={`interactive-transition grid grid-cols-[50px_1fr] rounded-2xl py-4}`}
+                  >
+                    <p className={`typo-body-2 font-semibold ${color.text}`}>{item.date}</p>
+                    <div className="flex items-center gap-[6px]">
+                      <Badge className={`${color.badgeBg} ${color.badgeText}`}>
+                        {item.category}
+                      </Badge>
+                      <p className="truncate typo-body-2 font-medium text-base-deep">
+                        {item.title}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })
+          ) : (
+            <div className="rounded-2xl bg-white px-3 py-3 text-sm text-text-muted">
+              등록된 공지가 없습니다.
+            </div>
+          )}
+        </div>
       </div>
-
-      <p className="mt-3 text-xs text-text-muted">
-        공지 원문, 분실물 상세 내용, 변경 사항은 더보기에서 확인해주세요.
+      <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none">
+        <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
+        공지 원문과 분실물 상세 내용은 더보기에서 확인할 수 있어요
       </p>
-    </div>
+    </>
   );
 }
 
 function MapPreviewCard() {
+  const { count, isLoading } = useBoothCount();
+
   return (
     <Link
       to="/map"
-      className="interactive-transition group block overflow-hidden rounded-3xl border border-knu-silver/65 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04)] hover:border-knu-gold/55 hover:shadow-[0_8px_20px_rgba(15,23,42,0.08)]"
+      className="interactive-transition group block overflow-hidden rounded-2xl bg-white shadow-sm"
       aria-label="부스 배치도 지도 페이지로 이동"
     >
-      <div className="relative h-36 overflow-hidden bg-knu-silver/20">
+      <div className="relative h-56 overflow-hidden bg-secondary-blue/5">
         <img
           src={MapSvg}
           alt=""
           aria-hidden="true"
-          className="h-full w-full object-cover object-top opacity-85 transition duration-200 group-hover:scale-[1.02]"
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover transition duration-200 group-hover:scale-[1.02]"
+          style={{ objectPosition: 'bottom 20%' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
-        <div className="absolute bottom-3 left-3 rounded-full bg-white/95 px-2.5 py-1 text-xs font-semibold text-knu-red">
-          탭하여 지도 보기
+        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent select-none" />
+        <div className="absolute bottom-3 right-3 flex items-center justify-center rounded-full bg-white/95 px-3 h-8 shadow-sm transition-all active:scale-95">
+          <span className="typo-body-2 font-medium text-primary leading-none">
+            탭하여 지도 보기
+          </span>
         </div>
       </div>
 
-      <div className="flex items-start justify-between gap-3 px-4 py-4">
+      <div className="flex items-start justify-between gap-3 px-4 py-4 select-none">
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-knu-gray">부스 배치도</p>
-          <p className="mt-1 text-xs leading-4 text-text-muted">
-            전체 배치도에서 부스 위치를 확인하고 탐색할 수 있어요.
+          <p className="typo-body-1 font-medium text-base-deep">
+            {isLoading
+              ? '부스 수 집계 중'
+              : typeof count === 'number'
+                ? `총 ${count}개의 동아리`
+                : '전체 동아리를 지도에서 확인해보세요'}
           </p>
+          <p className="mt-1 typo-body-2 text-gray-500">지도와 검색으로 쉽게 확인할 수 있어요</p>
         </div>
-        <span className="mt-0.5 shrink-0 text-sm font-semibold text-knu-red">OPEN</span>
       </div>
     </Link>
   );
@@ -263,63 +307,59 @@ function MapPreviewCard() {
 export default function HomeTab() {
   const [activeDay, setActiveDay] = useState<DayKey>('day1');
   const [contentByDay, setContentByDay] = useState<Record<DayKey, DayContent>>(DAY_CONTENT);
-  const [noticeLoadingByDay, setNoticeLoadingByDay] = useState<Record<DayKey, boolean>>({
-    day1: false,
-    day2: false,
-  });
 
   const activeContent = useMemo(() => contentByDay[activeDay], [activeDay, contentByDay]);
-  const activeOption = useMemo(
-    () => DAY_OPTIONS.find((day) => day.key === activeDay) ?? DAY_OPTIONS[0],
-    [activeDay],
-  );
 
   useEffect(() => {
     let isMounted = true;
-
-    const fetchNoticePreview = async () => {
-      setNoticeLoadingByDay((prev) => ({ ...prev, [activeDay]: true }));
-
+    const fetchTimelineByDay = async () => {
       try {
-        const notices = await getNotices();
-
-        if (!isMounted) {
-          return;
-        }
-
-        const noticePreview = mapNoticesToPreview(notices);
+        const [timetablePreview, timetableTimeline] = await Promise.all([
+          getPerformancePreviewByDay(activeDay),
+          getPerformanceTimelineByDay(activeDay),
+        ]);
+        if (!isMounted) return;
         setContentByDay((prev) => ({
           ...prev,
           [activeDay]: {
-            timetablePreview: PERFORMANCE_PREVIEW_BY_DAY[activeDay],
-            noticePreview:
-              noticePreview.length > 0 ? noticePreview : DAY_CONTENT[activeDay].noticePreview,
+            ...prev[activeDay],
+            timetablePreview,
+            timetableTimeline,
           },
         }));
       } catch {
-        if (!isMounted) {
-          return;
-        }
-        setContentByDay((prev) => ({
-          ...prev,
-          [activeDay]: {
-            timetablePreview: PERFORMANCE_PREVIEW_BY_DAY[activeDay],
-            noticePreview: DAY_CONTENT[activeDay].noticePreview,
-          },
-        }));
-      } finally {
-        if (isMounted) {
-          setNoticeLoadingByDay((prev) => ({ ...prev, [activeDay]: false }));
-        }
+        if (!isMounted) return;
       }
     };
-
-    void fetchNoticePreview();
-
+    void fetchTimelineByDay();
     return () => {
       isMounted = false;
     };
-  }, [activeDay, activeOption.queryDate]);
+  }, [activeDay]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchNoticePreview = async () => {
+      try {
+        const notices = await getRecentNotices();
+        if (!isMounted) return;
+
+        const noticePreview = mapNoticesToPreview(notices);
+        const nextPreview =
+          noticePreview.length > 0 ? noticePreview : DAY_CONTENT.day1.noticePreview;
+        setContentByDay((prev) => ({
+          day1: { ...prev.day1, noticePreview: nextPreview },
+          day2: { ...prev.day2, noticePreview: nextPreview },
+        }));
+      } catch {
+        if (!isMounted) return;
+      }
+    };
+    void fetchNoticePreview();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <section aria-labelledby="home-day-toggle-title" className="rounded-t-[28px]">
@@ -327,33 +367,23 @@ export default function HomeTab() {
         가두모집 날짜별 홈 안내
       </h2>
 
-      <div
-        role="tablist"
-        aria-label="가두모집 날짜 선택"
-        className="grid grid-cols-2 gap-2 sm:gap-3"
-      >
+      <div role="tablist" aria-label="날짜 선택" className="grid grid-cols-2 gap-2 sm:gap-3">
         {DAY_OPTIONS.map((day) => {
           const isActive = activeDay === day.key;
 
           return (
-            <button
+            <SelectableButton
               key={day.key}
-              id={`home-day-tab-${day.key}`}
-              type="button"
-              role="tab"
+              selected={isActive}
+              onClick={() => setActiveDay(day.key)}
+              className="whitespace-nowrap"
               aria-selected={isActive}
               aria-controls={`home-day-panel-${day.key}`}
-              onClick={() => setActiveDay(day.key)}
-              className={`interactive-transition rounded-full px-3 py-2.5 text-sm font-semibold ${
-                isActive
-                  ? 'bg-knu-red text-white shadow-[0_6px_14px_rgba(230,0,0,0.28)]'
-                  : 'bg-white text-knu-gray shadow-[inset_0_0_0_1px_rgba(204,204,204,0.9)] hover:text-knu-gold hover:shadow-[inset_0_0_0_1px_rgba(191,124,38,0.5)]'
-              }`}
+              role="tab"
+              id={`home-day-tab-${day.key}`}
             >
-              <span className="whitespace-nowrap">
-                {day.label} <span className="ml-1">{day.date}</span>
-              </span>
-            </button>
+              {day.label} ·<span className="ml-1">{day.date}</span>
+            </SelectableButton>
           );
         })}
       </div>
@@ -365,25 +395,22 @@ export default function HomeTab() {
         className="space-y-14 pt-10"
       >
         <section aria-labelledby="home-timetable-title">
-          <SectionHeader title="타임테이블" to="/timetable" label="더보기" />
+          <SectionHeader title="공연시간표" description="일청담 앞 중앙무대에서 만나요" />
           <TimeTablePreviewCard
-            dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
-            items={activeContent.timetablePreview}
-            totalCount={PERFORMANCE_TIMELINE_BY_DAY[activeDay].length}
+            previewItems={activeContent.timetablePreview}
+            items={activeContent.timetableTimeline}
+            totalCount={activeContent.timetableTimeline.length}
+            previewCount={4}
           />
         </section>
 
         <section aria-labelledby="home-notice-title">
-          <SectionHeader title="공지사항" to="/notice" label="더보기" />
-          <NoticePreviewCard
-            dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
-            items={activeContent.noticePreview}
-            isLoading={noticeLoadingByDay[activeDay]}
-          />
+          <SectionHeader title="공지사항" text="더보기" to="/notice" />
+          <NoticePreviewCard items={activeContent.noticePreview} />
         </section>
 
         <section aria-labelledby="home-map-preview-title">
-          <SectionHeader title="부스 배치도" to="/map" label="더보기" />
+          <SectionHeader title="부스 배치도" description="관심있는 동아리를 찾아보세요" />
           <div id="home-map-preview-title" className="sr-only">
             부스 배치도 미리보기
           </div>

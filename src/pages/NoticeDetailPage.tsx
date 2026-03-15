@@ -50,12 +50,14 @@ export default function NoticeDetailPage() {
   return (
     <div className="pt-5">
       <div className="flex flex-col space-y-1 mb-4 text-base-deep">
-        <div className="flex items-center gap-[8px] min-w-0">
-          <Badge className={`${color.badgeBg} ${color.badgeText} typo-body-2 font-medium`}>
+        <h2 className="typo-heading-3 min-w-0 leading-tight break-words">
+          <Badge
+            className={`inline-flex align-middle mr-2 ${color.badgeBg} ${color.badgeText} typo-body-2 font-medium`}
+          >
             {label}
           </Badge>
-          <h2 className="typo-heading-3">{notice.title}</h2>
-        </div>
+          <span className="align-middle">{notice.title}</span>
+        </h2>
         <div className="flex items-center space-x-1 typo-body-3 text-gray-500 mt-1">
           <span>{notice.authorNickname} ·</span>
           <span>{notice.createdAt.split('T')[0]} 작성됨</span>

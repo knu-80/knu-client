@@ -49,7 +49,7 @@ export default function EventPage() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-1 items-center justify-center rounded-2xl shadow-sm w-full min-h-45 border border-gray-200 bg-white ">
+        <div className="flex items-center justify-center rounded-2xl w-full min-h-10 border border-gray-200 bg-white ">
           <StatusDisplay variant="event" title="아직 예정된 이벤트가 없어요" />
         </div>
       )}

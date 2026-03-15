@@ -49,50 +49,12 @@ const DAY_CONTENT: Record<DayKey, DayContent> = {
   day1: {
     timetablePreview: PERFORMANCE_PREVIEW_BY_DAY.day1,
     timetableTimeline: PERFORMANCE_TIMELINE_BY_DAY.day1,
-    noticePreview: [
-      {
-        noticeId: undefined,
-        category: '공지',
-        title: '1일차 운영 시간 및 우천 시 안내',
-        date: '03.16',
-      },
-      {
-        noticeId: undefined,
-        category: '공지',
-        title: '백양로 일부 구간 동선 안내',
-        date: '03.16',
-      },
-      {
-        noticeId: undefined,
-        category: '분실물',
-        title: '현장 분실물 접수 위치 안내',
-        date: '03.16',
-      },
-    ],
+    noticePreview: [],
   },
   day2: {
     timetablePreview: PERFORMANCE_PREVIEW_BY_DAY.day2,
     timetableTimeline: PERFORMANCE_TIMELINE_BY_DAY.day2,
-    noticePreview: [
-      {
-        noticeId: undefined,
-        category: '공지',
-        title: '2일차 부스 위치 업데이트 안내',
-        date: '03.17',
-      },
-      {
-        noticeId: undefined,
-        category: '공지',
-        title: '프로그램 시간 변경 공지',
-        date: '03.17',
-      },
-      {
-        noticeId: undefined,
-        category: '분실물',
-        title: '분실물 보관 현황 업데이트',
-        date: '03.17',
-      },
-    ],
+    noticePreview: [],
   },
 };
 
@@ -281,15 +243,13 @@ function NoticePreviewCard({ items }: { items: DayContent['noticePreview'] }) {
                   aria-label={`${item.title} 상세 공지로 이동`}
                   className={`interactive-transition flex items-center justify-between rounded-2xl px-5 py-4 ${color.bg} ${color.hoverBg} hover:border-knu-gold/60`}
                 >
-                  <div
-                    className={`interactive-transition grid grid-cols-[50px_1fr] rounded-2xl py-4}`}
-                  >
+                  <div className="interactive-transition grid min-w-0 grid-cols-[50px_1fr] items-center gap-2 rounded-2xl">
                     <p className={`typo-body-2 font-semibold ${color.text}`}>{item.date}</p>
-                    <div className="flex items-center gap-[6px]">
-                      <Badge className={`${color.badgeBg} ${color.badgeText}`}>
+                    <div className="flex min-w-0 items-center gap-[6px]">
+                      <Badge className={`shrink-0 ${color.badgeBg} ${color.badgeText}`}>
                         {item.category}
                       </Badge>
-                      <p className="truncate typo-body-2 font-medium text-base-deep">
+                      <p className="min-w-0 flex-1 truncate typo-body-2 font-medium text-base-deep">
                         {item.title}
                       </p>
                     </div>
@@ -396,11 +356,9 @@ export default function HomeTab() {
         if (!isMounted) return;
 
         const noticePreview = mapNoticesToPreview(notices);
-        const nextPreview =
-          noticePreview.length > 0 ? noticePreview : DAY_CONTENT.day1.noticePreview;
         setContentByDay((prev) => ({
-          day1: { ...prev.day1, noticePreview: nextPreview },
-          day2: { ...prev.day2, noticePreview: nextPreview },
+          day1: { ...prev.day1, noticePreview },
+          day2: { ...prev.day2, noticePreview },
         }));
       } catch {
         if (!isMounted) return;

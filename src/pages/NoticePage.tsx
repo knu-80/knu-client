@@ -89,7 +89,7 @@ export default function NoticePage() {
             <StatusDisplay variant="error" title="인터넷 연결을 확인해주세요" onAction={refetch} />
           </div>
         ) : filteredNotices.length === 0 ? (
-          <div className="flex flex-1 items-center justify-center rounded-2xl w-full min-h-45 border border-gray-200 bg-white">
+          <div className="flex items-center justify-center rounded-2xl w-full min-h-45 border border-gray-200 bg-white">
             <StatusDisplay variant="event" title="현재 등록된 공지사항이 없어요" />
           </div>
         ) : (

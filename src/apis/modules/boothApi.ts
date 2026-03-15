@@ -24,6 +24,7 @@ export interface BoothSummary {
   contact: string | null;
   imageUrls: string[];
   isActive: boolean;
+  likeCount?: number;
 }
 
 export interface BoothListParams {
@@ -119,10 +120,8 @@ export async function deleteBooth(boothId: number): Promise<void> {
   await http.delete<ApiResponse<unknown>>(ENDPOINTS.adminBoothById(boothId));
 }
 
-export async function likeBooth(boothId: number, clientIp: string): Promise<number> {
-  const { data } = await http.post<ApiResponse<number>>(ENDPOINTS.boothLikes(boothId), null, {
-    params: { clientIp },
-  });
+export async function likeBooth(boothId: number): Promise<number> {
+  const { data } = await http.post<ApiResponse<number>>(ENDPOINTS.boothLikes(boothId), null);
 
   return unwrapApiResponse(data);
 }

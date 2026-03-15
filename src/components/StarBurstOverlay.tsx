@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaStar } from 'react-icons/fa';
 
 interface StarBurst {
-  id: number;
+  id: string;
   x: number;
   y: number;
 }

@@ -9,19 +9,46 @@ import { StatusDisplay } from '@/components/StatusDisplay';
 import { PiSpinnerGapThin } from 'react-icons/pi';
 import { StarBurstOverlay } from '@/components/StarBurstOverlay';
 import { PiShootingStarFill } from 'react-icons/pi';
+import { useLikeBooth } from '@/hooks/useLikeBooth';
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
   const boothId = Number(id);
-  const [bursts, setBursts] = useState<{ id: number; x: number; y: number }[]>([]);
+  const [bursts, setBursts] = useState<{ id: string; x: number; y: number }[]>([]);
 
-  const handleStarClick = () => {
-    const newBurst = { id: Date.now(), x: Math.random() * 100 - 50, y: Math.random() * -150 - 50 };
-    setBursts((prev) => [...prev, newBurst]);
-    setTimeout(() => setBursts((p) => p.filter((b) => b.id !== newBurst.id)), 1000);
-  };
+  const [likeDelta, setLikeDelta] = useState(0);
 
+  const { mutate, isPending } = useLikeBooth(boothId);
   const { booth, loading, refetch } = useBooth(boothId);
+  const displayLikeCount = (booth?.likeCount ?? 0) + likeDelta;
+
+  const handleStarClick = async () => {
+    if (isPending) return;
+
+    const newBurst = {
+      id: crypto.randomUUID(),
+      x: Math.random() * 100 - 50,
+      y: Math.random() * -150 - 50,
+    };
+
+    setBursts((prev) => [...prev, newBurst]);
+    setTimeout(() => {
+      setBursts((prev) => prev.filter((b) => b.id !== newBurst.id));
+    }, 1000);
+
+    setLikeDelta((prev) => (prev ?? 0) + 1);
+
+    try {
+      const updatedCount = await mutate();
+
+      if (updatedCount !== undefined) {
+        setLikeDelta(updatedCount - (booth?.likeCount ?? 0));
+      }
+    } catch (error) {
+      console.error('좋아요 실패:', error);
+      setLikeDelta((prev) => prev - 1);
+    }
+  };
 
   if (loading) {
     return (
@@ -50,10 +77,11 @@ export default function BoothDetailPage() {
         <div className="flex-1" />
         <button
           onClick={handleStarClick}
+          disabled={isPending}
           className="flex cursor-pointer items-center justify-center rounded-full gap-[2px] bg-white transition-all hover:brightness-95 active:scale-[0.98]"
         >
           <PiShootingStarFill size={28} className="text-secondary-yellow" />
-          <span className="typo-body-3 text-base-deep font-">숫자</span>
+          <span className="typo-body-3 text-base-deep font-">{displayLikeCount}</span>
         </button>
       </div>
 

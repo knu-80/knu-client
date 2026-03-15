@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
+import { usePostHog } from '@posthog/react';
 
 import MainLayout from '@/components/layouts/MainLayout';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import DetailLayout from '@/components/layouts/DetailLayout';
+import SearchLayout from '@/components/layouts/SearchLayout';
 import MapLayout from '@/components/layouts/MapLayout';
 import HomePage from '@/pages/HomePage';
 import NoticePage from '@/pages/NoticePage';
@@ -13,7 +15,6 @@ import SearchPage from '@/pages/SearchPage';
 import SearchResultPage from '@/pages/SearchResultPage';
 import MapPage from '@/pages/MapPage';
 import NoticeDetailPage from '@/pages/NoticeDetailPage';
-import TimeTablePage from '@/pages/TimeTablePage';
 import BoothDetailPage from '@/pages/BoothDetailPage';
 import AdminHomePage from '@/pages/admin/AdminHomePage';
 import AdminNoticePage from '@/pages/admin/AdminNoticePage';
@@ -27,15 +28,26 @@ import AdminSessionGuard from '@/components/guards/AdminSessionGuard';
 import { setUnauthorizedHandler } from '@/apis';
 import { useAdminSessionStore } from '@/stores/adminSessionStore';
 import SplashScreen from '@/components/home/SplashScreen';
+import RankingPage from '@/pages/RankingPage';
+import RankingLayout from './components/layouts/RankingLayout';
 
 const SPLASH_DURATION_MS = 1500;
+const isAdminRoutePath = (pathname: string) =>
+  pathname === '/admin' || pathname.startsWith('/admin/');
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const posthog = usePostHog();
   const bootstrapSession = useAdminSessionStore((state) => state.bootstrapSession);
   const setUnauthenticated = useAdminSessionStore((state) => state.setUnauthenticated);
+
+  useEffect(() => {
+    if (posthog) {
+      posthog.capture('$pageview');
+    }
+  }, [location, posthog]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -55,7 +67,7 @@ export default function App() {
     setUnauthorizedHandler(() => {
       setUnauthenticated();
 
-      const isAdminPath = location.pathname.startsWith('/admin');
+      const isAdminPath = isAdminRoutePath(location.pathname);
       const isLoginPath = location.pathname === '/admin/login';
       if (!isAdminPath || isLoginPath) {
         return;
@@ -81,11 +93,16 @@ export default function App() {
           <Route index element={<HomePage />} />
           <Route path="notice" element={<NoticePage />} />
           <Route path="event" element={<EventPage />} />
-          <Route path="search" element={<SearchPage />} />
-          <Route path="search/result" element={<SearchResultPage />} />
+        </Route>
+        <Route element={<RankingLayout />}>
+          <Route path="/ranking" element={<RankingPage />} />
         </Route>
         <Route element={<MapLayout />}>
           <Route path="/map" element={<MapPage />} />
+        </Route>
+        <Route element={<SearchLayout />}>
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="search/result" element={<SearchResultPage />} />
         </Route>
         <Route path="/admin/login" element={<LoginPage />} />
         <Route element={<AdminSessionGuard />}>
@@ -108,15 +125,13 @@ export default function App() {
           <Route element={<AdminLayout title="부스 수정" fallbackPath="/admin" />}>
             <Route path="/admin/booths/edit/:id" element={<AdminBoothEditPage />} />
           </Route>
+          <Route path="/admin/*" element={<Navigate to="/admin" replace />} />
         </Route>
         <Route element={<DetailLayout title="부스 상세" fallbackPath="/map" />}>
           <Route path="/booths/:id" element={<BoothDetailPage />} />
         </Route>
         <Route element={<DetailLayout title="공지사항" fallbackPath="/notice" />}>
           <Route path="/notice/:id" element={<NoticeDetailPage />} />
-        </Route>
-        <Route element={<DetailLayout title="타임테이블" fallbackPath="/" />}>
-          <Route path="/timetable" element={<TimeTablePage />} />
         </Route>
       </Routes>
       <Analytics />

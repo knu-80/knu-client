@@ -7,11 +7,15 @@ export const ENDPOINTS = {
   // Public (no token)
   login: `${PUBLIC_API_PREFIX}/login`,
   notices: `${PUBLIC_API_PREFIX}/notices`,
+  noticesRecent: `${PUBLIC_API_PREFIX}/notices/recent`,
   noticeById: (noticeId: number | string) => `${PUBLIC_API_PREFIX}/notices/${noticeId}`,
   eventsByType: (eventType: EventType) => `${PUBLIC_API_PREFIX}/events/list/${eventType}`,
   eventById: (eventId: number | string) => `${PUBLIC_API_PREFIX}/events/${eventId}`,
   booths: `${PUBLIC_API_PREFIX}/booths/list`,
+  boothCount: `${PUBLIC_API_PREFIX}/booths/count`,
   boothById: (boothId: number | string) => `${PUBLIC_API_PREFIX}/booths/${boothId}`,
+  boothLikes: (boothId: number | string) => `${PUBLIC_API_PREFIX}/booths/${boothId}/likes`,
+  boothRanking: `${PUBLIC_API_PREFIX}/booths/ranking`,
 
   // Admin (token required)
   adminMe: `${ADMIN_API_PREFIX}/me`,

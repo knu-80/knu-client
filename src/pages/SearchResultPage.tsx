@@ -2,8 +2,8 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { SearchBar } from '@/components/SearchBar';
 import { BoothItem } from '@/components/BoothItem';
-import { NoResults } from '@/components/search/NoResults';
-import { useBooths, useBoothsWithFallback } from '@/hooks/useBooths';
+import { StatusDisplay } from '@/components/StatusDisplay';
+import { useBooths } from '@/hooks/useBooths';
 import { useRecommendedClubBooths } from '@/hooks/useRecommendedBooths';
 import { useMemo, useState } from 'react';
 
@@ -14,9 +14,8 @@ export default function SearchResultPage() {
   const navigate = useNavigate();
   const paramsMemo = useMemo(() => ({ keyword: query }), [query]);
   const { booths } = useBooths(paramsMemo);
-
-  const { booths: fallbackBooths } = useBoothsWithFallback();
-  const recommendedBooths = useRecommendedClubBooths(fallbackBooths, 5);
+  const { booths: allBooths } = useBooths();
+  const recommendedBooths = useRecommendedClubBooths(allBooths, 5);
 
   const results = Object.values(booths);
   const hasResults = results.length > 0;
@@ -66,10 +65,16 @@ export default function SearchResultPage() {
         ) : (
           isSearching && (
             <>
-              <NoResults />
+              <StatusDisplay
+                variant="search"
+                title="검색 결과가 없어요"
+                description="다른 검색어를 입력해보세요"
+              />
               <div className="px-1 py-10">
                 <div className="mb-4">
-                  <h4 className="typo-heading-3 font-semibold text-black">놓치면 아쉬운 동아리</h4>
+                  <h4 className="typo-heading-3 font-semibold text-base-deep">
+                    놓치면 아쉬운 동아리
+                  </h4>
                 </div>
                 <div className="flex-1 overflow-y-auto no-scrollbar">
                   <div className="flex flex-col gap-5 pb-10">

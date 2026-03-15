@@ -12,8 +12,6 @@ export default function MapPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { booths } = useBooths();
-  // const { booths, loading } = useBooths();
-  // [seah] status ui 추가 필요
 
   const [value, setValue] = useState('');
   const [selectedBoothId, setSelectedBoothId] = useState<number | null>(() => {
@@ -29,10 +27,7 @@ export default function MapPage() {
 
   return (
     <div className="w-full h-full relative bg-gray-50">
-      <div
-        className="px-5 py-3 z-30 sticky top-0 bg-white"
-        onClick={() => navigate('/search', { state: { booths } })}
-      >
+      <div className="px-5 py-3 z-30 sticky top-0 bg-white" onClick={() => navigate('/search')}>
         <div className="pointer-events-none">
           <SearchBar
             value={value}

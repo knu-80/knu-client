@@ -27,3 +27,8 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# E2E artifacts
+playwright-report
+test-results
+blob-report

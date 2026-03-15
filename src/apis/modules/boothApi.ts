@@ -24,10 +24,24 @@ export interface BoothSummary {
   contact: string | null;
   imageUrls: string[];
   isActive: boolean;
+  likeCount?: number;
 }
 
 export interface BoothListParams {
   keyword?: string;
+}
+
+type BoothCountPayload =
+  | number
+  | {
+      count?: number;
+      totalCount?: number;
+      boothCount?: number;
+    };
+export interface BoothRanking {
+  boothId: number;
+  name: string;
+  likeCount: number;
 }
 
 export interface BoothMutationInput {
@@ -51,6 +65,32 @@ export async function getBooths(params: BoothListParams = {}): Promise<BoothSumm
   });
 
   return unwrapApiResponse(data);
+}
+
+function resolveBoothCount(payload: BoothCountPayload): number {
+  if (typeof payload === 'number') {
+    return payload;
+  }
+
+  if (typeof payload.count === 'number') {
+    return payload.count;
+  }
+
+  if (typeof payload.totalCount === 'number') {
+    return payload.totalCount;
+  }
+
+  if (typeof payload.boothCount === 'number') {
+    return payload.boothCount;
+  }
+
+  throw new Error('booth count 응답 형식을 확인해주세요.');
+}
+
+export async function getBoothCount(): Promise<number> {
+  const { data } = await http.get<ApiResponse<BoothCountPayload>>(ENDPOINTS.boothCount);
+
+  return resolveBoothCount(unwrapApiResponse(data));
 }
 
 export async function getBooth(boothId: number): Promise<BoothSummary> {
@@ -111,4 +151,16 @@ export async function updateBoothImages(boothId: number, images: File[]): Promis
 
 export async function deleteBooth(boothId: number): Promise<void> {
   await http.delete<ApiResponse<unknown>>(ENDPOINTS.adminBoothById(boothId));
+}
+
+export async function likeBooth(boothId: number): Promise<number> {
+  const { data } = await http.post<ApiResponse<number>>(ENDPOINTS.boothLikes(boothId), null);
+
+  return unwrapApiResponse(data);
+}
+
+export async function getBoothRanking(): Promise<BoothRanking[]> {
+  const { data } = await http.get<ApiResponse<BoothRanking[]>>(ENDPOINTS.boothRanking);
+
+  return unwrapApiResponse(data);
 }

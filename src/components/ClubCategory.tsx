@@ -11,9 +11,9 @@ export function ClubCategory({ division }: ClubCategoryProps) {
   if (!info) return null;
 
   return (
-    <div className="flex items-center space-x-1">
+    <div className={`flex items-center space-x-1 px-[6px] py-[2px] rounded-sm ${info.bgColor}`}>
       <div className={`w-2 h-2 rounded-full ${info.color}`}></div>
-      <p className="typo-body-3">{info.name}</p>
+      <p className="typo-body-2 text-base-deep">{info.name}</p>
     </div>
   );
 }
@@ -23,9 +23,9 @@ export function ClubCategoryLabel({ division }: ClubCategoryProps) {
   if (!info) return null;
 
   return (
-    <div className="flex items-center space-x-1">
-      <div className={`w-2 h-2 rounded-full ${info.color}`}></div>
-      <p className="typo-body-2">{info.name}</p>
+    <div className={`flex items-center space-x-[3px] px-1 py-[1px] rounded-sm ${info.bgColor}`}>
+      <div className={`w-1.5 h-1.5 rounded-full ${info.color}`}></div>
+      <p className="typo-caption text-base-deep">{info.shortName}</p>
     </div>
   );
 }
@@ -37,13 +37,13 @@ export function ClubCategoryChip({ division, active }: ClubCategoryProps) {
   return (
     <div
       className={`
-        h-8 px-2.5 border rounded-full flex items-center shrink-0 border-black/10 cursor-pointer
+        h-8 px-2.5 border rounded-full flex items-center shrink-0 border-gray-200 cursor-pointer
         ${active ? `${info.color} text-white` : 'bg-white'}
       `}
     >
       <div className="flex items-center space-x-1">
         <div className={`w-2 h-2 rounded-full ${active ? 'bg-white' : info.color}`}></div>
-        <p className="typo-body-2">{info.shortName}</p>
+        <p className="typo-body-2 text-base-deep">{info.shortName}</p>
       </div>
     </div>
   );

@@ -194,10 +194,6 @@ function TimeTablePreviewCard({
           {groupedItems.length > 0 ? (
             groupedItems.map((group) => (
               <div key={group.session} className="space-y-2">
-                <p className="ml-1 typo-caption font-semibold text-text-muted">
-                  {group.sessionLabel}
-                </p>
-
                 {group.items.map((item) => {
                   const color = SESSION_COLOR_MAP[item.session];
                   const rowClassName = `interactive-transition grid grid-cols-[90px_1fr] rounded-2xl px-5 py-4 ${color.bg} ${color.hoverBg}`;

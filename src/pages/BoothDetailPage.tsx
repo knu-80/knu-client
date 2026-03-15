@@ -23,6 +23,9 @@ export default function BoothDetailPage() {
   const { booth, loading, refetch } = useBooth(boothId);
   const displayLikeCount = (booth?.likeCount ?? 0) + likeDelta;
 
+  const isSpecialDivision =
+    booth?.division === 'MANAGEMENT' || booth?.division === 'EXTERNAL_SUPPORT';
+
   const handleStarClick = async () => {
     if (isPending) return;
 
@@ -76,16 +79,18 @@ export default function BoothDetailPage() {
           <ClubCategory division={booth.division} />
         </div>
         <div className="flex-1" />
-        <button
-          onClick={handleStarClick}
-          disabled={isPending}
-          className="flex cursor-pointer items-center justify-center rounded-full gap-[2px] bg-white transition-all hover:brightness-95 active:scale-[0.98]"
-        >
-          <PiShootingStarFill size={28} className="text-secondary-yellow" />
-          <span className="typo-body-1 text-secondary-yellow font-medium">
-            {formatLikeCount(displayLikeCount)}
-          </span>
-        </button>
+        {!isSpecialDivision && (
+          <button
+            onClick={handleStarClick}
+            disabled={isPending}
+            className="flex cursor-pointer items-center justify-center rounded-full gap-[2px] bg-white transition-all hover:brightness-95 active:scale-[0.98]"
+          >
+            <PiShootingStarFill size={28} className="text-secondary-yellow" />
+            <span className="typo-body-1 text-secondary-yellow font-medium">
+              {formatLikeCount(displayLikeCount)}
+            </span>
+          </button>
+        )}
       </div>
 
       <ExpandableText text={booth.description || '동아리 소개 정보가 없습니다.'} />

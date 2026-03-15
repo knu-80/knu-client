@@ -46,7 +46,7 @@ export default function RankingLayout() {
           <Outlet />
         </main>
 
-        <div className="relative z-10 pb-[calc(68px+env(safe-area-inset-bottom))]">
+        <div className="relative z-10 pb-[calc(60px+env(safe-area-inset-bottom))]">
           <Footer />
         </div>
 

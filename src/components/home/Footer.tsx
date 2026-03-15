@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FiX, FiGithub, FiInstagram, FiExternalLink } from 'react-icons/fi';
+import { IoChatbubblesOutline } from 'react-icons/io5';
 
 export default function Footer() {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
@@ -28,13 +29,13 @@ export default function Footer() {
         </a>
 
         <a
-          href="https://dongari.knu.ac.kr/"
+          href="https://open.kakao.com/o/gGAROzli"
           target="_blank"
           rel="noreferrer"
           className="flex items-center justify-center rounded-full transition border border-gray-400 gap-1 px-2 py-1 text-body-3 hover:bg-gray-100 bg-white"
         >
-          <FiExternalLink className="h-4 w-4" strokeWidth={1} />
-          방문하기
+          <IoChatbubblesOutline className="h-4 w-4" strokeWidth={1} />
+          문의하기
         </a>
       </div>
       <div className="flex flex-wrap items-center justify-center gap-1 font-regular text-body-3 text-gray-400">

@@ -13,7 +13,7 @@ export default function EventPage() {
 
   return (
     <div className="flex flex-col flex-1 pt-5 sm:p-5">
-      <div className="flex items-center h-14 mb-4">
+      <div className="flex items-center h-14">
         {' '}
         <img
           src={EventSvg}

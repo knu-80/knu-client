@@ -37,3 +37,16 @@ export const formatDateTime = (dateTimeStr: string) => {
 
   return `${year}년 ${month}월 ${day}일 ${hours}시 ${minutes}분`;
 };
+
+export function toMonthDayDot(value: string): string {
+  const datePart = getDatePart(value);
+  if (!datePart) return '00.00';
+
+  const parts = datePart.split('-');
+  if (parts.length < 3) return '00.00';
+
+  const month = parts[1];
+  const day = parts[2];
+
+  return `${month}.${day}`;
+}

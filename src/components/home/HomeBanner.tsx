@@ -1,11 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  type CSSProperties,
-  type TouchEvent,
-} from 'react';
+import { useEffect, useState, useCallback, type CSSProperties } from 'react';
 
 import banner1 from '@/assets/banner1.webp';
 import banner2 from '@/assets/banner2.webp';
@@ -19,7 +12,6 @@ type BannerSlide = {
 };
 
 const AUTO_SLIDE_MS = 3000;
-const SWIPE_THRESHOLD_PX = 40;
 
 const BANNER_SLIDES: BannerSlide[] = [
   {
@@ -50,17 +42,10 @@ export default function HomeBanner() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isLoaded, setIsLoaded] = useState<Record<number, boolean>>({});
-  const touchStartXRef = useRef<number | null>(null);
-  const isSwiping = useRef(false);
 
   const moveToNext = useCallback(() => {
     setIsTransitioning(true);
     setCurrentIndex((prev) => prev + 1);
-  }, []);
-
-  const moveToPrev = useCallback(() => {
-    setIsTransitioning(true);
-    setCurrentIndex((prev) => prev - 1);
   }, []);
 
   useEffect(() => {
@@ -83,28 +68,6 @@ export default function HomeBanner() {
     }
   };
 
-  const handleTouchStart = (e: TouchEvent) => {
-    touchStartXRef.current = e.touches[0].clientX;
-    isSwiping.current = true;
-  };
-
-  const handleTouchEnd = (e: TouchEvent) => {
-    if (!isSwiping.current || touchStartXRef.current === null) return;
-
-    const touchEndX = e.changedTouches[0].clientX;
-    const deltaX = touchStartXRef.current - touchEndX;
-
-    if (Math.abs(deltaX) > SWIPE_THRESHOLD_PX) {
-      if (deltaX > 0) {
-        moveToNext();
-      } else {
-        moveToPrev();
-      }
-    }
-
-    isSwiping.current = false;
-  };
-
   const trackStyle: CSSProperties = {
     '--banner-card-width': 'calc(100% - 56px)',
     '--banner-side-offset': 'calc((100% - var(--banner-card-width)) / 2)',
@@ -115,11 +78,7 @@ export default function HomeBanner() {
   return (
     <section className="-mx-5 relative overflow-hidden select-none [--banner-gap:12px] md:[--banner-gap:28px]">
       <div className="relative py-6">
-        <div
-          className="overflow-visible touch-pan-y"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
+        <div className="overflow-visible pointer-events-none">
           <div
             className="flex gap-[var(--banner-gap)]"
             style={trackStyle}

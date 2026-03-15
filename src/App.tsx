@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
+import { usePostHog } from '@posthog/react';
 
 import MainLayout from '@/components/layouts/MainLayout';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import DetailLayout from '@/components/layouts/DetailLayout';
-import SearchLayout from './components/layouts/SearchLayout';
+import SearchLayout from '@/components/layouts/SearchLayout';
 import MapLayout from '@/components/layouts/MapLayout';
 import HomePage from '@/pages/HomePage';
 import NoticePage from '@/pages/NoticePage';
@@ -27,6 +28,8 @@ import AdminSessionGuard from '@/components/guards/AdminSessionGuard';
 import { setUnauthorizedHandler } from '@/apis';
 import { useAdminSessionStore } from '@/stores/adminSessionStore';
 import SplashScreen from '@/components/home/SplashScreen';
+import RankingPage from '@/pages/RankingPage';
+import RankingLayout from './components/layouts/RankingLayout';
 
 const SPLASH_DURATION_MS = 1500;
 const isAdminRoutePath = (pathname: string) =>
@@ -36,8 +39,15 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const posthog = usePostHog();
   const bootstrapSession = useAdminSessionStore((state) => state.bootstrapSession);
   const setUnauthenticated = useAdminSessionStore((state) => state.setUnauthenticated);
+
+  useEffect(() => {
+    if (posthog) {
+      posthog.capture('$pageview');
+    }
+  }, [location, posthog]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -83,6 +93,9 @@ export default function App() {
           <Route index element={<HomePage />} />
           <Route path="notice" element={<NoticePage />} />
           <Route path="event" element={<EventPage />} />
+        </Route>
+        <Route element={<RankingLayout />}>
+          <Route path="/ranking" element={<RankingPage />} />
         </Route>
         <Route element={<MapLayout />}>
           <Route path="/map" element={<MapPage />} />

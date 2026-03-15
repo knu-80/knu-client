@@ -2,7 +2,6 @@ import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import RepresentativeImage from './RepresentativeImage';
 import { Badge } from './Badge';
 import { formatDateTime } from '@/lib/date';
-import { PiMapPinAreaFill } from 'react-icons/pi';
 
 export interface EventCardProps {
   title: string;
@@ -63,19 +62,17 @@ export default function EventCard({
         )}
       </div>
 
-      <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-2 p-4">
         <div className="flex flex-col gap-[2px]">
-          <div className="flex justify-between">
-            <h3 className="text-body-1 font-medium text-base-deep">{title}</h3>
-            <div className="flex items-center gap-[2px] typo-body-2 text-base-deep font-medium">
-              <PiMapPinAreaFill className="h-4 w-4 shrink-0" />
-              <span>{location}</span>
-            </div>
-          </div>
+          <h3 className="text-body-1 font-medium text-base-deep">{title}</h3>
           <p className="typo-body-2 text-gray-500 line-clamp-4">{description}</p>
         </div>
 
         <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <Badge className="bg-secondary-purple/10 text-secondary-purple">장소</Badge>
+            <span className="typo-body-2 text-base-deep">{location}</span>
+          </div>
           <div className="flex items-center gap-2">
             <Badge className="bg-secondary-green/10 text-secondary-green">시작</Badge>
             <span className="typo-body-2 text-base-deep">{formatDateTime(startAt)}</span>

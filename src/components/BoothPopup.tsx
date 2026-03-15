@@ -5,6 +5,7 @@ import { ClubCategoryLabel } from './ClubCategory';
 import type { BoothSummary } from '@/apis/modules/boothApi';
 import { useAdminSessionStore } from '@/stores/adminSessionStore';
 import AdminActionButton from './AdminActionButton';
+import { ImageWithFallback } from './Skeleton';
 
 interface BoothPopupProps {
   booths: BoothSummary[];
@@ -24,7 +25,6 @@ export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }:
   const isAdmin = profile?.role === 'ADMIN';
 
   const thumbnail = booth.imageUrls[0];
-  const hasImage = thumbnail && thumbnail.trim() !== '';
 
   const handlePopupClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -44,20 +44,11 @@ export const BoothPopup = memo(function BoothPopup({ booths, boothId, onClose }:
         onClick={handlePopupClick}
         className="absolute bottom-22 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-40px)] min-h-[120px] bg-white rounded-[8px] p-4 shadow-xl flex gap-4 items-center cursor-pointer"
       >
-        {hasImage ? (
-          <img
-            src={thumbnail}
-            alt={booth.name}
-            loading="lazy"
-            decoding="async"
-            sizes="88px"
-            className="w-[88px] h-[88px] object-cover rounded-[4px] shrink-0"
-          />
-        ) : (
-          <div className="w-[88px] h-[88px] bg-gray-200 rounded-[4px] relative overflow-hidden shrink-0">
-            <div className="absolute inset-0 animate-shimmer bg-gradient-to-r via-white/40" />
-          </div>
-        )}
+        <ImageWithFallback
+          src={thumbnail}
+          alt={booth.name}
+          className="w-[88px] h-[88px] object-cover rounded-[4px] shrink-0 border border-gray-100"
+        />
 
         <div className="flex flex-col flex-1 h-[88px] justify-between overflow-hidden relative">
           <div className="flex flex-col gap-1 overflow-hidden">

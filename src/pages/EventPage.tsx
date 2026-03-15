@@ -12,13 +12,14 @@ export default function EventPage() {
   );
 
   return (
-    <div className="pt-5 sm:p-5">
+    <div className="flex flex-col flex-1 pt-5 sm:p-5">
       <div className="flex items-center h-14">
+        {' '}
         <img
           src={EventSvg}
           alt="이벤트"
           draggable={false}
-          className="ml-1 mt-2 w-18 h-16 pointer-events-none select-none"
+          className="ml-1 mt-1 w-18 h-16 pointer-events-none select-none"
         />
         <span className="ml-2 mt-2 typo-heading-3 font-semibold text-base-deep">
           이벤트에 참여해보세요
@@ -31,11 +32,11 @@ export default function EventPage() {
         </div>
       ) : error ? (
         <div className="flex items-center justify-center rounded-2xl w-full min-h-80 border border-gray-200 bg-white">
-          <StatusDisplay variant="error" title="이벤트를 불러오지 못했어요" onAction={refetch} />
+          <StatusDisplay variant="error" title="인터넷 연결을 확인해주세요" onAction={refetch} />
         </div>
       ) : sortedEvents.length > 0 ? (
-        sortedEvents.map((event) => (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {sortedEvents.map((event) => (
             <EventCard
               key={event.id}
               title={event.title}
@@ -45,8 +46,8 @@ export default function EventPage() {
               location={event.location}
               imageUrl={event.imageUrl}
             />
-          </div>
-        ))
+          ))}
+        </div>
       ) : (
         <div className="flex flex-1 items-center justify-center rounded-2xl shadow-sm w-full min-h-45 border border-gray-200 bg-white ">
           <StatusDisplay variant="event" title="아직 예정된 이벤트가 없어요" />

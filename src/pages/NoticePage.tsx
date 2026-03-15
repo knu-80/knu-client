@@ -36,7 +36,7 @@ export default function NoticePage() {
   }, [selectedCategories, notices]);
 
   return (
-    <div className="flex flex-col gap-5 pt-5">
+    <div className="flex flex-col flex-1 gap-5 pt-5 sm:p-5">
       <div>
         <div className="flex items-center h-14 gap-2">
           <img

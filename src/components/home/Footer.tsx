@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiX, FiGithub, FiInstagram, FiExternalLink } from 'react-icons/fi';
+import { FiX, FiGithub, FiInstagram } from 'react-icons/fi';
 import { IoChatbubblesOutline } from 'react-icons/io5';
 
 export default function Footer() {

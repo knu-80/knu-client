@@ -2,7 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiChevronRight, FiAlertCircle, FiChevronDown } from 'react-icons/fi';
 import MapSvg from '@/assets/map.svg';
-import { getNotices, toNoticeLabel, type NoticeListItem } from '@/apis';
+import {
+  getPerformancePreviewByDay,
+  getPerformanceTimelineByDay,
+  getRecentNotices,
+  toNoticeLabel,
+  type NoticeListItem,
+} from '@/apis';
 import {
   PERFORMANCE_PREVIEW_BY_DAY,
   PERFORMANCE_TIMELINE_BY_DAY,
@@ -11,7 +17,7 @@ import {
   SESSION_COLOR_MAP,
 } from '@/constants/performanceTimetable';
 import { SelectableButton } from '../SelectableButton';
-import { useBooths } from '@/hooks/useBooths';
+import { useBoothCount } from '@/hooks/useBoothCount';
 import { toMonthDayDot } from '@/lib/date';
 import { NOTICE_CATEGORY_COLOR_MAP } from '@/constants/notice';
 import { Badge } from '../Badge';
@@ -25,6 +31,7 @@ type DayOption = {
 
 type DayContent = {
   timetablePreview: PerformanceTimelineItem[];
+  timetableTimeline: PerformanceTimelineItem[];
   noticePreview: {
     noticeId?: number;
     category: '공지' | '분실물';
@@ -41,6 +48,7 @@ const DAY_OPTIONS: DayOption[] = [
 const DAY_CONTENT: Record<DayKey, DayContent> = {
   day1: {
     timetablePreview: PERFORMANCE_PREVIEW_BY_DAY.day1,
+    timetableTimeline: PERFORMANCE_TIMELINE_BY_DAY.day1,
     noticePreview: [
       {
         noticeId: undefined,
@@ -64,6 +72,7 @@ const DAY_CONTENT: Record<DayKey, DayContent> = {
   },
   day2: {
     timetablePreview: PERFORMANCE_PREVIEW_BY_DAY.day2,
+    timetableTimeline: PERFORMANCE_TIMELINE_BY_DAY.day2,
     noticePreview: [
       {
         noticeId: undefined,
@@ -128,17 +137,18 @@ function SectionHeader({ title, text, description, to }: SectionHeaderProps) {
 }
 
 function TimeTablePreviewCard({
+  previewItems,
   totalCount,
   items,
   previewCount = 4,
 }: {
-  dayLabel: string;
+  previewItems: DayContent['timetablePreview'];
   items: DayContent['timetablePreview'];
   totalCount: number;
   previewCount: number;
 }) {
   const [showAll, setShowAll] = useState(false);
-  const displayItems = showAll ? items : items.slice(0, previewCount);
+  const displayItems = showAll ? items : previewItems.slice(0, previewCount);
 
   return (
     <>
@@ -201,13 +211,7 @@ function TimeTablePreviewCard({
   );
 }
 
-function NoticePreviewCard({
-  items,
-}: {
-  dayLabel: string;
-  items: DayContent['noticePreview'];
-  isLoading: boolean;
-}) {
+function NoticePreviewCard({ items }: { items: DayContent['noticePreview'] }) {
   return (
     <>
       <div className="rounded-2xl shadow-sm bg-white p-4 select-none">
@@ -224,7 +228,7 @@ function NoticePreviewCard({
                   key={`${item.date}-${item.category}-${item.title}`}
                   to={item.noticeId ? `/notice/${item.noticeId}` : '/notice'}
                   aria-label={`${item.title} 상세 공지로 이동`}
-                  className={`interactive-transition flex items-center justify-between gap-3 rounded-2xl px-5 py-4 ${color.bg} ${color.hoverBg} hover:border-knu-gold/60`}
+                  className={`interactive-transition flex items-center justify-between rounded-2xl px-5 ${color.bg} ${color.hoverBg} hover:border-knu-gold/60`}
                 >
                   <div
                     className={`interactive-transition grid grid-cols-[50px_1fr] rounded-2xl py-4}`}
@@ -258,7 +262,7 @@ function NoticePreviewCard({
 }
 
 function MapPreviewCard() {
-  const { booths } = useBooths();
+  const { count, isLoading } = useBoothCount();
 
   return (
     <Link
@@ -286,7 +290,13 @@ function MapPreviewCard() {
 
       <div className="flex items-start justify-between gap-3 px-4 py-4 select-none">
         <div className="min-w-0">
-          <p className="typo-body-1 font-medium text-base-deep">총 {booths.length}개의 동아리</p>
+          <p className="typo-body-1 font-medium text-base-deep">
+            {isLoading
+              ? '부스 수 집계 중'
+              : typeof count === 'number'
+                ? `총 ${count}개의 동아리`
+                : '전체 동아리를 지도에서 확인해보세요'}
+          </p>
           <p className="mt-1 typo-body-2 text-gray-500">지도와 검색으로 쉽게 확인할 수 있어요</p>
         </div>
       </div>
@@ -297,41 +307,59 @@ function MapPreviewCard() {
 export default function HomeTab() {
   const [activeDay, setActiveDay] = useState<DayKey>('day1');
   const [contentByDay, setContentByDay] = useState<Record<DayKey, DayContent>>(DAY_CONTENT);
-  const [noticeLoadingByDay, setNoticeLoadingByDay] = useState<Record<DayKey, boolean>>({
-    day1: false,
-    day2: false,
-  });
 
   const activeContent = useMemo(() => contentByDay[activeDay], [activeDay, contentByDay]);
 
   useEffect(() => {
     let isMounted = true;
-    const fetchNoticePreview = async () => {
-      setNoticeLoadingByDay((prev) => ({ ...prev, [activeDay]: true }));
+    const fetchTimelineByDay = async () => {
       try {
-        const notices = await getNotices();
+        const [timetablePreview, timetableTimeline] = await Promise.all([
+          getPerformancePreviewByDay(activeDay),
+          getPerformanceTimelineByDay(activeDay),
+        ]);
         if (!isMounted) return;
-
-        const noticePreview = mapNoticesToPreview(notices);
         setContentByDay((prev) => ({
           ...prev,
           [activeDay]: {
-            timetablePreview: PERFORMANCE_PREVIEW_BY_DAY[activeDay],
-            noticePreview:
-              noticePreview.length > 0 ? noticePreview : DAY_CONTENT[activeDay].noticePreview,
+            ...prev[activeDay],
+            timetablePreview,
+            timetableTimeline,
           },
         }));
       } catch {
         if (!isMounted) return;
-      } finally {
-        if (isMounted) setNoticeLoadingByDay((prev) => ({ ...prev, [activeDay]: false }));
+      }
+    };
+    void fetchTimelineByDay();
+    return () => {
+      isMounted = false;
+    };
+  }, [activeDay]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchNoticePreview = async () => {
+      try {
+        const notices = await getRecentNotices();
+        if (!isMounted) return;
+
+        const noticePreview = mapNoticesToPreview(notices);
+        const nextPreview =
+          noticePreview.length > 0 ? noticePreview : DAY_CONTENT.day1.noticePreview;
+        setContentByDay((prev) => ({
+          day1: { ...prev.day1, noticePreview: nextPreview },
+          day2: { ...prev.day2, noticePreview: nextPreview },
+        }));
+      } catch {
+        if (!isMounted) return;
       }
     };
     void fetchNoticePreview();
     return () => {
       isMounted = false;
     };
-  }, [activeDay]);
+  }, []);
 
   return (
     <section aria-labelledby="home-day-toggle-title" className="rounded-t-[28px]">
@@ -369,20 +397,16 @@ export default function HomeTab() {
         <section aria-labelledby="home-timetable-title">
           <SectionHeader title="공연시간표" description="일청담 앞 중앙무대에서 만나요" />
           <TimeTablePreviewCard
-            dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
-            items={PERFORMANCE_TIMELINE_BY_DAY[activeDay]}
-            totalCount={PERFORMANCE_TIMELINE_BY_DAY[activeDay].length}
+            previewItems={activeContent.timetablePreview}
+            items={activeContent.timetableTimeline}
+            totalCount={activeContent.timetableTimeline.length}
             previewCount={4}
           />
         </section>
 
         <section aria-labelledby="home-notice-title">
           <SectionHeader title="공지사항" text="더보기" to="/notice" />
-          <NoticePreviewCard
-            dayLabel={activeDay === 'day1' ? 'DAY 1' : 'DAY 2'}
-            items={activeContent.noticePreview}
-            isLoading={noticeLoadingByDay[activeDay]}
-          />
+          <NoticePreviewCard items={activeContent.noticePreview} />
         </section>
 
         <section aria-labelledby="home-map-preview-title">

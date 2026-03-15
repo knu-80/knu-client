@@ -6,7 +6,7 @@ import { useNotices } from '@/hooks/useNotices';
 import MegaPhoneSvg from '@/assets/megaphone.svg';
 import { SelectableButton } from '@/components/SelectableButton';
 import { NOTICE_CATEGORY_COLOR_MAP, NOTICE_BUTTON_COLOR_MAP } from '@/constants/notice';
-import { toDotDate } from '@/lib/date';
+import { toMonthDayDot } from '@/lib/date';
 import { Badge } from '@/components/Badge';
 import { StatusDisplay } from '@/components/StatusDisplay';
 import { PiSpinnerGapThin } from 'react-icons/pi';
@@ -105,7 +105,7 @@ export default function NoticePage() {
               >
                 <div className="grid grid-cols-[100px_1fr_20px] items-center gap-3">
                   <p className={`typo-body-2 font-semibold ${color.text}`}>
-                    {toDotDate(notice.createdAt)}
+                    {toMonthDayDot(notice.createdAt)}
                   </p>
 
                   <div className="flex items-center gap-[8px] min-w-0">

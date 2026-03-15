@@ -30,6 +30,7 @@ export {
   createNotice,
   deleteNotice,
   getNotices,
+  getRecentNotices,
   getNotice,
   updateNotice,
   type LostFoundDetail,
@@ -50,9 +51,14 @@ export {
   type EventUpdateInput,
 } from '@/apis/modules/eventApi';
 export {
+  getPerformancePreviewByDay,
+  getPerformanceTimelineByDay,
+} from '@/apis/modules/performanceApi';
+export {
   createBooth,
   deleteBooth,
   getBooths,
+  getBoothCount,
   getBooth,
   updateBooth,
   type BoothDivision,

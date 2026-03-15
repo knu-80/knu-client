@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 import ImageCarousel from '@/components/ImageCarousel';
 import ApplyButton from '@/components/ApplyButton';
 import { ClubCategory } from '@/components/ClubCategory';
@@ -6,10 +7,19 @@ import { useBooth } from '@/hooks/useBooth';
 import { ExpandableText } from '@/components/ExpandableText';
 import { StatusDisplay } from '@/components/StatusDisplay';
 import { PiSpinnerGapThin } from 'react-icons/pi';
+import { StarBurstOverlay } from '@/components/StarBurstOverlay';
+import { PiShootingStarFill } from 'react-icons/pi';
 
 export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
   const boothId = Number(id);
+  const [bursts, setBursts] = useState<{ id: number; x: number; y: number }[]>([]);
+
+  const handleStarClick = () => {
+    const newBurst = { id: Date.now(), x: Math.random() * 100 - 50, y: Math.random() * -150 - 50 };
+    setBursts((prev) => [...prev, newBurst]);
+    setTimeout(() => setBursts((p) => p.filter((b) => b.id !== newBurst.id)), 1000);
+  };
 
   const { booth, loading, refetch } = useBooth(boothId);
 
@@ -31,9 +41,20 @@ export default function BoothDetailPage() {
 
   return (
     <div className="pt-5">
-      <div className="flex items-center space-x-[10px] mb-1 text-base-deep">
-        <h2 className="typo-heading-3">{booth.name}</h2>
-        <ClubCategory division={booth.division} />
+      <StarBurstOverlay bursts={bursts} />
+      <div className="flex items-center mb-1 text-base-deep">
+        <div className="flex items-center space-x-[10px]">
+          <h2 className="typo-heading-3">{booth.name}</h2>
+          <ClubCategory division={booth.division} />
+        </div>
+        <div className="flex-1" />
+        <button
+          onClick={handleStarClick}
+          className="flex cursor-pointer items-center justify-center rounded-full gap-[2px] bg-white transition-all hover:brightness-95 active:scale-[0.98]"
+        >
+          <PiShootingStarFill size={28} className="text-secondary-yellow" />
+          <span className="typo-body-3 text-base-deep font-">숫자</span>
+        </button>
       </div>
 
       <ExpandableText text={booth.description || '동아리 소개 정보가 없습니다.'} />

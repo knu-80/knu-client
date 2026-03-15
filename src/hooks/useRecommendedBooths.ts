@@ -1,29 +1,33 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { type BoothSummary, type BoothDivision } from '@/apis';
 
 const EXCLUDED_DIVISIONS: BoothDivision[] = ['MANAGEMENT', 'EXTERNAL_SUPPORT'];
 
+function pickRandomBooths(booths: BoothSummary[], count: number) {
+  if (booths.length <= count) {
+    return booths;
+  }
+
+  return [...booths].sort(() => Math.random() - 0.5).slice(0, count);
+}
+
 export function useRecommendedBooths(booths: BoothSummary[], count = 5, onlyActive = true) {
-  const [recommended] = useState<BoothSummary[]>(() => {
+  return useMemo(() => {
     if (booths.length === 0) return [];
     const candidates = onlyActive ? booths.filter((b) => b.isActive) : booths;
-    const shuffled = [...candidates].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, count);
-  });
-
-  return recommended;
+    return pickRandomBooths(candidates, count);
+  }, [booths, count, onlyActive]);
 }
 
 export function useRecommendedClubBooths(booths: BoothSummary[], count = 5, onlyActive = true) {
-  if (booths.length === 0) return [];
+  return useMemo(() => {
+    if (booths.length === 0) return [];
 
-  let candidates = booths.filter((b) => !EXCLUDED_DIVISIONS.includes(b.division));
+    let candidates = booths.filter((b) => !EXCLUDED_DIVISIONS.includes(b.division));
+    if (onlyActive) {
+      candidates = candidates.filter((b) => b.isActive);
+    }
 
-  if (onlyActive) {
-    candidates = candidates.filter((b) => b.isActive);
-  }
-
-  const shuffled = [...candidates].sort(() => Math.random() - 0.5);
-
-  return shuffled.slice(0, count);
+    return pickRandomBooths(candidates, count);
+  }, [booths, count, onlyActive]);
 }

@@ -112,8 +112,7 @@ export default function BoothDetailPage() {
           </p>
         </div>
       </div>
-
-      {booth.applyLink && <ApplyButton url={booth.applyLink} />}
+      {booth.applyLink && !isSpecialDivision && <ApplyButton url={booth.applyLink} />}
     </div>
   );
 }

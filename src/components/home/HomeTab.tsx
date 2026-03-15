@@ -18,7 +18,7 @@ import {
 } from '@/constants/performanceTimetable';
 import { SelectableButton } from '../SelectableButton';
 import { useBoothCount } from '@/hooks/useBoothCount';
-import { toDotDate } from '@/lib/date';
+import { toMonthDayDot } from '@/lib/date';
 import { NOTICE_CATEGORY_COLOR_MAP } from '@/constants/notice';
 import { Badge } from '../Badge';
 
@@ -101,7 +101,7 @@ function mapNoticesToPreview(items: NoticeListItem[]): DayContent['noticePreview
     noticeId: item.noticeId,
     category: toNoticeLabel(item.type),
     title: item.title,
-    date: toDotDate(item.createdAt),
+    date: toMonthDayDot(item.createdAt),
   }));
 }
 

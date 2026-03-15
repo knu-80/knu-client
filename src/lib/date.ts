@@ -9,6 +9,17 @@ export function toDotDate(value: string): string {
   return datePart.replace(/-/g, '.');
 }
 
+export function toMonthDayDot(value: string): string {
+  const dotDate = toDotDate(value);
+  const [year, month, day] = dotDate.split('.');
+
+  if (!year || !month || !day) {
+    return dotDate;
+  }
+
+  return `${month}.${day}`;
+}
+
 export const formatDateTime = (dateTimeStr: string) => {
   if (!dateTimeStr) return '미지정';
 

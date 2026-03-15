@@ -149,6 +149,29 @@ function TimeTablePreviewCard({
 }) {
   const [showAll, setShowAll] = useState(false);
   const displayItems = showAll ? items : previewItems.slice(0, previewCount);
+  const groupedItems = useMemo(() => {
+    const map = new Map<
+      number,
+      {
+        sessionLabel: string;
+        items: PerformanceTimelineItem[];
+      }
+    >();
+
+    displayItems.forEach((item) => {
+      const current = map.get(item.session);
+      if (!current) {
+        map.set(item.session, { sessionLabel: item.sessionLabel, items: [item] });
+        return;
+      }
+      current.items.push(item);
+    });
+
+    return Array.from(map.entries()).map(([session, value]) => ({
+      session,
+      ...value,
+    }));
+  }, [displayItems]);
 
   return (
     <>
@@ -167,22 +190,50 @@ function TimeTablePreviewCard({
             })}
           </div>
         </div>
-        <div className="space-y-2">
-          {displayItems.length > 0 ? (
-            displayItems.map((item) => {
-              const color = SESSION_COLOR_MAP[item.session];
-              return (
-                <div
-                  key={`${item.time}-${item.title}`}
-                  className={`interactive-transition grid grid-cols-[90px_1fr] rounded-2xl px-5 py-4 ${color.bg} ${color.hoverBg}`}
-                >
-                  <p className={`typo-body-2 font-semibold ${color.text}`}>{item.time}</p>
-                  <div className="min-w-0">
-                    <p className="truncate typo-body-2 font-medium text-base-deep">{item.title}</p>
-                  </div>
-                </div>
-              );
-            })
+        <div className="space-y-3">
+          {groupedItems.length > 0 ? (
+            groupedItems.map((group) => (
+              <div key={group.session} className="space-y-2">
+                {group.items.map((item) => {
+                  const color = SESSION_COLOR_MAP[item.session];
+                  const rowClassName = `interactive-transition grid grid-cols-[90px_1fr] rounded-2xl px-5 py-4 ${color.bg} ${color.hoverBg}`;
+
+                  const rowContent = (
+                    <>
+                      <p className={`typo-body-2 font-semibold ${color.text}`}>{item.time}</p>
+                      <div className="min-w-0">
+                        <p className="truncate typo-body-2 font-medium text-base-deep">
+                          {item.title}
+                        </p>
+                      </div>
+                    </>
+                  );
+
+                  if (item.boothId) {
+                    return (
+                      <Link
+                        key={`${item.session}-${item.time}-${item.boothId}`}
+                        to="/map"
+                        state={{ selectedBoothId: item.boothId }}
+                        className={rowClassName}
+                        aria-label={`${item.title} 부스 위치로 이동`}
+                      >
+                        {rowContent}
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <div
+                      key={`${item.session}-${item.time}-${item.title}`}
+                      className={rowClassName}
+                    >
+                      {rowContent}
+                    </div>
+                  );
+                })}
+              </div>
+            ))
           ) : (
             <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
               등록된 타임테이블이 없습니다.
@@ -205,7 +256,7 @@ function TimeTablePreviewCard({
       </div>
       <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none">
         <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
-        현장 상황에 따라 공연 시간이 일부 변경될 수 있어요
+        공연 카드를 누르면 해당 동아리의 지도 위치로 이동할 수 있어요
       </p>
     </>
   );
@@ -247,7 +298,7 @@ function NoticePreviewCard({ items }: { items: DayContent['noticePreview'] }) {
               );
             })
           ) : (
-            <div className="rounded-2xl bg-white px-3 py-3 text-sm text-text-muted">
+            <div className="rounded-2xl bg-white/85 px-3 py-3 text-sm text-text-muted">
               등록된 공지가 없습니다.
             </div>
           )}
@@ -397,7 +448,11 @@ export default function HomeTab() {
         <section aria-labelledby="home-timetable-title">
           <SectionHeader title="공연시간표" description="일청담 앞 중앙무대에서 만나요" />
           <TimeTablePreviewCard
-            previewItems={activeContent.timetablePreview}
+            previewItems={
+              activeDay === 'day2'
+                ? activeContent.timetableTimeline
+                : activeContent.timetablePreview
+            }
             items={activeContent.timetableTimeline}
             totalCount={activeContent.timetableTimeline.length}
             previewCount={4}

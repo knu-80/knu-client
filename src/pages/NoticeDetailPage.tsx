@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ImageCarousel from '@/components/ImageCarousel';
 import FoundItemCard from '@/components/FoundItemCard';
@@ -13,6 +14,10 @@ export default function NoticeDetailPage() {
   const { id } = useParams<{ id: string }>();
   const noticeId = id ? Number(id) : null;
   const { notice, isLoading, error } = useNoticeDetail(noticeId);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [noticeId]);
 
   if (isLoading) {
     return (

@@ -11,6 +11,7 @@ export const ENDPOINTS = {
   noticeById: (noticeId: number | string) => `${PUBLIC_API_PREFIX}/notices/${noticeId}`,
   eventsByType: (eventType: EventType) => `${PUBLIC_API_PREFIX}/events/list/${eventType}`,
   eventById: (eventId: number | string) => `${PUBLIC_API_PREFIX}/events/${eventId}`,
+  performances: `${PUBLIC_API_PREFIX}/performances`,
   booths: `${PUBLIC_API_PREFIX}/booths/list`,
   boothCount: `${PUBLIC_API_PREFIX}/booths/count`,
   boothById: (boothId: number | string) => `${PUBLIC_API_PREFIX}/booths/${boothId}`,

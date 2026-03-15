@@ -30,6 +30,7 @@ import { useAdminSessionStore } from '@/stores/adminSessionStore';
 import SplashScreen from '@/components/home/SplashScreen';
 import RankingPage from '@/pages/RankingPage';
 import RankingLayout from './components/layouts/RankingLayout';
+import GoogleAnalytics from '@/utils/GoogleAnalytics';
 
 const SPLASH_DURATION_MS = 1500;
 const isAdminRoutePath = (pathname: string) =>
@@ -88,6 +89,7 @@ export default function App() {
 
   return (
     <>
+      <GoogleAnalytics />
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />

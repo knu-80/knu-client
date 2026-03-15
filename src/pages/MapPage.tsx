@@ -16,7 +16,10 @@ export default function MapPage() {
   const [value, setValue] = useState('');
   const [selectedBoothId, setSelectedBoothId] = useState<number | null>(() => {
     const externalId = location.state?.selectedBoothId;
-    return externalId ? Number(externalId) : null;
+    if (externalId) return Number(externalId);
+
+    const queryId = new URLSearchParams(location.search).get('selectedBoothId');
+    return queryId ? Number(queryId) : null;
   });
 
   const [selectedDivision, setSelectedDivision] = useState<BoothDivision | null>(null);

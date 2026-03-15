@@ -3,7 +3,7 @@ export const WORLD_HEIGHT = 3200;
 
 export const BUILDING_LABELS = [
   { name: '공대2A호관', x: 80, y: 440 },
-  { name: '공대2호관', x: 100, y: 840 },
+  { name: '공대2호관', x: 100, y: 940 },
   { name: '공대12호관', x: 164, y: 1560 },
   { name: 'IT대3호관', x: 120, y: 1850 },
   { name: 'IT대4호관', x: 120, y: 2016 },

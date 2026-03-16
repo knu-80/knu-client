@@ -44,6 +44,12 @@ export interface BoothRanking {
   likeCount: number;
 }
 
+export interface Booth3Ranking {
+  boothId: number;
+  boothName: string;
+  likeCount: number;
+}
+
 export interface BoothMutationInput {
   memberId: number;
   boothNumber: number;
@@ -161,6 +167,12 @@ export async function likeBooth(boothId: number): Promise<number> {
 
 export async function getBoothRanking(): Promise<BoothRanking[]> {
   const { data } = await http.get<ApiResponse<BoothRanking[]>>(ENDPOINTS.boothRanking);
+
+  return unwrapApiResponse(data);
+}
+
+export async function getBoothTop3(): Promise<Booth3Ranking[]> {
+  const { data } = await http.get<ApiResponse<Booth3Ranking[]>>(ENDPOINTS.boothTop3);
 
   return unwrapApiResponse(data);
 }

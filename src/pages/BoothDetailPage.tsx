@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useState } from 'react';
 import ImageCarousel from '@/components/ImageCarousel';
 import ApplyButton from '@/components/ApplyButton';
@@ -112,7 +112,20 @@ export default function BoothDetailPage() {
           </p>
         </div>
       </div>
-      {booth.applyLink && !isSpecialDivision && <ApplyButton url={booth.applyLink} />}
+      <div className="flex gap-3 mb-10">
+        <Link
+          to="/map"
+          state={{ selectedBoothId: booth.id }}
+          className="flex-1 flex items-center justify-center bg-gray-100 rounded-full text-base-deep py-3 mb-6 typo-body-1 cursor-pointer transition-all hover:scale-[1.01] hover:brightness-95 active:scale-[0.98]"
+        >
+          위치보기
+        </Link>
+        {!isSpecialDivision && booth.applyLink && (
+          <div className="flex-1">
+            <ApplyButton url={booth.applyLink} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

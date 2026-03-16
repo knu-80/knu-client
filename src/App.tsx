@@ -32,6 +32,9 @@ import RankingPage from '@/pages/RankingPage';
 import RankingLayout from './components/layouts/RankingLayout';
 import GoogleAnalytics from '@/utils/GoogleAnalytics';
 
+import MaintenancePage from '@/pages/MaintenancePage';
+import { isMaintenanceTime } from '@/lib/maintenance';
+
 const SPLASH_DURATION_MS = 1500;
 const isAdminRoutePath = (pathname: string) =>
   pathname === '/admin' || pathname.startsWith('/admin/');
@@ -43,6 +46,8 @@ export default function App() {
   const posthog = usePostHog();
   const bootstrapSession = useAdminSessionStore((state) => state.bootstrapSession);
   const setUnauthenticated = useAdminSessionStore((state) => state.setUnauthenticated);
+
+  const isMaintenance = isMaintenanceTime();
 
   useEffect(() => {
     if (posthog) {
@@ -82,6 +87,10 @@ export default function App() {
       setUnauthorizedHandler(null);
     };
   }, [location.hash, location.pathname, location.search, navigate, setUnauthenticated]);
+
+  if (isMaintenance) {
+    return <MaintenancePage />;
+  }
 
   if (isLoading) {
     return <SplashScreen />;

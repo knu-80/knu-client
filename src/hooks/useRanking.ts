@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { getBoothRanking, type BoothRanking } from '@/apis/modules/boothApi';
+import { getBoothRanking, type BoothRanking } from '@/apis';
 
 export function useRanking() {
   const [booths, setBooths] = useState<BoothRanking[]>([]);

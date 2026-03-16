@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiChevronRight, FiAlertCircle, FiChevronDown } from 'react-icons/fi';
 import MapSvg from '@/assets/map.svg';
 import {
@@ -17,10 +17,12 @@ import {
   SESSION_COLOR_MAP,
 } from '@/constants/performanceTimetable';
 import { SelectableButton } from '../SelectableButton';
+import { useBoothTop3 } from '@/hooks/useBoothTop3';
 import { useBoothCount } from '@/hooks/useBoothCount';
 import { toMonthDayDot } from '@/lib/date';
 import { NOTICE_CATEGORY_COLOR_MAP } from '@/constants/notice';
 import { Badge } from '../Badge';
+import { FaStar } from 'react-icons/fa';
 
 type DayOption = {
   key: DayKey;
@@ -73,6 +75,59 @@ type SectionHeaderProps = {
   description?: React.ReactNode;
   to?: string;
 };
+
+function TrendingBooths() {
+  const { data: ranking, status } = useBoothTop3();
+  const navigate = useNavigate();
+
+  const isFirstLoading = status === 'pending' && (!ranking || ranking.length === 0);
+
+  if (isFirstLoading) {
+    return (
+      <div className="flex gap-2 justify-center items-center h-[96px] px-1">
+        <div className="flex-1 w-[120px] h-[96px] bg-gray-100 animate-pulse rounded-xl" />
+        <div className="flex-1 w-[120px] h-[96px] bg-gray-100 animate-pulse rounded-xl" />
+        <div className="flex-1 w-[120px] h-[96px] bg-gray-100 animate-pulse rounded-xl" />
+      </div>
+    );
+  }
+
+  if (!ranking || ranking.length === 0) return null;
+
+  return (
+    <div className="flex flex-col">
+      <div className="flex items-center justify-center gap-2 px-1 relative z-20">
+        {ranking.slice(0, 3).map((booth, index) => {
+          const rank = index + 1;
+          return (
+            <button
+              key={booth.boothId}
+              onClick={() => navigate(`/booths/${booth.boothId}`)}
+              className={`relative flex flex-col w-[120px] py-3 items-center justify-center gap-1 rounded-xl bg-secondary-yellow/10 transition-all active:scale-95`}
+            >
+              <div className="flex items-center justify-center gap-1">
+                <span className={`typo-body-1 font-semibold text-base-deep `}>{rank}위</span>
+              </div>
+              <p className="text-center typo-body-2 font-medium line-clamp-2 text-base-deep flex items-center justify-center">
+                {booth.boothName}
+              </p>
+              <div className="flex items-center gap-0.5">
+                <FaStar className="text-secondary-yellow w-4 h-4" />
+                <span className="text-secondary-yellow typo-body-3 font-semibold">
+                  {booth.likeCount.toLocaleString()}
+                </span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none">
+        <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
+        카드를 눌러 동아리 정보를 확인할 수 있어요
+      </p>
+    </div>
+  );
+}
 
 function SectionHeader({ title, text, description, to }: SectionHeaderProps) {
   return (
@@ -218,7 +273,7 @@ function TimeTablePreviewCard({
       </div>
       <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none">
         <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
-        공연 카드를 누르면 해당 동아리의 지도 위치로 이동할 수 있어요
+        카드를 눌러 동아리 위치를 확인할 수 있어요
       </p>
     </>
   );
@@ -403,6 +458,10 @@ export default function HomeTab() {
         aria-labelledby={`home-day-tab-${activeDay}`}
         className="space-y-14 pt-10"
       >
+        <section aria-labelledby="home-timetable-title">
+          <SectionHeader title="지금 뜨는 동아리" description="투표로 동아리를 응원해보세요" />
+          <TrendingBooths />
+        </section>
         <section aria-labelledby="home-timetable-title">
           <SectionHeader title="공연시간표" description="일청담 앞 중앙무대에서 만나요" />
           <TimeTablePreviewCard

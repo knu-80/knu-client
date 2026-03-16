@@ -11,7 +11,7 @@ import type { BoothDivision } from '@/apis';
 export default function MapPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { booths } = useBooths();
+  const { data: booths = [] } = useBooths();
 
   const [value, setValue] = useState('');
   const [selectedBoothId, setSelectedBoothId] = useState<number | null>(() => {

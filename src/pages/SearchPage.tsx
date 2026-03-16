@@ -10,7 +10,7 @@ import { RECOMMENDATIONS } from '@/constants/booth';
 export default function SearchPage() {
   const navigate = useNavigate();
   const [, setSearchParams] = useSearchParams();
-  const { booths } = useBooths();
+  const { data: booths = [] } = useBooths();
   const recommendedBooths = useRecommendedBooths(booths, 5);
 
   const [value, setValue] = useState('');

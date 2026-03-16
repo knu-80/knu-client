@@ -6,6 +6,7 @@ import { PostHogProvider } from '@posthog/react';
 import './index.css';
 import App from './App.tsx';
 import * as Sentry from '@sentry/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const isProd = import.meta.env.MODE === 'production';
 
@@ -24,11 +25,15 @@ const root = createRoot(container!, {
   }),
 });
 
+const queryClient = new QueryClient();
+
 root.render(
   <StrictMode>
     <PostHogProvider apiKey={import.meta.env.VITE_PUBLIC_POSTHOG_KEY} options={posthogOptions}>
       <BrowserRouter>
-        <App />
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
       </BrowserRouter>
     </PostHogProvider>
   </StrictMode>,

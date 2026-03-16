@@ -60,12 +60,16 @@ export {
   getBooths,
   getBoothCount,
   getBooth,
+  getBoothTop3,
+  getBoothRanking,
   updateBooth,
   type BoothDivision,
   type BoothMutationInput,
   type BoothSummary,
   type BoothListParams,
   type BoothUpdateInput,
+  type BoothRanking,
+  type Booth3Ranking,
 } from '@/apis/modules/boothApi';
 export {
   getAdminProfile,

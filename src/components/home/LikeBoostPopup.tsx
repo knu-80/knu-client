@@ -1,26 +1,13 @@
 import { useEffect, useState } from 'react';
 import { FiX, FiClock, FiMapPin, FiStar } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-
-type LikeBoostStatus = 'upcoming' | 'active' | 'ended';
+import { getLikeBoostStatus, type LikeBoostStatus } from '@/constants/likeBoostEvent';
 
 type LikeBoostPopupProps = {
   isOpen: boolean;
   onClose: () => void;
   onHideToday: () => void;
 };
-
-function getLikeBoostStatus(now: Date): LikeBoostStatus {
-  const start = new Date(now);
-  start.setHours(13, 0, 0, 0);
-
-  const end = new Date(now);
-  end.setHours(15, 0, 0, 0);
-
-  if (now < start) return 'upcoming';
-  if (now >= start && now < end) return 'active';
-  return 'ended';
-}
 
 const STATUS_COPY: Record<
   LikeBoostStatus,

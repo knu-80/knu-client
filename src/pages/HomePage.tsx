@@ -3,23 +3,13 @@ import HomeBanner from '@/components/home/HomeBanner';
 import HomeTab from '@/components/home/HomeTab';
 import LikeBoostPopup from '@/components/home/LikeBoostPopup';
 import FaceSvg from '@/assets/face.svg';
-
-function getTodayKey() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-function isLikeBoostPopupAvailable(now: Date) {
-  const end = new Date(now);
-  end.setHours(15, 0, 0, 0);
-  return now < end;
-}
+import { LIKE_BOOST_EVENT_DATE, isLikeBoostPopupAvailable } from '@/constants/likeBoostEvent';
 
 export default function HomePage() {
-  const dismissStorageKey = useMemo(() => `like-boost-popup-dismissed-${getTodayKey()}`, []);
+  const dismissStorageKey = useMemo(
+    () => `like-boost-popup-dismissed-${LIKE_BOOST_EVENT_DATE}`,
+    [],
+  );
   const [isPopupOpen, setIsPopupOpen] = useState(() => {
     if (typeof window === 'undefined') return false;
     if (!isLikeBoostPopupAvailable(new Date())) return false;

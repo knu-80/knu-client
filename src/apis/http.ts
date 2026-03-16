@@ -1,5 +1,6 @@
 import axios, { AxiosHeaders, type InternalAxiosRequestConfig } from 'axios';
 import posthog from 'posthog-js';
+import axiosRetry from 'axios-retry';
 
 import { clearAccessToken, getAccessToken } from './auth';
 import { toApiClientError } from './error';
@@ -15,6 +16,20 @@ export const http = axios.create({
   timeout: timeoutMs,
   headers: {
     Accept: 'application/json',
+  },
+});
+
+axiosRetry(http, {
+  retries: 3,
+  shouldResetTimeout: true,
+  retryDelay: (retryCount) => {
+    return axiosRetry.exponentialDelay(retryCount);
+  },
+  retryCondition: (error) => {
+    return (
+      axiosRetry.isNetworkOrIdempotentRequestError(error) ||
+      (error.response ? error.response.status >= 500 : false)
+    );
   },
 });
 

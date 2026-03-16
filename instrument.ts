@@ -9,5 +9,7 @@ if (isProd) {
     integrations: [Sentry.browserTracingIntegration()],
     tracesSampleRate: 1.0,
     tracePropagationTargets: ['localhost', import.meta.env.VITE_API_BASE_URL],
+
+    ignoreErrors: ['Java object is gone', 'Error invoking postMessage', 'Request aborted'],
   });
 }

@@ -271,7 +271,7 @@ function TimeTablePreviewCard({
       </div>
       <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none">
         <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
-        공연 카드를 누르면 해당 동아리의 지도 위치로 이동할 수 있어요
+        카드를 눌러 동아리 위치를 확인할 수 있어요
       </p>
     </>
   );

@@ -8,7 +8,7 @@ export default function AdminHomePage() {
   const profile = useAdminSessionStore((state) => state.profile);
 
   const myBoothPath =
-    profile?.role === 'ADMIN'
+    profile?.role === 'ADMIN' || profile?.role === 'CLUB_ADMIN'
       ? profile.boothId
         ? `/admin/booths/edit/${profile.boothId}`
         : '/map'

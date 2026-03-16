@@ -12,10 +12,17 @@ function getTodayKey() {
   return `${year}-${month}-${day}`;
 }
 
+function isLikeBoostPopupAvailable(now: Date) {
+  const end = new Date(now);
+  end.setHours(15, 0, 0, 0);
+  return now < end;
+}
+
 export default function HomePage() {
   const dismissStorageKey = useMemo(() => `like-boost-popup-dismissed-${getTodayKey()}`, []);
   const [isPopupOpen, setIsPopupOpen] = useState(() => {
     if (typeof window === 'undefined') return false;
+    if (!isLikeBoostPopupAvailable(new Date())) return false;
     return window.localStorage.getItem(dismissStorageKey) !== '1';
   });
 

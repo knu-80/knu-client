@@ -5,20 +5,18 @@ import { BoothItem } from '@/components/BoothItem';
 import { StatusDisplay } from '@/components/StatusDisplay';
 import { useBooths } from '@/hooks/useBooths';
 import { useRecommendedClubBooths } from '@/hooks/useRecommendedBooths';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 export default function SearchResultPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
   const [searchTerm, setSearchTerm] = useState(query);
   const navigate = useNavigate();
-  const paramsMemo = useMemo(() => ({ keyword: query }), [query]);
-  const { booths } = useBooths(paramsMemo);
-  const { booths: allBooths } = useBooths();
+  const { data: searchResults = [] } = useBooths({ keyword: query });
+  const { data: allBooths = [] } = useBooths();
   const recommendedBooths = useRecommendedClubBooths(allBooths, 5);
 
-  const results = Object.values(booths);
-  const hasResults = results.length > 0;
+  const hasResults = searchResults.length > 0;
   const isSearching = query !== '';
 
   return (
@@ -45,10 +43,10 @@ export default function SearchResultPage() {
         {hasResults ? (
           <div className="px-1 py-4">
             <p className="typo-body-2 text-gray-500 mb-4">
-              총 <span className="text-black font-medium">{results.length}개</span>의 결과
+              총 <span className="text-black font-medium">{searchResults.length}개</span>의 결과
             </p>
             <div className="flex flex-col gap-5">
-              {results.map((booth) => (
+              {searchResults.map((booth) => (
                 <BoothItem
                   key={booth.id}
                   booth={booth}

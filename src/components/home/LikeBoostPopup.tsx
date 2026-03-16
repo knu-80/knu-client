@@ -29,17 +29,17 @@ const STATUS_COPY: Record<
   upcoming: {
     badge: '곧 시작',
     badgeClassName: 'bg-secondary-blue/10 text-secondary-blue',
-    description: '13:00부터 15:00까지 좋아요 1회 클릭 시 2개가 반영돼요.',
+    description: '13:00부터 15:00까지 스타 1회 클릭 시 2개가 반영돼요.',
   },
   active: {
     badge: '진행 중',
     badgeClassName: 'bg-primary/10 text-primary',
-    description: '지금은 더블 좋아요 타임! 부스를 응원하면 1회 클릭에 2개가 반영돼요.',
+    description: '지금은 더블 스타 타임! 부스를 응원하면 1회 클릭에 2개가 반영돼요.',
   },
   ended: {
     badge: '종료',
     badgeClassName: 'bg-gray-200 text-gray-600',
-    description: '오늘 더블 좋아요 이벤트는 종료됐어요. 일반 좋아요로 참여할 수 있어요.',
+    description: '오늘 더블 스타 이벤트는 종료됐어요. 일반 스타로 참여할 수 있어요.',
   },
 };
 
@@ -92,7 +92,7 @@ export default function LikeBoostPopup({ isOpen, onClose, onHideToday }: LikeBoo
       <section
         role="dialog"
         aria-modal="true"
-        aria-label="더블 좋아요 이벤트 안내"
+        aria-label="더블 스타 이벤트 안내"
         className="relative w-full max-w-[420px] rounded-3xl bg-white p-5 shadow-[0_20px_50px_rgba(0,0,0,0.2)]"
       >
         <button
@@ -116,15 +116,15 @@ export default function LikeBoostPopup({ isOpen, onClose, onHideToday }: LikeBoo
           </span>
         </div>
 
-        <h2 className="typo-heading-3 text-base-deep">🔥 더블 좋아요 타임 이벤트</h2>
+        <h2 className="typo-heading-3 text-base-deep">⭐️ 더블 스타 이벤트</h2>
         <p className="mt-2 typo-body-2 text-gray-600">{copy.description}</p>
 
-        <div className="mt-4 rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3">
+        <div className="mt-4 rounded-2xl border border-primary/5 bg-primary/5 px-4 py-3">
           <p className="typo-body-2 font-semibold text-base-deep">
-            좋아요 1회 클릭 시 <span className="text-primary">+2</span>
+            스타 1회 클릭 시 <span className="text-primary">+2</span>
           </p>
           <p className="mt-1 typo-body-3 text-gray-500">
-            랭킹은 실시간으로 반영되며, 현장 참여가 많을수록 순위 변동이 빨라져요.
+            관심있는 동아리의 순위를 높여봐요! <br /> 랭킹은 실시간으로 반영돼요.
           </p>
         </div>
 

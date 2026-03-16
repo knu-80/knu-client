@@ -1,31 +1,17 @@
-import { useState, useEffect } from 'react';
-import { getBoothTop3, type Booth3Ranking } from '@/apis';
+import { useQuery } from '@tanstack/react-query';
+import { getBoothTop3 } from '@/apis';
 
 export function useBoothTop3() {
-  const [data, setData] = useState<Booth3Ranking[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data, isLoading, status } = useQuery({
+    queryKey: ['booths', 'ranking', 'top3'],
+    queryFn: getBoothTop3,
+    staleTime: 0,
+    gcTime: 1000 * 60 * 2,
+  });
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchRanking = async () => {
-      setIsLoading(true);
-      try {
-        const res = await getBoothTop3();
-        if (isMounted) setData(res);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
-    };
-
-    fetchRanking();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  return { data, isLoading };
+  return {
+    data: data ?? [],
+    isLoading,
+    status,
+  };
 }

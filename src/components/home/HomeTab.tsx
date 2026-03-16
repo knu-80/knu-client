@@ -77,10 +77,12 @@ type SectionHeaderProps = {
 };
 
 function TrendingBooths() {
-  const { data: ranking, isLoading } = useBoothTop3();
+  const { data: ranking, status } = useBoothTop3();
   const navigate = useNavigate();
 
-  if (isLoading) {
+  const isFirstLoading = status === 'pending' && (!ranking || ranking.length === 0);
+
+  if (isFirstLoading) {
     return (
       <div className="flex gap-2 justify-center items-center h-[96px] px-1">
         <div className="flex-1 w-[120px] h-[96px] bg-gray-100 animate-pulse rounded-xl" />

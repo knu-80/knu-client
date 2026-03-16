@@ -23,6 +23,7 @@
   "dependencies": {
     "@posthog/react": "^1.8.2",
     "@sentry/react": "^10.42.0",
+    "@tanstack/react-query": "^5.90.21",
     "@vercel/analytics": "^1.6.1",
     "axios": "^1.13.6",
     "axios-retry": "^4.5.0",

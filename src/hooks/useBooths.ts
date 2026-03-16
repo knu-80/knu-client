@@ -1,23 +1,13 @@
-import { useState, useEffect } from 'react';
-import { getBooths, type BoothListParams, type BoothSummary } from '@/apis';
+import { useQuery } from '@tanstack/react-query';
+import { getBooths, type BoothListParams } from '@/apis';
 
 export function useBooths(params?: BoothListParams) {
-  const [booths, setBooths] = useState<BoothSummary[]>([]);
-  const [loading, setLoading] = useState(true);
+  const keyword = params?.keyword;
 
-  useEffect(() => {
-    const fetchBooths = async () => {
-      try {
-        setLoading(true);
-        const data = await getBooths(params);
-        setBooths(data);
-      } finally {
-        setLoading(false);
-      }
-    };
+  return useQuery({
+    queryKey: keyword ? ['booths', 'search', keyword] : ['booths', 'all'],
+    queryFn: () => getBooths(params),
 
-    fetchBooths();
-  }, [params]);
-
-  return { booths, loading };
+    staleTime: 1000 * 60 * 5,
+  });
 }

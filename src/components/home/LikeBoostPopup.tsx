@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiX, FiClock, FiMapPin, FiStar } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
@@ -46,8 +46,21 @@ const STATUS_COPY: Record<
 export default function LikeBoostPopup({ isOpen, onClose, onHideToday }: LikeBoostPopupProps) {
   const navigate = useNavigate();
   const [dontShowToday, setDontShowToday] = useState(false);
+  const [, setTick] = useState(0);
 
-  const status = useMemo(() => getLikeBoostStatus(new Date()), []);
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const timer = window.setInterval(() => {
+      setTick((prev) => prev + 1);
+    }, 30_000);
+
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, [isOpen]);
+
+  const status = getLikeBoostStatus(new Date());
   const copy = STATUS_COPY[status];
 
   const handleClose = () => {
@@ -65,7 +78,7 @@ export default function LikeBoostPopup({ isOpen, onClose, onHideToday }: LikeBoo
     navigate(path);
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || status === 'ended') return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-5">

@@ -176,3 +176,9 @@ export async function getBoothTop3(): Promise<Booth3Ranking[]> {
 
   return unwrapApiResponse(data);
 }
+
+export async function getYesterdayBoothTop3(): Promise<Booth3Ranking[]> {
+  const { data } = await http.get<ApiResponse<Booth3Ranking[]>>(ENDPOINTS.boothTop3Yesterday);
+
+  return unwrapApiResponse(data);
+}

@@ -16,19 +16,16 @@ export default function BoothDetailPage() {
   const { id } = useParams<{ id: string }>();
   const boothId = Number(id);
   const [bursts, setBursts] = useState<{ id: string; x: number; y: number }[]>([]);
-
   const [likeDelta, setLikeDelta] = useState(0);
 
-  const { mutate, isPending } = useLikeBooth(boothId);
+  const { mutate, isPending, isCoolingDown } = useLikeBooth(boothId);
   const { booth, loading, refetch } = useBooth(boothId);
   const displayLikeCount = (booth?.likeCount ?? 0) + likeDelta;
 
   const isSpecialDivision =
     booth?.division === 'MANAGEMENT' || booth?.division === 'EXTERNAL_SUPPORT';
 
-  const handleStarClick = async () => {
-    if (isPending) return;
-
+  const createStarBurst = () => {
     const newBurst = {
       id: crypto.randomUUID(),
       x: Math.random() * 100 - 50,
@@ -39,18 +36,19 @@ export default function BoothDetailPage() {
     setTimeout(() => {
       setBursts((prev) => prev.filter((b) => b.id !== newBurst.id));
     }, 1000);
+  };
 
-    setLikeDelta((prev) => (prev ?? 0) + 1);
+  const handleStarClick = async () => {
+    if (isPending || isCoolingDown) return;
 
     try {
       const updatedCount = await mutate();
-
-      if (updatedCount !== undefined) {
+      if (typeof updatedCount === 'number') {
         setLikeDelta(updatedCount - (booth?.likeCount ?? 0));
+        createStarBurst();
       }
     } catch (error) {
       console.error('좋아요 실패:', error);
-      setLikeDelta((prev) => prev - 1);
     }
   };
 
@@ -82,7 +80,7 @@ export default function BoothDetailPage() {
         {!isSpecialDivision && (
           <button
             onClick={handleStarClick}
-            disabled={isPending}
+            disabled={isPending || isCoolingDown}
             className="flex cursor-pointer items-center justify-center rounded-full gap-[2px] bg-white transition-all hover:brightness-95 active:scale-[0.98]"
           >
             <PiShootingStarFill size={28} className="text-secondary-yellow" />

@@ -83,14 +83,6 @@ export default function RankingPage() {
         alt="지금 뜨는 동아리"
         className="my-4 mx-auto h-14 pointer-events-none select-none"
       />
-      <button
-        type="button"
-        onClick={() => setIsPopupOpenedByButton(true)}
-        disabled={!hasYesterdayTop3 && !isYesterdayTop3Loading}
-        className="mb-3 w-full rounded-xl border border-knu-silver/70 bg-white px-4 py-2.5 typo-body-2 font-semibold text-base-deep transition enabled:hover:border-knu-red/35 enabled:hover:bg-knu-red/5 disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        어제 TOP3 관심 동아리 보기
-      </button>
 
       <div className="flex items-end justify-center gap-2 px-1 mb-3 relative z-20">
         {topThree.map((booth) => {
@@ -170,6 +162,19 @@ export default function RankingPage() {
           );
         })}
       </section>
+
+      {(hasYesterdayTop3 || isYesterdayTop3Loading) && (
+        <button
+          type="button"
+          onClick={() => setIsPopupOpenedByButton(true)}
+          disabled={!hasYesterdayTop3 && isYesterdayTop3Loading}
+          aria-label="어제 TOP3 팝업 열기"
+          className="fixed bottom-[calc(88px+env(safe-area-inset-bottom))] right-5 z-40 inline-flex h-12 items-center justify-center gap-1 rounded-full bg-primary px-4 text-white shadow-[0_10px_22px_rgba(230,0,0,0.28)] transition hover:brightness-95 active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          <FaStar className="h-4 w-4" />
+          <span className="typo-body-3 font-semibold">어제 TOP3</span>
+        </button>
+      )}
 
       {isYesterdayPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-5">

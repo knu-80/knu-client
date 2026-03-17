@@ -14,6 +14,7 @@ const timeoutMs = Number.isFinite(parsedTimeout) ? parsedTimeout : FALLBACK_TIME
 export const http = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL ?? FALLBACK_API_BASE_URL,
   timeout: timeoutMs,
+  withCredentials: true,
   headers: {
     Accept: 'application/json',
   },

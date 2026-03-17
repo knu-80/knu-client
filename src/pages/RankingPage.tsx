@@ -167,15 +167,17 @@ export default function RankingPage() {
         })}
       </section>
 
-      <button
-        type="button"
-        onClick={() => setIsPopupOpenedByButton(true)}
-        aria-label="어제 TOP3 팝업 열기"
-        className="fixed bottom-[calc(88px+env(safe-area-inset-bottom))] right-5 z-40 inline-flex h-12 items-center justify-center gap-1 rounded-full bg-primary px-4 text-white shadow-[0_10px_22px_rgba(230,0,0,0.28)] transition hover:brightness-95 active:scale-95"
-      >
-        <FaStar className="h-4 w-4" />
-        <span className="typo-body-3 font-semibold">어제 TOP3</span>
-      </button>
+      <div className="pointer-events-none fixed left-1/2 bottom-[calc(88px+env(safe-area-inset-bottom))] z-40 flex w-full max-w-[700px] -translate-x-1/2 justify-end px-5">
+        <button
+          type="button"
+          onClick={() => setIsPopupOpenedByButton(true)}
+          aria-label="어제 TOP3 팝업 열기"
+          className="pointer-events-auto inline-flex h-12 items-center justify-center gap-1 rounded-full bg-primary px-4 text-white shadow-[0_10px_22px_rgba(230,0,0,0.28)] transition hover:brightness-95 active:scale-95"
+        >
+          <FaStar className="h-4 w-4" />
+          <span className="typo-body-3 font-semibold">어제 TOP3</span>
+        </button>
+      </div>
 
       {isYesterdayPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-5">

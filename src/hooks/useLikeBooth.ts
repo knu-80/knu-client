@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { likeBooth } from '@/apis/modules/boothApi';
 
-const CLIENT_LIKE_COOLDOWN_MS = 1000;
+const CLIENT_LIKE_COOLDOWN_MS = 700;
 
 export function useLikeBooth(boothId: number) {
   const [isPending, setIsPending] = useState(false);

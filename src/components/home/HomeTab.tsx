@@ -102,7 +102,7 @@ function TrendingBooths() {
           return (
             <button
               key={booth.boothId}
-              onClick={() => navigate(`/booths/${booth.boothId}`)}
+              onClick={() => navigate('/map', { state: { selectedBoothId: booth.boothId } })}
               className={`relative flex flex-col w-[120px] py-3 items-center justify-center gap-1 rounded-xl bg-secondary-yellow/10 transition-all active:scale-95`}
             >
               <div className="flex items-center justify-center gap-1">
@@ -123,7 +123,7 @@ function TrendingBooths() {
       </div>
       <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none">
         <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
-        카드를 눌러 동아리 정보를 확인할 수 있어요
+        카드를 눌러 부스 위치를 확인할 수 있어요
       </p>
     </div>
   );
@@ -273,7 +273,7 @@ function TimeTablePreviewCard({
       </div>
       <p className="ml-1 mt-3 flex gap-1 items-center text-text-muted typo-caption select-none">
         <FiAlertCircle className="h-4 w-4 flex items-baseline text-text-muted" strokeWidth={1.5} />
-        카드를 눌러 동아리 위치를 확인할 수 있어요
+        카드를 눌러 부스 위치를 확인할 수 있어요
       </p>
     </>
   );

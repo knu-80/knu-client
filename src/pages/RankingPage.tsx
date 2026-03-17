@@ -96,7 +96,8 @@ export default function RankingPage() {
           return (
             <Link
               key={booth.boothId}
-              to={`/booths/${booth.boothId}`}
+              to="/map"
+              state={{ selectedBoothId: booth.boothId }}
               className={`relative flex flex-col items-center justify-center gap-1 rounded-lg py-2 bg-white border ${
                 isFirst
                   ? 'border-secondary-yellow z-10 w-[120px] h-[140px]'
@@ -143,7 +144,8 @@ export default function RankingPage() {
           return (
             <Link
               key={booth.boothId}
-              to={`/booths/${booth.boothId}`}
+              to="/map"
+              state={{ selectedBoothId: booth.boothId }}
               className="interactive-transition flex items-center justify-between rounded-2xl px-5 py-4 bg-white border border-primary/10"
             >
               <div className="flex items-center gap-3 min-w-0">

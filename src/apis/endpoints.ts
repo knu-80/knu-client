@@ -18,7 +18,7 @@ export const ENDPOINTS = {
   boothLikes: (boothId: number | string) => `${PUBLIC_API_PREFIX}/booths/${boothId}/likes`,
   boothRanking: `${PUBLIC_API_PREFIX}/booths/ranking`,
   boothTop3: `${PUBLIC_API_PREFIX}/booths/ranking/top3`,
-  boothTop3Yesterday: `${PUBLIC_API_PREFIX}/booths/ranking/top3/yesterday`,
+  boothDailyRanking: (date: string) => `${PUBLIC_API_PREFIX}/booths/ranking/daily/${date}`,
 
   // Admin (token required)
   adminMe: `${ADMIN_API_PREFIX}/me`,

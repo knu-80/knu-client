@@ -22,7 +22,11 @@ function getTodayKey() {
 
 export default function RankingPage() {
   const { topThree, rest, isLoading } = useRanking();
-  const { data: yesterdayTop3, isLoading: isYesterdayTop3Loading } = useYesterdayBoothTop3();
+  const {
+    data: yesterdayTop3,
+    date: yesterdayDate,
+    isLoading: isYesterdayTop3Loading,
+  } = useYesterdayBoothTop3();
 
   const dismissStorageKey = useMemo(() => `ranking-yesterday-top3-dismissed-${getTodayKey()}`, []);
 
@@ -163,18 +167,15 @@ export default function RankingPage() {
         })}
       </section>
 
-      {(hasYesterdayTop3 || isYesterdayTop3Loading) && (
-        <button
-          type="button"
-          onClick={() => setIsPopupOpenedByButton(true)}
-          disabled={!hasYesterdayTop3 && isYesterdayTop3Loading}
-          aria-label="어제 TOP3 팝업 열기"
-          className="fixed bottom-[calc(88px+env(safe-area-inset-bottom))] right-5 z-40 inline-flex h-12 items-center justify-center gap-1 rounded-full bg-primary px-4 text-white shadow-[0_10px_22px_rgba(230,0,0,0.28)] transition hover:brightness-95 active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
-        >
-          <FaStar className="h-4 w-4" />
-          <span className="typo-body-3 font-semibold">어제 TOP3</span>
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={() => setIsPopupOpenedByButton(true)}
+        aria-label="어제 TOP3 팝업 열기"
+        className="fixed bottom-[calc(88px+env(safe-area-inset-bottom))] right-5 z-40 inline-flex h-12 items-center justify-center gap-1 rounded-full bg-primary px-4 text-white shadow-[0_10px_22px_rgba(230,0,0,0.28)] transition hover:brightness-95 active:scale-95"
+      >
+        <FaStar className="h-4 w-4" />
+        <span className="typo-body-3 font-semibold">어제 TOP3</span>
+      </button>
 
       {isYesterdayPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-5">
@@ -201,31 +202,43 @@ export default function RankingPage() {
             </button>
 
             <h2 className="typo-heading-3 text-base-deep">어제 TOP3 관심 동아리였습니다</h2>
-            <p className="mt-1 typo-body-3 text-gray-500">오늘도 많은 참여 부탁드릴게요!</p>
+            <p className="mt-1 typo-body-3 text-gray-500">
+              {yesterdayDate} 기준 결과예요. 오늘도 많은 참여 부탁드릴게요!
+            </p>
 
-            <div className="mt-4 space-y-2">
-              {yesterdayTop3.map((booth, index) => (
-                <Link
-                  key={booth.boothId}
-                  to={`/booths/${booth.boothId}`}
-                  onClick={handleCloseYesterdayPopup}
-                  className="interactive-transition flex items-center justify-between rounded-2xl border border-knu-silver/60 bg-knu-silver/10 px-4 py-3 hover:border-knu-red/25 hover:bg-knu-red/5"
-                >
-                  <div className="min-w-0">
-                    <p className="typo-body-3 font-semibold text-knu-red">{index + 1}위</p>
-                    <p className="truncate typo-body-2 font-medium text-base-deep">
-                      {booth.boothName}
-                    </p>
-                  </div>
-                  <div className="ml-3 flex items-center gap-1">
-                    <FaStar className="text-secondary-yellow" />
-                    <span className="typo-body-3 font-semibold text-base-deep">
-                      {formatLikeCount(booth.likeCount)}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            {isYesterdayTop3Loading ? (
+              <div className="mt-4 rounded-2xl border border-knu-silver/50 bg-knu-silver/10 px-4 py-6 text-center text-sm text-text-muted">
+                어제 TOP3를 불러오는 중이에요.
+              </div>
+            ) : yesterdayTop3.length === 0 ? (
+              <div className="mt-4 rounded-2xl border border-knu-silver/50 bg-knu-silver/10 px-4 py-6 text-center text-sm text-text-muted">
+                어제 TOP3 데이터가 아직 없습니다.
+              </div>
+            ) : (
+              <div className="mt-4 space-y-2">
+                {yesterdayTop3.map((booth, index) => (
+                  <Link
+                    key={booth.boothId}
+                    to={`/booths/${booth.boothId}`}
+                    onClick={handleCloseYesterdayPopup}
+                    className="interactive-transition flex items-center justify-between rounded-2xl border border-knu-silver/60 bg-knu-silver/10 px-4 py-3 hover:border-knu-red/25 hover:bg-knu-red/5"
+                  >
+                    <div className="min-w-0">
+                      <p className="typo-body-3 font-semibold text-knu-red">{index + 1}위</p>
+                      <p className="truncate typo-body-2 font-medium text-base-deep">
+                        {booth.name}
+                      </p>
+                    </div>
+                    <div className="ml-3 flex items-center gap-1">
+                      <FaStar className="text-secondary-yellow" />
+                      <span className="typo-body-3 font-semibold text-base-deep">
+                        {formatLikeCount(booth.likeCount)}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
 
             <div className="mt-5 grid grid-cols-2 gap-2">
               <button

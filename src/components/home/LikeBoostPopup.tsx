@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import { FiX, FiClock, FiMapPin, FiStar } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { getLikeBoostStatus, type LikeBoostStatus } from '@/constants/likeBoostEvent';
+import {
+  LIKE_BOOST_END_HOUR,
+  LIKE_BOOST_START_HOUR,
+  getLikeBoostStatus,
+  type LikeBoostStatus,
+} from '@/constants/likeBoostEvent';
 
 type LikeBoostPopupProps = {
   isOpen: boolean;
@@ -16,7 +21,7 @@ const STATUS_COPY: Record<
   upcoming: {
     badge: '곧 시작',
     badgeClassName: 'bg-secondary-blue/10 text-secondary-blue',
-    description: '13:00부터 15:00까지 스타 1회 클릭 시 2개가 반영돼요.',
+    description: '곧 더블 스타 타임이 시작됩니다.',
   },
   active: {
     badge: '진행 중',
@@ -29,6 +34,12 @@ const STATUS_COPY: Record<
     description: '오늘 더블 스타 이벤트는 종료됐어요. 일반 스타로 참여할 수 있어요.',
   },
 };
+
+function formatHourRange(startHour: number, endHour: number): string {
+  const start = String(startHour).padStart(2, '0');
+  const end = String(endHour).padStart(2, '0');
+  return `${start}:00 ~ ${end}:00`;
+}
 
 export default function LikeBoostPopup({ isOpen, onClose, onHideToday }: LikeBoostPopupProps) {
   const navigate = useNavigate();
@@ -48,6 +59,7 @@ export default function LikeBoostPopup({ isOpen, onClose, onHideToday }: LikeBoo
   }, [isOpen]);
 
   const status = getLikeBoostStatus(new Date());
+  const timeRange = formatHourRange(LIKE_BOOST_START_HOUR, LIKE_BOOST_END_HOUR);
   const copy = STATUS_COPY[status];
 
   const handleClose = () => {
@@ -99,7 +111,7 @@ export default function LikeBoostPopup({ isOpen, onClose, onHideToday }: LikeBoo
           </span>
           <span className="inline-flex items-center gap-1 text-gray-500 typo-body-3">
             <FiClock className="h-3.5 w-3.5" />
-            13:00 ~ 15:00
+            {timeRange}
           </span>
         </div>
 

@@ -4,17 +4,23 @@ import { useNavigate } from 'react-router-dom';
 type BackHeaderProps = {
   title: string;
   fallbackPath: string;
+  state?: { selectedBoothId: number | undefined };
 };
 
-export default function BackHeader({ title, fallbackPath }: BackHeaderProps) {
+export default function BackHeader({ title, fallbackPath, state }: BackHeaderProps) {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
+    if (state) {
+      navigate(fallbackPath, { replace: true, state });
+
       return;
     }
+    if (window.history.length > 1) {
+      navigate(-1);
 
+      return;
+    }
     navigate(fallbackPath, { replace: true });
   };
 

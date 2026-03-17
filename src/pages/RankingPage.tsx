@@ -223,7 +223,8 @@ export default function RankingPage() {
                 {yesterdayTop3.map((booth, index) => (
                   <Link
                     key={booth.boothId}
-                    to={`/booths/${booth.boothId}`}
+                    to="/map"
+                    state={{ selectedBoothId: booth.boothId }}
                     onClick={handleCloseYesterdayPopup}
                     className="interactive-transition flex items-center justify-between rounded-2xl border border-knu-silver/60 bg-knu-silver/10 px-4 py-3 hover:border-knu-red/25 hover:bg-knu-red/5"
                   >

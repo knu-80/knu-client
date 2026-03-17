@@ -61,6 +61,7 @@ export {
   getBoothCount,
   getBooth,
   getBoothTop3,
+  getBoothDailyRanking,
   getBoothRanking,
   updateBooth,
   type BoothDivision,

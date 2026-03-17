@@ -176,3 +176,9 @@ export async function getBoothTop3(): Promise<Booth3Ranking[]> {
 
   return unwrapApiResponse(data);
 }
+
+export async function getBoothDailyRanking(date: string): Promise<BoothRanking[]> {
+  const { data } = await http.get<ApiResponse<BoothRanking[]>>(ENDPOINTS.boothDailyRanking(date));
+
+  return unwrapApiResponse(data);
+}

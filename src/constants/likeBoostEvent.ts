@@ -1,8 +1,8 @@
 export type LikeBoostStatus = 'upcoming' | 'active' | 'ended';
 
-export const LIKE_BOOST_EVENT_DATE = '2026-03-16';
-export const LIKE_BOOST_START_HOUR = 13;
-export const LIKE_BOOST_END_HOUR = 15;
+export const LIKE_BOOST_EVENT_DATE = '2026-03-17';
+export const LIKE_BOOST_START_HOUR = 12;
+export const LIKE_BOOST_END_HOUR = 14;
 
 function toDateKey(date: Date): string {
   const year = date.getFullYear();
